@@ -1,0 +1,44 @@
+{
+  "name": "junk-kit",
+  "description": "Js13kGames framework.",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jameswilddev/junk-kit"
+  },
+  "license": "MIT",
+  "scripts": {
+    "cli": "ts-node --project src/pipeline/tsconfig.json src/pipeline/cli",
+    "ci": "ts-node --project src/pipeline/tsconfig.json src/pipeline/ci"
+  },
+  "dependencies": {
+    "@types/archiver": "3.0.0",
+    "@types/bl": "2.1.0",
+    "@types/express": "4.17.0",
+    "@types/html-minifier": "3.5.3",
+    "@types/mkdirp-promise": "5.0.0",
+    "@types/node": "12.0.10",
+    "@types/progress": "2.0.3",
+    "@types/pug": "2.0.4",
+    "@types/recursive-readdir": "2.2.0",
+    "@types/rmfr": "2.0.0",
+    "@types/svgo": "1.2.0",
+    "@types/uuid": "3.4.5",
+    "archiver": "3.0.0",
+    "bl": "3.0.0",
+    "chokidar": "3.0.1",
+    "express": "4.17.1",
+    "html-minifier": "4.0.0",
+    "mkdirp-promise": "5.0.1",
+    "progress": "2.0.3",
+    "pug": "2.0.4",
+    "recursive-readdir": "2.2.2",
+    "rmfr": "2.0.0",
+    "svgo": "1.2.2",
+    "ts-node": "8.3.0",
+    "typescript": "3.5.2",
+    "uglify-js": "3.6.0",
+    "uuid": "3.3.2"
+  },
+  "devDependencies": {}
+}

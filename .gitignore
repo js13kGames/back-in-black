@@ -1,0 +1,4 @@
+/node_modules
+/src/games/*/tsconfig.json
+/src/games/*/.generated-type-script
+/dist
