@@ -266,8 +266,9 @@ function layers(layer: LayerFactory): void {
         32, // topVirtualPixels
         64, // widthVirtualPixels
         80, // heightVirtualPixels
-        (state, save, load, drop) => {
+        (state, now, save, load, drop) => {
           state.clickedOrTouched = true
+          const currentTime = now
           const trueOnSuccess = save(`a-key`, aJsonSerializableValue)
           const deserializedOrNull = load<AJsonSerializableType>(`a-key`)
           const trueOnNonFailure = drop(`a-key`)
@@ -275,8 +276,9 @@ function layers(layer: LayerFactory): void {
       )
       at(
         now + 32000,
-        (state, save, load, drop) => {
+        (state, now, save, load, drop) => {
           state.thirtyTwoSecondsElapsed = true
+          const sameAsAboveTime = now
           const trueOnSuccess = save(`a-key`, aJsonSerializableValue)
           const deserializedOrNull = load<AJsonSerializableType>(`a-key`)
           const trueOnNonFailure = drop(`a-key`)
@@ -368,6 +370,11 @@ A mutable reference to the current state.
 
 Note: changing what `state` itself references will have no effect; instead,
 modify its contents.
+
+###### `now`
+
+Equivalent to the `now` of a `render` callback.  May be the same, or different,
+to that of the parent `render` callback.
 
 ###### `save`
 
