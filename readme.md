@@ -274,9 +274,9 @@ function layers(layer: LayerFactory): void {
         }
       )
       at(
-        now + 32,
+        now + 32000,
         (state, save, load, drop) => {
-          state.thirtySecondsElapsed = true
+          state.thirtyTwoSecondsElapsed = true
           const trueOnSuccess = save(`a-key`, aJsonSerializableValue)
           const deserializedOrNull = load<AJsonSerializableType>(`a-key`)
           const trueOnNonFailure = drop(`a-key`)
@@ -339,7 +339,7 @@ the last defined wins.
 
 ###### `now`
 
-A monotonic clock, which tracks the number of seconds which appear to have
+A monotonic clock, which tracks the number of milliseconds which appear to have
 elapsed since the start of the game.  This may be somewhat inaccurate; there is
 a limit on how much time can "pass" in one go.
 
