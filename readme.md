@@ -258,14 +258,12 @@ function layers(layer: LayerFactory): void {
     (state, draw, hitbox, now, at) => {
       draw(
         anExample_svg,
-        25, // leftVirtualPixels
-        32  // topVirtualPixels
+        [translateX(24)] // transforms
       )
       hitbox(
-        25, // leftVirtualPixels
-        32, // topVirtualPixels
         64, // widthVirtualPixels
         80, // heightVirtualPixels
+        [translateX(24)], // transforms
         (state, now, save, load, drop) => {
           state.clickedOrTouched = true
           const currentTime = now
@@ -327,14 +325,14 @@ A read-only view of the current state.
 
 ###### `draw`
 
-Draws the given `svg` at the given location, where `leftVirtualPixels` and
-`topVirtualPixels` are the number of virtual pixels between the left/top of the
-SVG and the left and top of the viewport's "safe area".
+Draws the given `svg`.  The transform origin is the center of the SVG.
 
 ###### `hitbox`
 
 Defines a clickable or touchable area within the viewport which triggers a
 mutation callback.
+
+As with `draw`, the transform origin is the center of the hitbox.
 
 If multiple hitboxes overlap, within the same layer or between multiple layers,
 the last defined wins.
@@ -426,6 +424,43 @@ Makes a JSON-serializable type immutable.
 
 Linearly interpolates between two values by a unit interval, extrapolating if
 that mix value leaves the 0...1 range.
+
+#### Transforms
+
+These can be given to some functions when rendering a layer.
+
+##### `translateX`
+
+Returns a translation by the given number of virtual pixels on the X axis.
+
+##### `translateY`
+
+Returns a translation by the given number of virtual pixels on the Y axis.
+
+##### `translate`
+
+Returns a translation by the given numbers of virtual pixels on the X and Y axes
+respectively.
+
+##### `rotation`
+
+Returns a translation by the given number of degrees clockwise.
+
+##### `scaleX`
+
+Returns a scaling by the given factor on the X axis.
+
+##### `scaleY`
+
+Returns a scaling by the given factor on the Y axis.
+
+##### `scale`
+
+Returns a scaling by the given factors on the X and Y axes respectively.
+
+##### `scaleUniform`
+
+Returns a scaling by the given factor on the X and Y axes.
 
 ## Build pipeline
 
