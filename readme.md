@@ -356,7 +356,7 @@ Timers will not fire if missing from future `render` callbacks.
 Executes immediately if before `now`.  This can cause infinite recursion if care
 is not taken to ensure they are not present on the following `render`.
 
-If multiple are defined, the first defined with the earliest time takes
+If multiple are defined, the last defined with the earliest time takes
 priority.  Only one can fire per `render`.
 
 ##### Mutation callbacks
