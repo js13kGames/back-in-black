@@ -289,9 +289,9 @@ function layers(layer: LayerFactory): void {
           [600, () => { /* Rendered between now + 500 and now + 1100. */ }],
           [150, () => { /* Rendered between now + 1100 and now + 1250. */ }]
         ],
-        sinceEnd => {
+        ended => {
           /* Rendered after now + 1250. */
-          /* At now + 1400, sinceEnd = 150. */
+          /* ended = now + 1250. */
         }
       )
       loop(
