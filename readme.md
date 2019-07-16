@@ -255,7 +255,7 @@ function layers(layer: LayerFactory): void {
     400, // viewportMaximumHeightVirtualPixels
     0, // viewportHorizontalAlignmentSignedUnitInterval
     0, // viewportVerticalAlignmentSignedUnitInterval
-    (state, draw, hitbox, now, at) => {
+    (state, draw, hitbox, now, at, animation, loop) => {
       draw(
         anExample_svg,
         [translateX(24)] // transforms
@@ -281,6 +281,35 @@ function layers(layer: LayerFactory): void {
           const deserializedOrNull = load<AJsonSerializableType>(`a-key`)
           const trueOnNonFailure = drop(`a-key`)
         }
+      )
+      animation(
+        now + 200,
+        [
+          [300, () => { /* Rendered between now + 200 and now + 500. */ }],
+          [600, () => { /* Rendered between now + 500 and now + 1100. */ }],
+          [150, () => { /* Rendered between now + 1100 and now + 1250. */ }]
+        ],
+        sinceEnd => {
+          /* Rendered after now + 1250. */
+          /* At now + 1400, sinceEnd = 150. */
+        }
+      )
+      loop(
+        now + 200,
+        [
+          [300, () => {
+            /* Rendered between now + 200 and now + 500. */
+            /* Subsequently rendered between now + 1250 and now + 1550. */
+          }],
+          [600, () => {
+            /* Rendered between now + 500 and now + 1100. */
+            /* Subsequently rendered between now + 1550 and now + 2150. */
+          }],
+          [150, () => {
+            /* Rendered between now + 1100 and now + 1250. */
+            /* Subsequently rendered between now + 2150 and now + 2300. */
+          }]
+        ]
       )
     }
   )
@@ -356,6 +385,31 @@ is not taken to ensure they are not present on the following `render`.
 
 If multiple are defined, the last defined with the earliest time takes
 priority.  Only one can fire per `render`.
+
+###### `animation`
+
+Describes a "one-shot" animation.
+
+This is:
+
+- A time at which to start playing the animation.
+- A list of "frames", which are a duration and a render callback.
+- A render callback to execute once the animation finishes.
+
+The appropriate render callback (if any) will be executed, and a re-render
+triggered at the end of each frame.
+
+###### `loop`
+
+Describes a looping animation.
+
+This is:
+
+- A time at which to start playing the animation.
+- A list of "frames", which are a duration and a render callback.
+
+The appropriate render callback (if any) will be executed, and a re-render
+triggered at the end of each frame.
 
 ##### Mutation callbacks
 
