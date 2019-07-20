@@ -14,3 +14,8 @@ export type GameFile = {
   readonly name: string
   readonly extension: string
 }
+
+export type GeneratedHtml = {
+  readonly html: string
+  readonly uuid: string
+}
