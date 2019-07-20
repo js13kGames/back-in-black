@@ -13,5 +13,9 @@ export default function (
     return false
   }
 
+  if (/^src[\\\/]hot-reload[\\\/]/.test(path)) {
+    return false
+  }
+
   return true
 }
