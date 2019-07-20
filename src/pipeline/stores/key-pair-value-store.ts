@@ -32,15 +32,14 @@ export default class KeyPairValueStore<TValue> extends StoreBase {
     }
   }
 
-  getAllByBaseKey(
+  tryGetAllByBaseKey(
     a: string
   ): { readonly [b: string]: TValue } {
-    if (!this.hasBaseKey(a)) {
-      throw new Error(`Unable to retrieve all keys of base key ${JSON.stringify(a)} which is not set.`)
-    }
     const output: { [b: string]: TValue } = {}
-    for (const b in this.keyPairsAndValues[a]) {
-      output[b] = this.keyPairsAndValues[a][b]
+    if (this.hasBaseKey(a)) {
+      for (const b in this.keyPairsAndValues[a]) {
+        output[b] = this.keyPairsAndValues[a][b]
+      }
     }
     return output
   }
