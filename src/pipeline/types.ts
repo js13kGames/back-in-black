@@ -1,3 +1,5 @@
+import StepBase from "./steps/step-base"
+
 export type FileVersions = {
   readonly [path: string]: number
 }
@@ -13,6 +15,12 @@ export type GameFile = {
   readonly game: string
   readonly name: string
   readonly extension: string
+}
+
+export type EnginePlanningResult = {
+  readonly allGamesRequireJavascriptRegeneration: boolean
+  readonly allGamesRequireHtmlRegeneration: boolean
+  readonly step: StepBase
 }
 
 export type GeneratedHtml = {
