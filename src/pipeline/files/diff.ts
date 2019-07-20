@@ -114,7 +114,7 @@ export default class Diff<T> {
 
     itemsToGenerate
       .filter(item => itemsToClean.includes(item))
-      .forEach(item => steps.push(new SerialStep(describe(item), new Array<StepBase>(new ParallelStep(`${describe(item)}-clean`, cleanStepsFactory(item))).concat(generateStepsFactory(item)))))
+      .forEach(item => steps.push(new SerialStep(describe(item), new Array<StepBase>(new ParallelStep(`clean`, cleanStepsFactory(item))).concat(generateStepsFactory(item)))))
 
     itemsToClean
       .filter(item => !itemsToGenerate.includes(item))
