@@ -1,4 +1,4 @@
-export default function keyValue<TValue>(
+export default function <TValue>(
   key: string,
   value: TValue
 ): { readonly [key: string]: TValue } {
