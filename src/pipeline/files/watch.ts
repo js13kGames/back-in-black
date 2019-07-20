@@ -1,10 +1,10 @@
 import * as fs from "fs"
 import * as chokidar from "chokidar"
-import * as types from "../../types"
+import * as types from "../types"
 import isMonitored from "./is-monitored"
 
 export default function (
-  onChange: types.FileChangeHandler
+  onChange: (fileVersions: types.FileVersions) => Promise<void>
 ): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     resolve // Required as positional.
