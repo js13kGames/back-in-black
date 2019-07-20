@@ -4,9 +4,7 @@ import ActionStepBase from "../action-step-base"
 
 export default class CombineUglifyJsStep extends ActionStepBase {
   constructor(
-    private readonly getParsed: () => ReadonlyArray<{
-      readonly [path: string]: any
-    }>,
+    private readonly getParsed: () => ReadonlyArray<any>,
     private readonly storeResult: (combined: string) => void,
   ) {
     super(
@@ -18,8 +16,6 @@ export default class CombineUglifyJsStep extends ActionStepBase {
 
   async execute(): Promise<void> {
     const parsed = this.getParsed()
-      .map(set => Object.keys(set).map(key => set[key]))
-      .reduce((a, b) => a.concat(b), [])
       .map(item => item.clone(true))
 
     const combined = parsed[0]
