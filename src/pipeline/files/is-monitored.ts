@@ -9,5 +9,9 @@ export default function (
     return false
   }
 
+  if (/^src[\\\/]pipeline[\\\/]/.test(path)) {
+    return false
+  }
+
   return true
 }
