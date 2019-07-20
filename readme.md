@@ -151,6 +151,14 @@ TypeScript which is included in every game.
 
 Defines types which the engine expects games to define.
 
+#### `src/engine/index.pug`
+
+Rendered as `index.html` in zipped games.  The following variables are defined:
+
+| Name         | Description                                     |
+| ------------ | ----------------------------------------------- |
+| `javascript` | The minified JavaScript generated for the game. |
+
 #### `src/games/{game-name}/{file-path}.ts`
 
 TypeScript included in the game.
@@ -161,15 +169,6 @@ SVG minified and included in the game's TypeScript global scope.  For instance,
 `src/games/test-game-name/complex-multi-level/folder-structure/with-a-file.svg`
 will be available in the game's TypeScript global scope as
 `complexMultiLevel_folderStructure_withAFile_svg`.
-
-#### `src/games/{game-name}/index.pug`
-
-Rendered as `index.html` in the zipped game.  The following variables are
-defined:
-
-| Name         | Description                                     |
-| ------------ | ----------------------------------------------- |
-| `javascript` | The minified JavaScript generated for the game. |
 
 #### `dist/{game-name}.zip`
 
