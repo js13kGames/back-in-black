@@ -109,7 +109,8 @@ export default class CombineTypeScriptStep extends ActionStepBase {
         keyofStringsOnly: false,
         lib: [
           `lib.dom.d.ts`,
-          `lib.es5.d.ts`
+          `lib.es5.d.ts`,
+          `lib.scripthost.d.ts`
         ],
         listEmittedFiles: false,
         listFiles: false,
