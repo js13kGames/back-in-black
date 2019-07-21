@@ -1,0 +1,6 @@
+onload = () => {
+  engineLoadState()
+  onbeforeunload = () => {
+    engineSaveState()
+  }
+}
