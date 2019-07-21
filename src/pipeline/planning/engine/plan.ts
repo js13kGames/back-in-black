@@ -16,7 +16,7 @@ export default function (
   const allGamesRequireJavascriptRegeneration = typeSeparated.sortedByKey
     .typeScript.invalidatesDependents()
   const allGamesRequireHtmlRegeneration = allGamesRequireJavascriptRegeneration
-    || typeSeparated.sortedByKey.typeScript.invalidatesDependents()
+    || typeSeparated.sortedByKey.pug.invalidatesDependents()
 
   return {
     allGamesRequireJavascriptRegeneration,
