@@ -12,7 +12,6 @@ const output: typeScript.CompilerOptions = {
   //checkJs: true,
   composite: false,
   declaration: true,
-  declarationDir: ``,
   declarationMap: false,
   diagnostics: false,
   disableSizeLimit: false,
