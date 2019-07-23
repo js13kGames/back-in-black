@@ -19,11 +19,9 @@ import gameJavascriptStore from "../../stores/game-javascript-store"
 
 export default function (
   enginePlanningResult: types.EnginePlanningResult,
-  allSorted: Diff<types.GameFile>
+  games: Diff<string>
 ): StepBase {
-  return allSorted
-    .mapItems(item => item.game)
-    .deduplicateItems()
+  return games
     .generateSteps(
       `htmlGeneration`,
       enginePlanningResult.allGamesRequireHtmlRegeneration,

@@ -20,8 +20,11 @@ export default function (
   const javaScriptSteps = planJavascriptGeneration(
     enginePlanningResult, typeSeparated.allSorted
   )
+  const games = typeSeparated.allSorted
+    .mapItems(item => item.game)
+    .deduplicateItems()
   const htmlGenerationSteps = planHtmlGeneration(
-    enginePlanningResult, typeSeparated.allSorted
+    enginePlanningResult, games
   )
 
   return new SerialStep(
