@@ -5,3 +5,16 @@ type EngineMutationCallback = (
   load: <T extends Json>(name: string) => null | T,
   drop: (name: string) => boolean
 ) => void
+
+function engineExecuteMutationCallback(
+  callback: EngineMutationCallback
+): void {
+  callback(
+    engineState,
+    engineNow,
+    engineSave,
+    engineLoad,
+    engineDrop
+  )
+  engineRender()
+}
