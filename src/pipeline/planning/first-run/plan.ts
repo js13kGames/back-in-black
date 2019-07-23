@@ -34,7 +34,7 @@ export default function (
     )
 
     if (debug) {
-      const hotReloadIndex = path.join(`src`, `hot-reload`, `index.ts`)
+      const hotReloadIndex = path.join(`src`, `hot-reload`, `src`, `index.ts`)
       typeScriptSteps.push(
         new SerialStep(
           `readAndParseHotReload`,
