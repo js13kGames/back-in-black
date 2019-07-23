@@ -8,6 +8,7 @@ import planTypeScript from "./plan-type-script"
 import planSvg from "./plan-svg"
 import planJavascriptGeneration from "./plan-javascript-generation"
 import planHtmlGeneration from "./plan-html-generation"
+import planTsconfig from "./plan-tsconfig"
 
 export default function (
   debug: boolean,
@@ -26,16 +27,23 @@ export default function (
   const htmlGenerationSteps = planHtmlGeneration(
     enginePlanningResult, games
   )
+  const tsconfigSteps = planTsconfig(games)
 
-  return new SerialStep(
+  return new ParallelStep(
     `games`,
     [
-      new ParallelStep(
-        `files`,
-        [typeScriptSteps, svgSteps]
-      ),
-      javaScriptSteps,
-      htmlGenerationSteps
+      tsconfigSteps,
+      new SerialStep(
+        `builds`,
+        [
+          new ParallelStep(
+            `files`,
+            [typeScriptSteps, svgSteps]
+          ),
+          javaScriptSteps,
+          htmlGenerationSteps
+        ]
+      )
     ]
   )
 }
