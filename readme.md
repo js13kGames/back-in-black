@@ -159,14 +159,14 @@ Rendered as `index.html` in zipped games.  The following variables are defined:
 | ------------ | ----------------------------------------------- |
 | `javascript` | The minified JavaScript generated for the game. |
 
-#### `src/games/{game-name}/{file-path}.ts`
+#### `src/games/{game-name}/src/{file-path}.ts`
 
 TypeScript included in the game.
 
-#### `src/games/{game-name}/{file-path}.svg`
+#### `src/games/{game-name}/src/{file-path}.svg`
 
 SVG minified and included in the game's TypeScript global scope.  For instance,
-`src/games/test-game-name/complex-multi-level/folder-structure/with-a-file.svg`
+`src/games/test-game-name/src/complex-multi-level/folder-structure/with-a-file.svg`
 will be available in the game's TypeScript global scope as
 `complexMultiLevel_folderStructure_withAFile_svg`.
 

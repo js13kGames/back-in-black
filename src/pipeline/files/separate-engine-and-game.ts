@@ -47,7 +47,7 @@ export default function (
       }
     },
     game: path => {
-      const match = /^src[\\\/]games[\\\/]([a-z]|[a-z][a-z0-9-]{0,48}[a-z0-9])((?:[\\\/](?:[a-z][a-z0-9-]*[a-z0-9]|[a-z]))+)\.([a-z\.]*[a-z])$/
+      const match = /^src[\\\/]games[\\\/]([a-z]|[a-z][a-z0-9-]{0,48}[a-z0-9])[\\\/]src((?:[\\\/](?:[a-z][a-z0-9-]*[a-z0-9]|[a-z]))+)\.([a-z\.]*[a-z])$/
         .exec(path)
       if (match === null) {
         return null
