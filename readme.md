@@ -143,15 +143,15 @@ Any file path (including files within folders), where:
 
 ### Paths
 
-#### `src/engine/**/*.ts`
+#### `src/engine/src/**/*.ts`
 
 TypeScript which is included in every game.
 
-#### `src/engine/**/*.d.ts`
+#### `src/engine/src/**/*.d.ts`
 
 Defines types which the engine expects games to define.
 
-#### `src/engine/index.pug`
+#### `src/engine/src/index.pug`
 
 Rendered as `index.html` in zipped games.  The following variables are defined:
 

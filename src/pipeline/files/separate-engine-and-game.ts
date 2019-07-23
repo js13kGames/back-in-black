@@ -34,7 +34,7 @@ export default function (
 } {
   const typeSeparated = diff.separate({
     engine: path => {
-      const match = /^src[\\\/]engine((?:[\\\/](?:[a-z][a-z0-9-]*[a-z0-9]|[a-z]))+)\.([a-z\.]*[a-z])$/
+      const match = /^src[\\\/]engine[\\\/]src((?:[\\\/](?:[a-z][a-z0-9-]*[a-z0-9]|[a-z]))+)\.([a-z\.]*[a-z])$/
         .exec(path)
       if (match === null) {
         return null
