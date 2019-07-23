@@ -31,9 +31,9 @@ const output: typeScript.CompilerOptions = {
   //jsxFactory: ,
   keyofStringsOnly: false,
   lib: [
-    `lib.dom.d.ts`,
-    `lib.es5.d.ts`,
-    `lib.scripthost.d.ts`
+    `dom`,
+    `es5`,
+    `scripthost`
   ],
   listEmittedFiles: false,
   listFiles: false,
