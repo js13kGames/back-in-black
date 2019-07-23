@@ -95,6 +95,17 @@ export default function (
           compilerOptions
         }),
         path.join(`src`, `engine`, `tsconfig.json`)
+      ),
+      new WriteFileStep(
+        () => JSON.stringify({
+          include: [
+            path.join(`**`, `*.ts`),
+            path.join(`**`, `*.d.ts`),
+            path.join(`**`, `*.json`)
+          ],
+          compilerOptions
+        }),
+        path.join(`src`, `hot-reload`, `tsconfig.json`)
       )
     ]
   )
