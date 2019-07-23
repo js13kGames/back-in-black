@@ -174,6 +174,11 @@ will be available in the game's TypeScript global scope as
 
 The built game artifact.
 
+#### `src/hot-reload/src/**/*.ts`
+
+TypeScript which is included in every game during debug builds to enable hot
+reload.
+
 ## Engine
 
 The included game engine is a little unconventional, and may not be appropriate
