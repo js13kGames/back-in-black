@@ -1,3 +1,4 @@
+import * as path from "path"
 import keyValueObject from "../../utilities/key-value-object"
 import * as types from "../../types"
 import Diff from "../../files/diff"
@@ -6,6 +7,7 @@ import DeleteFromKeyValueStoreIfSetStep from "../../steps/actions/stores/delete-
 import CombineTypeScriptStep from "../../steps/actions/type-script/combine-type-script-step"
 import ParseUglifyJsStep from "../../steps/actions/uglify-js/parse-step"
 import CombineUglifyJsStep from "../../steps/actions/uglify-js/combine-step"
+import gameNameTypeScriptParsedStore from "../../stores/game-name-type-script-parsed-store"
 import gameTypeScriptCombinedJavascriptTextStore from "../../stores/game-type-script-combined-javascript-text-store"
 import gameTypeScriptCombinedJavascriptParsedStore from "../../stores/game-type-script-combined-javascript-parsed-store"
 import gameJavascriptStore from "../../stores/game-javascript-store"
@@ -39,6 +41,10 @@ export default function (
           () => [
             keyValueObject(
               `engine.d.ts`, engineTypeScriptCombinedTypesParsedStore.get()
+            ),
+            keyValueObject(
+              path.join(`.generated-type-script`, `game-name.ts`),
+              gameNameTypeScriptParsedStore.get(item)
             ),
             gameSvgTypeScriptParsedStore.tryGetAllByBaseKey(item),
             gameTypeScriptParsedStore.tryGetAllByBaseKey(item)
