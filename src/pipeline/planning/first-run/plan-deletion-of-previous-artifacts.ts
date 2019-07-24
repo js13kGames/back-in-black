@@ -8,7 +8,7 @@ export default function (): StepBase {
     `deletePreviousArtifacts`,
     [
       [`src`, `games`, `*`, `tsconfig.json`],
-      [`src`, `games`, `*`, `.generated-type-script`],
+      [`src`, `games`, `*`, `src`, `.generated-type-script`],
       [`dist`]
     ].map(pathSegments => new DeleteStep(path.join.apply(path, pathSegments)))
   )

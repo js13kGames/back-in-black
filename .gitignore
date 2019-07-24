@@ -2,5 +2,5 @@
 /src/engine/tsconfig.json
 /src/hot-reload/tsconfig.json
 /src/games/*/tsconfig.json
-/src/games/*/.generated-type-script
+/src/games/*/src/.generated-type-script
 /dist
