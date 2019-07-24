@@ -1,9 +1,9 @@
 type EngineMutationCallback = (
   state: State,
   now: number,
-  save: <T extends Json>(name: string, content: T) => boolean,
+  save: <T extends Json>(name: string, content: T) => Truthiness,
   load: <T extends Json>(name: string) => null | T,
-  drop: (name: string) => boolean
+  drop: (name: string) => Truthiness
 ) => void
 
 function engineExecuteMutationCallback(

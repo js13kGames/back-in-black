@@ -1,22 +1,22 @@
-let saveLoadAvailable = false
+let saveLoadAvailable: Truthiness
 
 try {
   localStorage.setItem(`${gameName}-check`, `check`)
-  saveLoadAvailable = true
+  saveLoadAvailable = 1
 } catch { }
 
-function engineSave<T extends Json>(name: string, content: T): boolean {
+function engineSave<T extends Json>(name: string, content: T): Truthiness {
   return engineSaveDirect(`${gameName}-${name}`, content)
 }
 
-function engineSaveDirect<T extends Json>(key: string, content: T): boolean {
+function engineSaveDirect<T extends Json>(key: string, content: T): Truthiness {
   if (saveLoadAvailable) {
     try {
       localStorage.setItem(key, JSON.stringify(content))
-      return true
+      return 1
     } catch { }
   }
-  return false
+  return
 }
 
 function engineLoad<T extends Json>(name: string): null | T {
@@ -35,16 +35,16 @@ function engineLoadDirect<T extends Json>(key: string): null | T {
   return null
 }
 
-function engineDrop(name: string): boolean {
+function engineDrop(name: string): Truthiness {
   return engineDropDirect(`${gameName}-${name}`)
 }
 
-function engineDropDirect(key: string): boolean {
+function engineDropDirect(key: string): Truthiness {
   if (saveLoadAvailable) {
     try {
       localStorage.removeItem(key)
-      return true
+      return 1
     } catch { }
   }
-  return false
+  return
 }
