@@ -17,7 +17,7 @@
     "src/engine/tsconfig.json": true,
     "src/hot-reload/tsconfig.json": true,
     "src/games/*/tsconfig.json": true,
-    "src/games/*/.generated-type-script": true,
+    "src/games/*/src/.generated-type-script": true,
     "dist": true
   }
 }
