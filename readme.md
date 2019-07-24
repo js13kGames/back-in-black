@@ -271,9 +271,9 @@ function layers(layer: LayerFactory): void {
         (state, now, save, load, drop) => {
           state.clickedOrTouched = true
           const currentTime = now
-          const trueOnSuccess = save(`a-key`, aJsonSerializableValue)
+          const truthyOnSuccess = save(`a-key`, aJsonSerializableValue)
           const deserializedOrNull = load<AJsonSerializableType>(`a-key`)
-          const trueOnNonFailure = drop(`a-key`)
+          const truthyOnNonFailure = drop(`a-key`)
         }
       )
       at(
@@ -281,9 +281,9 @@ function layers(layer: LayerFactory): void {
         (state, now, save, load, drop) => {
           state.thirtyTwoSecondsElapsed = true
           const sameAsAboveTime = now
-          const trueOnSuccess = save(`a-key`, aJsonSerializableValue)
+          const truthyOnSuccess = save(`a-key`, aJsonSerializableValue)
           const deserializedOrNull = load<AJsonSerializableType>(`a-key`)
-          const trueOnNonFailure = drop(`a-key`)
+          const truthyOnNonFailure = drop(`a-key`)
         }
       )
       animation(
@@ -436,9 +436,9 @@ to that of the parent `render` callback.
 
 Saves a JSON-serializable object under the given string key.
 
-Returns `true` when successful.
+Returns truthy when successful.
 
-Returns `false` and has no side effects when unsuccessful.
+Returns falsy and has no side effects when unsuccessful.
 
 ###### `load`
 
@@ -453,9 +453,9 @@ Returns `null` when unsuccessful or not previously saved.
 
 Deletes the object with the given string key.
 
-Returns `true` when successful, including when no such object exists.
+Returns truthy when successful, including when no such object exists.
 
-Returns `false` and has no side effects when unsuccessful.
+Returns falsy and has no side effects when unsuccessful.
 
 ### Defined by the engine
 
@@ -465,9 +465,9 @@ The name of the game from its path under `src/games`, as a string.
 
 #### `saveLoadAvailable`
 
-When `true`, mutation callbacks' `save`, `load` and `drop` are likely to work.
+When truthy, mutation callbacks' `save`, `load` and `drop` are likely to work.
 
-When `false`, mutation callbacks' `save`, `load` and `drop` will definitely not
+When falsy, mutation callbacks' `save`, `load` and `drop` will definitely not
 work.
 
 #### `Json`/`IJsonArray`/`IJsonArrayAny`/`IJsonObject`
