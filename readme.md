@@ -143,11 +143,11 @@ Any file path (including files within folders), where:
 
 ### Paths
 
-#### `src/engine/src/**/*.ts`
+#### `src/engine/src/{file-path}.ts`
 
 TypeScript which is included in every game.
 
-#### `src/engine/src/**/*.d.ts`
+#### `src/engine/src/{file-path}.d.ts`
 
 Defines types which the engine expects games to define.
 
@@ -174,7 +174,7 @@ will be available in the game's TypeScript global scope as
 
 The built game artifact.
 
-#### `src/hot-reload/src/**/*.ts`
+#### `src/hot-reload/src/index.ts`
 
 TypeScript which is included in every game during debug builds to enable hot
 reload.
