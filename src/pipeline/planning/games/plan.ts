@@ -4,6 +4,7 @@ import StepBase from "../../steps/step-base"
 import ParallelStep from "../../steps/aggregators/parallel-step"
 import SerialStep from "../../steps/aggregators/serial-step"
 import separateByType from "./separate-by-type"
+import planGeneratedTypeScript from "./plan-generated-type-script"
 import planTypeScript from "./plan-type-script"
 import planSvg from "./plan-svg"
 import planJavascriptGeneration from "./plan-javascript-generation"
@@ -16,14 +17,15 @@ export default function (
   gamesDiff: Diff<types.GameFile>
 ): StepBase {
   const typeSeparated = separateByType(debug, gamesDiff)
+  const games = typeSeparated.allSorted
+    .mapItems(item => item.game)
+    .deduplicateItems()
+  const generatedTypeScriptSteps = planGeneratedTypeScript(games)
   const typeScriptSteps = planTypeScript(typeSeparated.sortedByKey.typeScript)
   const svgSteps = planSvg(typeSeparated.sortedByKey.svg)
   const javaScriptSteps = planJavascriptGeneration(
     enginePlanningResult, typeSeparated.allSorted
   )
-  const games = typeSeparated.allSorted
-    .mapItems(item => item.game)
-    .deduplicateItems()
   const htmlGenerationSteps = planHtmlGeneration(
     enginePlanningResult, games
   )
@@ -36,6 +38,7 @@ export default function (
       new SerialStep(
         `builds`,
         [
+          generatedTypeScriptSteps,
           new ParallelStep(
             `files`,
             [typeScriptSteps, svgSteps]
