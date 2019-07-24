@@ -2,8 +2,12 @@ import * as path from "path"
 import * as types from "../../types"
 import Diff from "../../files/diff"
 import StepBase from "../../steps/step-base"
+import SerialStep from "../../steps/aggregators/serial-step"
+import ParallelStep from "../../steps/aggregators/parallel-step"
 import ArbitraryStep from "../../steps/actions/arbitrary-step"
 import DeleteFromKeyPairValueStoreIfSetStep from "../../steps/actions/stores/delete-from-key-pair-value-store-if-set-step"
+import DeleteStep from "../../steps/actions/files/delete-step"
+import WriteFileStep from "../../steps/actions/files/write-file-step"
 import ReadTextFileStep from "../../steps/actions/files/read-text-file-step"
 import ParseTypeScriptStep from "../../steps/actions/type-script/parse-type-script-step"
 import OptimizeSvgStep from "../../steps/actions/optimize-svg-step"
@@ -35,6 +39,9 @@ export default function (
       ),
       new DeleteFromKeyPairValueStoreIfSetStep(
         gameSvgTypeScriptParsedStore, item.game, generateSvgPath(item)
+      ),
+      new DeleteStep(
+        path.join(`src`, `games`, item.game, `src`, `.generated-type-script`, `${item.name}.ts`)
       )
     ],
     item => [
@@ -63,10 +70,24 @@ export default function (
           gameSvgTypeScriptTextStore.set(item.game, generateSvgPath(item), typeScript)
         }
       ),
-      new ParseTypeScriptStep(
-        generateSvgPath(item),
-        () => gameSvgTypeScriptTextStore.get(item.game, generateSvgPath(item)),
-        parsed => gameSvgTypeScriptParsedStore.set(item.game, generateSvgPath(item), parsed)
+      new ParallelStep(
+        `parseAndWrite`,
+        [
+          new ParseTypeScriptStep(
+            generateSvgPath(item),
+            () => gameSvgTypeScriptTextStore.get(item.game, generateSvgPath(item)),
+            parsed => gameSvgTypeScriptParsedStore.set(item.game, generateSvgPath(item), parsed)
+          ),
+          new SerialStep(
+            `write`,
+            [
+              new WriteFileStep(
+                () => gameSvgTypeScriptTextStore.get(item.game, generateSvgPath(item)),
+                path.join(`src`, `games`, item.game, `src`, `.generated-type-script`, `${item.name}.ts`)
+              )
+            ]
+          )
+        ]
       )
     ]
   )
