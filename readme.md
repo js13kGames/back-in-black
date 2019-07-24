@@ -470,6 +470,11 @@ When truthy, mutation callbacks' `save`, `load` and `drop` are likely to work.
 When falsy, mutation callbacks' `save`, `load` and `drop` will definitely not
 work.
 
+#### `Truthiness`
+
+Either `1` or `undefined`.  Useful for indicating a `true`/`false` flag without
+the overhead of `return !1` or similar.
+
 #### `Json`/`IJsonArray`/`IJsonArrayAny`/`IJsonObject`
 
 Types which can be serialized to or deserialized from JSON.
