@@ -1,12 +1,8 @@
-type EngineMutationCallback = (
-  now: number
-) => void
+type EngineMutationCallback = () => void
 
 function engineExecuteMutationCallback(
   callback: EngineMutationCallback
 ): void {
-  callback(
-    now
-  )
+  callback()
   engineRender()
 }
