@@ -5,11 +5,11 @@ try {
   saveLoadAvailable = 1
 } catch { }
 
-function engineSave<T extends Json>(name: string, content: T): Truthiness {
-  return engineSaveDirect(`${gameName}-${name}`, content)
+function save<T extends Json>(name: string, content: T): Truthiness {
+  return engineSave(`${gameName}-${name}`, content)
 }
 
-function engineSaveDirect<T extends Json>(key: string, content: T): Truthiness {
+function engineSave<T extends Json>(key: string, content: T): Truthiness {
   if (saveLoadAvailable) {
     try {
       localStorage.setItem(key, JSON.stringify(content))

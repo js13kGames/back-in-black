@@ -1,5 +1,5 @@
 function engineSaveState(): void {
-  engineSaveDirect<EngineState>(gameName, {
+  engineSave<EngineState>(gameName, {
     engineVersion,
     gameVersion: version,
     state,

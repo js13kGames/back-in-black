@@ -268,10 +268,9 @@ function layers(layer: LayerFactory): void {
         64, // widthVirtualPixels
         80, // heightVirtualPixels
         [translateX(24)], // transforms
-        save => {
+        () => {
           state.clickedOrTouched = true
           const currentTime = now
-          const truthyOnSuccess = save(`a-key`, aJsonSerializableValue)
         }
       )
     }
@@ -330,14 +329,6 @@ the last defined wins.
 A mutation callback is executed when an event occurs which could alter state,
 and will be followed by a re-`render`.
 
-###### `save`
-
-Saves a JSON-serializable object under the given string key.
-
-Returns truthy when successful.
-
-Returns falsy and has no side effects when unsuccessful.
-
 ### Defined by the engine
 
 #### `gameName`
@@ -389,10 +380,9 @@ the render emits.
 ```typescript
 at(
   now + 32000,
-  save => {
+  () => {
     state.thirtyTwoSecondsElapsed = true
     const sameAsAboveTime = now
-    const truthyOnSuccess = save(`a-key`, aJsonSerializableValue)
   }
 )
 ```
@@ -477,6 +467,18 @@ loop(
 #### Mutation Callback Helpers
 
 These are intended to be used only during a mutation callback.
+
+##### `save`
+
+Saves a JSON-serializable object under the given string key.
+
+Returns truthy when successful.
+
+Returns falsy and has no side effects when unsuccessful.
+
+```typescript
+const truthyOnSuccess = save(`a-key`, aJsonSerializableValue)
+```
 
 ##### `load`
 
