@@ -8,5 +8,5 @@ function engineLoadState(): void {
     state = possibleState.state
     now = possibleState.now
   }
-  engineDropDirect(gameName)
+  engineDrop(gameName)
 }

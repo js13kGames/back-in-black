@@ -268,12 +268,11 @@ function layers(layer: LayerFactory): void {
         64, // widthVirtualPixels
         80, // heightVirtualPixels
         [translateX(24)], // transforms
-        (save, load, drop) => {
+        (save, load) => {
           state.clickedOrTouched = true
           const currentTime = now
           const truthyOnSuccess = save(`a-key`, aJsonSerializableValue)
           const deserializedOrNull = load<AJsonSerializableType>(`a-key`)
-          const truthyOnNonFailure = drop(`a-key`)
         }
       )
     }
@@ -349,14 +348,6 @@ Returns the deserialized object when successful.
 
 Returns `null` when unsuccessful or not previously saved.
 
-###### `drop`
-
-Deletes the object with the given string key.
-
-Returns truthy when successful, including when no such object exists.
-
-Returns falsy and has no side effects when unsuccessful.
-
 ### Defined by the engine
 
 #### `gameName`
@@ -408,12 +399,11 @@ the render emits.
 ```typescript
 at(
   now + 32000,
-  (save, load, drop) => {
+  (save, load) => {
     state.thirtyTwoSecondsElapsed = true
     const sameAsAboveTime = now
     const truthyOnSuccess = save(`a-key`, aJsonSerializableValue)
     const deserializedOrNull = load<AJsonSerializableType>(`a-key`)
-    const truthyOnNonFailure = drop(`a-key`)
   }
 )
 ```
@@ -493,6 +483,22 @@ loop(
     }]
   ]
 )
+```
+
+#### Mutation Callback Helpers
+
+These are intended to be used only during a mutation callback.
+
+##### `drop`
+
+Deletes the object with the given string key.
+
+Returns truthy when successful, including when no such object exists.
+
+Returns falsy and has no side effects when unsuccessful.
+
+```typescript
+const truthyOnNonFailure = drop(`a-key`)
 ```
 
 #### Transforms

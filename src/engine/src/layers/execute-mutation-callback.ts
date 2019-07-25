@@ -1,8 +1,7 @@
 type EngineMutationCallback = (
   now: number,
   save: <T extends Json>(name: string, content: T) => Truthiness,
-  load: <T extends Json>(name: string) => null | T,
-  drop: (name: string) => Truthiness
+  load: <T extends Json>(name: string) => null | T
 ) => void
 
 function engineExecuteMutationCallback(
@@ -11,8 +10,7 @@ function engineExecuteMutationCallback(
   callback(
     now,
     engineSave,
-    engineLoad,
-    engineDrop
+    engineLoad
   )
   engineRender()
 }

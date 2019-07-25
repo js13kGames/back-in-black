@@ -35,11 +35,11 @@ function engineLoadDirect<T extends Json>(key: string): null | T {
   return null
 }
 
-function engineDrop(name: string): Truthiness {
-  return engineDropDirect(`${gameName}-${name}`)
+function drop(name: string): Truthiness {
+  return engineDrop(`${gameName}-${name}`)
 }
 
-function engineDropDirect(key: string): Truthiness {
+function engineDrop(key: string): Truthiness {
   if (saveLoadAvailable) {
     try {
       localStorage.removeItem(key)
