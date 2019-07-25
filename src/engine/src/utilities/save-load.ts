@@ -19,11 +19,11 @@ function engineSaveDirect<T extends Json>(key: string, content: T): Truthiness {
   return
 }
 
-function engineLoad<T extends Json>(name: string): null | T {
-  return engineLoadDirect(`${gameName}-${name}`)
+function load<T extends Json>(name: string): null | T {
+  return engineLoad(`${gameName}-${name}`)
 }
 
-function engineLoadDirect<T extends Json>(key: string): null | T {
+function engineLoad<T extends Json>(key: string): null | T {
   if (saveLoadAvailable) {
     try {
       const json = localStorage.getItem(key)

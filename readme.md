@@ -268,11 +268,10 @@ function layers(layer: LayerFactory): void {
         64, // widthVirtualPixels
         80, // heightVirtualPixels
         [translateX(24)], // transforms
-        (save, load) => {
+        save => {
           state.clickedOrTouched = true
           const currentTime = now
           const truthyOnSuccess = save(`a-key`, aJsonSerializableValue)
-          const deserializedOrNull = load<AJsonSerializableType>(`a-key`)
         }
       )
     }
@@ -339,15 +338,6 @@ Returns truthy when successful.
 
 Returns falsy and has no side effects when unsuccessful.
 
-###### `load`
-
-Loads the JSON-serializable object with the given key.  Makes no attempt to
-ensure that the deserialized object matches the specified type.
-
-Returns the deserialized object when successful.
-
-Returns `null` when unsuccessful or not previously saved.
-
 ### Defined by the engine
 
 #### `gameName`
@@ -399,11 +389,10 @@ the render emits.
 ```typescript
 at(
   now + 32000,
-  (save, load) => {
+  save => {
     state.thirtyTwoSecondsElapsed = true
     const sameAsAboveTime = now
     const truthyOnSuccess = save(`a-key`, aJsonSerializableValue)
-    const deserializedOrNull = load<AJsonSerializableType>(`a-key`)
   }
 )
 ```
@@ -488,6 +477,19 @@ loop(
 #### Mutation Callback Helpers
 
 These are intended to be used only during a mutation callback.
+
+##### `load`
+
+Loads the JSON-serializable object with the given key.  Makes no attempt to
+ensure that the deserialized object matches the specified type.
+
+Returns the deserialized object when successful.
+
+Returns `null` when unsuccessful or not previously saved.
+
+```typescript
+const deserializedOrNull = load<AJsonSerializableType>(`a-key`)
+```
 
 ##### `drop`
 

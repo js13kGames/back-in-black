@@ -1,5 +1,5 @@
 function engineLoadState(): void {
-  const possibleState = engineLoadDirect<EngineState>(gameName)
+  const possibleState = engineLoad<EngineState>(gameName)
   if (possibleState === null
     || possibleState.engineVersion !== engineVersion
     || possibleState.gameVersion !== version) {
