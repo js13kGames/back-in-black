@@ -259,7 +259,7 @@ function layers(layer: LayerFactory): void {
     400, // viewportMaximumHeightVirtualPixels
     0, // viewportHorizontalAlignmentSignedUnitInterval
     0, // viewportVerticalAlignmentSignedUnitInterval
-    (state, draw, hitbox, loop) => {
+    (state, draw, hitbox) => {
       draw(
         anExample_svg,
         [translateX(24)] // transforms
@@ -275,23 +275,6 @@ function layers(layer: LayerFactory): void {
           const deserializedOrNull = load<AJsonSerializableType>(`a-key`)
           const truthyOnNonFailure = drop(`a-key`)
         }
-      )
-      loop(
-        now + 200,
-        [
-          [300, () => {
-            /* Rendered between now + 200 and now + 500. */
-            /* Subsequently rendered between now + 1250 and now + 1550. */
-          }],
-          [600, () => {
-            /* Rendered between now + 500 and now + 1100. */
-            /* Subsequently rendered between now + 1550 and now + 2150. */
-          }],
-          [150, () => {
-            /* Rendered between now + 1100 and now + 1250. */
-            /* Subsequently rendered between now + 2150 and now + 2300. */
-          }]
-        ]
       )
     }
   )
@@ -347,18 +330,6 @@ As with `draw`, the transform origin is the center of the hitbox.
 
 If multiple hitboxes overlap, within the same layer or between multiple layers,
 the last defined wins.
-
-###### `loop`
-
-Describes a looping animation.
-
-This is:
-
-- A time at which to start playing the animation.
-- A list of "frames", which are a duration and a render callback.
-
-The appropriate render callback (if any) will be executed, and a re-render
-triggered at the end of each frame.
 
 ##### Mutation callbacks
 
@@ -498,6 +469,38 @@ This is:
 
 The appropriate render callback (if any) will be executed, and a re-render
 triggered at the end of each frame.
+
+##### `loop`
+
+Describes a looping animation.
+
+This is:
+
+- A time at which to start playing the animation.
+- A list of "frames", which are a duration and a render callback.
+
+The appropriate render callback (if any) will be executed, and a re-render
+triggered at the end of each frame.
+
+```typescript
+loop(
+  now + 200,
+  [
+    [300, () => {
+      /* Rendered between now + 200 and now + 500. */
+      /* Subsequently rendered between now + 1250 and now + 1550. */
+    }],
+    [600, () => {
+      /* Rendered between now + 500 and now + 1100. */
+      /* Subsequently rendered between now + 1550 and now + 2150. */
+    }],
+    [150, () => {
+      /* Rendered between now + 1100 and now + 1250. */
+      /* Subsequently rendered between now + 2150 and now + 2300. */
+    }]
+  ]
+)
+```
 
 #### Transforms
 

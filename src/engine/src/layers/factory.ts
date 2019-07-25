@@ -18,10 +18,6 @@ type LayerFactory = (
       heightVirtualPixels: number,
       transforms: ReadonlyArray<EngineTransform>,
       callback: EngineMutationCallback
-    ) => void,
-    loop: (
-      start: number,
-      frames: ReadonlyArray<readonly [number, () => void]>
     ) => void
   ) => void
 ) => void

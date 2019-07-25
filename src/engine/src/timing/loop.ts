@@ -1,4 +1,4 @@
-function engineLoop(
+function loop(
   start: number,
   frames: ReadonlyArray<readonly [number, () => void]>
 ): void {

@@ -98,8 +98,7 @@ function engineCreateLayers(): void {
           hitboxElement.style.marginTop = `${-height / 2}px`
           hitboxElement.style.transform = transforms.join(` `)
           viewportElement.insertBefore(hitboxElement, null)
-        },
-        engineLoop
+        }
       )
     })
   })
