@@ -30,7 +30,8 @@ export default function (
         new DeleteFromKeyValueStoreIfSetStep(gameHtmlStore, item),
         new DeleteFromKeyValueStoreIfSetStep(gameMinifiedHtmlStore, item),
         new DeleteFromKeyValueStoreIfSetStep(gameZipStore, item),
-        new DeleteStep(path.join(`dist`, `${item}.zip`))
+        new DeleteStep(path.join(`dist`, `${item}.zip`)),
+        new DeleteStep(path.join(`dist`, `${item}.html`))
       ],
       item => [
         new RenderPugStep(
@@ -46,6 +47,10 @@ export default function (
             html,
             uuid: uuid.v4()
           })
+        ),
+        new WriteFileStep(
+          () => gameMinifiedHtmlStore.get(item).html,
+          path.join(`dist`, `${item}.html`)
         ),
         new ZipStep(
           () => keyValueObject(
