@@ -3,9 +3,9 @@ function engineLoadState(): void {
   if (possibleState === null
     || possibleState.engineVersion !== engineVersion
     || possibleState.gameVersion !== version) {
-    engineState = initial()
+    state = initial()
   } else {
-    engineState = possibleState.state
+    state = possibleState.state
     now = possibleState.now
   }
   engineDropDirect(gameName)

@@ -1,4 +1,4 @@
-let engineState: State
+let state: State
 let now = 0
 
 const engineVersion = 0
