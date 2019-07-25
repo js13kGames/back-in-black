@@ -74,7 +74,7 @@ See `File structure` for details on adding new or modifying existing games.
 It is highly recommended to set up the following continuous integration
 services.
 
-##### Travis CI (recommended)
+##### Travis CI
 
 This means that your games will be built for you whenever you push changes to
 your fork, and the zipped games uploaded as GitHub releases.
