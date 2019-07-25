@@ -15,7 +15,7 @@ types of [Js13kGames](https://js13kgames.com/) entries.  It features:
 
 - Continuous integration.
 
-See an [src/games/basic-tower-of-hanoi/src](example game)!
+See an [example game](src/games/basic-tower-of-hanoi/src)!
 
 ## Usage
 
