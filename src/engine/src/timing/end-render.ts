@@ -9,10 +9,9 @@ function engineTimingEndRender(): void {
         () => {
           now = capturedEarliestTimer.at
           if (capturedEarliestTimer.callback) {
-            engineExecuteMutationCallback(capturedEarliestTimer.callback)
-          } else {
-            engineRender()
+            capturedEarliestTimer.callback()
           }
+          engineRender()
         },
         engineEarliestTimer.at - now
       )

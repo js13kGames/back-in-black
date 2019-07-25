@@ -83,7 +83,8 @@ function engineCreateLayers(): void {
               )
               now += elapsed
             }
-            engineExecuteMutationCallback(callback)
+            callback()
+            engineRender()
             e.preventDefault()
           }
           hitboxElement.onmousedown = handler
