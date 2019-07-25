@@ -79,10 +79,10 @@ function engineCreateLayers(): void {
             if (engineEarliestTimer !== null) {
               const timeOfRender = +new Date
               const elapsed = Math.min(
-                engineEarliestTimer.at - engineNow,
+                engineEarliestTimer.at - now,
                 timeOfRender - engineTimeOfLastRender
               )
-              engineNow += elapsed
+              now += elapsed
             }
             engineExecuteMutationCallback(callback)
             e.preventDefault()
@@ -99,7 +99,6 @@ function engineCreateLayers(): void {
           hitboxElement.style.transform = transforms.join(` `)
           viewportElement.insertBefore(hitboxElement, null)
         },
-        engineNow,
         engineAnimation,
         engineLoop
       )

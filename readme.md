@@ -259,7 +259,7 @@ function layers(layer: LayerFactory): void {
     400, // viewportMaximumHeightVirtualPixels
     0, // viewportHorizontalAlignmentSignedUnitInterval
     0, // viewportVerticalAlignmentSignedUnitInterval
-    (state, draw, hitbox, now, animation, loop) => {
+    (state, draw, hitbox, animation, loop) => {
       draw(
         anExample_svg,
         [translateX(24)] // transforms
@@ -268,7 +268,7 @@ function layers(layer: LayerFactory): void {
         64, // widthVirtualPixels
         80, // heightVirtualPixels
         [translateX(24)], // transforms
-        (state, now, save, load, drop) => {
+        (state, save, load, drop) => {
           state.clickedOrTouched = true
           const currentTime = now
           const truthyOnSuccess = save(`a-key`, aJsonSerializableValue)
@@ -360,12 +360,6 @@ As with `draw`, the transform origin is the center of the hitbox.
 If multiple hitboxes overlap, within the same layer or between multiple layers,
 the last defined wins.
 
-###### `now`
-
-A monotonic clock, which tracks the number of milliseconds which appear to have
-elapsed since the start of the game.  This may be somewhat inaccurate; there is
-a limit on how much time can "pass" in one go.
-
 ###### `animation`
 
 Describes a "one-shot" animation.
@@ -402,11 +396,6 @@ A mutable reference to the current state.
 
 Note: changing what `state` itself references will have no effect; instead,
 modify its contents.
-
-###### `now`
-
-Equivalent to the `now` of a `render` callback.  May be the same, or different,
-to that of the parent `render` callback.
 
 ###### `save`
 
@@ -464,6 +453,12 @@ Makes a JSON-serializable type immutable.
 Linearly interpolates between two values by a unit interval, extrapolating if
 that mix value leaves the 0...1 range.
 
+###### `now`
+
+A monotonic clock, which tracks the number of milliseconds which appear to have
+elapsed since the start of the game.  This may be somewhat inaccurate; there is
+a limit on how much time can "pass" in one go.
+
 #### Render emitters
 
 These can be called during a layer's render callback to describe something which
@@ -474,7 +469,7 @@ the render emits.
 ```typescript
 at(
   now + 32000,
-  (state, now, save, load, drop) => {
+  (state, save, load, drop) => {
     state.thirtyTwoSecondsElapsed = true
     const sameAsAboveTime = now
     const truthyOnSuccess = save(`a-key`, aJsonSerializableValue)

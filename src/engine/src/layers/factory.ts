@@ -19,7 +19,6 @@ type LayerFactory = (
       transforms: ReadonlyArray<EngineTransform>,
       callback: EngineMutationCallback
     ) => void,
-    now: number,
     animation: (
       start: number,
       frames: ReadonlyArray<readonly [number, () => void]>,

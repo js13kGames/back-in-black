@@ -5,7 +5,7 @@ function engineAnimation(
     ended: number
   ) => void
 ): void {
-  const elapsed = engineNow - start
+  const elapsed = now - start
   if (elapsed < 0) {
     at(start)
   } else {

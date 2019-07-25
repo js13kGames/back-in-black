@@ -1,5 +1,5 @@
 let engineState: State
-let engineNow = 0
+let now = 0
 
 const engineVersion = 0
 

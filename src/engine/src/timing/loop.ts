@@ -2,7 +2,7 @@ function engineLoop(
   start: number,
   frames: ReadonlyArray<readonly [number, () => void]>
 ): void {
-  const elapsed = engineNow - start
+  const elapsed = now - start
   if (elapsed < 0) {
     at(start)
   } else {
