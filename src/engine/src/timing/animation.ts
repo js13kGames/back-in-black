@@ -7,14 +7,14 @@ function engineAnimation(
 ): void {
   const elapsed = engineNow - start
   if (elapsed < 0) {
-    engineAt(start)
+    at(start)
   } else {
     let accumulated = 0
     for (const frame of frames) {
       accumulated += frame[0]
       if (elapsed < accumulated) {
         frame[1]()
-        engineAt(start + accumulated)
+        at(start + accumulated)
         return
       }
     }

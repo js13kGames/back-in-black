@@ -4,7 +4,7 @@ function engineLoop(
 ): void {
   const elapsed = engineNow - start
   if (elapsed < 0) {
-    engineAt(start)
+    at(start)
   } else {
     let loopDuration = 0
     for (const frame of frames) {
@@ -17,7 +17,7 @@ function engineLoop(
       accumulated += frame[0]
       if (loopElapsed < accumulated) {
         frame[1]()
-        engineAt(start + accumulated + elapsed - loopElapsed)
+        at(start + accumulated + elapsed - loopElapsed)
         return
       }
     }
@@ -25,6 +25,6 @@ function engineLoop(
     // This should be very unlikely.
     accumulated += frames[0][0]
     frames[0][1]()
-    engineAt(start + accumulated + elapsed - loopElapsed)
+    at(start + accumulated + elapsed - loopElapsed)
   }
 }

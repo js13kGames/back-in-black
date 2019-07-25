@@ -20,10 +20,6 @@ type LayerFactory = (
       callback: EngineMutationCallback
     ) => void,
     now: number,
-    at: (
-      time: number,
-      callback: EngineMutationCallback
-    ) => void,
     animation: (
       start: number,
       frames: ReadonlyArray<readonly [number, () => void]>,

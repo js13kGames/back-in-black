@@ -259,7 +259,7 @@ function layers(layer: LayerFactory): void {
     400, // viewportMaximumHeightVirtualPixels
     0, // viewportHorizontalAlignmentSignedUnitInterval
     0, // viewportVerticalAlignmentSignedUnitInterval
-    (state, draw, hitbox, now, at, animation, loop) => {
+    (state, draw, hitbox, now, animation, loop) => {
       draw(
         anExample_svg,
         [translateX(24)] // transforms
@@ -271,16 +271,6 @@ function layers(layer: LayerFactory): void {
         (state, now, save, load, drop) => {
           state.clickedOrTouched = true
           const currentTime = now
-          const truthyOnSuccess = save(`a-key`, aJsonSerializableValue)
-          const deserializedOrNull = load<AJsonSerializableType>(`a-key`)
-          const truthyOnNonFailure = drop(`a-key`)
-        }
-      )
-      at(
-        now + 32000,
-        (state, now, save, load, drop) => {
-          state.thirtyTwoSecondsElapsed = true
-          const sameAsAboveTime = now
           const truthyOnSuccess = save(`a-key`, aJsonSerializableValue)
           const deserializedOrNull = load<AJsonSerializableType>(`a-key`)
           const truthyOnNonFailure = drop(`a-key`)
@@ -375,20 +365,6 @@ the last defined wins.
 A monotonic clock, which tracks the number of milliseconds which appear to have
 elapsed since the start of the game.  This may be somewhat inaccurate; there is
 a limit on how much time can "pass" in one go.
-
-###### `at`
-
-Requests that a mutation callback be executed after a delay.
-
-Operates in the same time space as `now`.
-
-Timers will not fire if missing from future `render` callbacks.
-
-Executes immediately if before `now`.  This can cause infinite recursion if care
-is not taken to ensure they are not present on the following `render`.
-
-If multiple are defined, the last defined with the earliest time takes
-priority.  Only one can fire per `render`.
 
 ###### `animation`
 
@@ -487,6 +463,38 @@ Makes a JSON-serializable type immutable.
 
 Linearly interpolates between two values by a unit interval, extrapolating if
 that mix value leaves the 0...1 range.
+
+#### Render emitters
+
+These can be called during a layer's render callback to describe something which
+the render emits.
+
+##### `at`
+
+```typescript
+at(
+  now + 32000,
+  (state, now, save, load, drop) => {
+    state.thirtyTwoSecondsElapsed = true
+    const sameAsAboveTime = now
+    const truthyOnSuccess = save(`a-key`, aJsonSerializableValue)
+    const deserializedOrNull = load<AJsonSerializableType>(`a-key`)
+    const truthyOnNonFailure = drop(`a-key`)
+  }
+)
+```
+
+Requests that a mutation callback be executed after a delay.
+
+Operates in the same time space as `now`.
+
+Timers will not fire if missing from future `render` callbacks.
+
+Executes immediately if before `now`.  This can cause infinite recursion if care
+is not taken to ensure they are not present on the following `render`.
+
+If multiple are defined, the last defined with the earliest time takes
+priority.  Only one can fire per `render`.
 
 #### Transforms
 
