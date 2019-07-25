@@ -1,4 +1,4 @@
-function engineAnimation(
+function animation(
   start: number,
   frames: ReadonlyArray<readonly [number, () => void]>,
   pastEnd?: (

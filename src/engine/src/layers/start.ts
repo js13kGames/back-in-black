@@ -99,7 +99,6 @@ function engineCreateLayers(): void {
           hitboxElement.style.transform = transforms.join(` `)
           viewportElement.insertBefore(hitboxElement, null)
         },
-        engineAnimation,
         engineLoop
       )
     })
