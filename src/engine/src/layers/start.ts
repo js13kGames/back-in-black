@@ -50,7 +50,6 @@ function engineCreateLayers(): void {
       }
 
       render(
-        state,
         (
           svg,
           transforms

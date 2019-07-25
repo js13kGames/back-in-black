@@ -8,7 +8,6 @@ type LayerFactory = (
   viewportHorizontalAlignmentSignedUnitInterval: number,
   viewportVerticalAlignmentSignedUnitInterval: number,
   render: (
-    state: Readonly<State>,
     draw: (
       src: EngineSvg,
       transforms: ReadonlyArray<EngineTransform>

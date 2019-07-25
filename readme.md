@@ -259,7 +259,7 @@ function layers(layer: LayerFactory): void {
     400, // viewportMaximumHeightVirtualPixels
     0, // viewportHorizontalAlignmentSignedUnitInterval
     0, // viewportVerticalAlignmentSignedUnitInterval
-    (state, draw, hitbox) => {
+    (draw, hitbox) => {
       draw(
         anExample_svg,
         [translateX(24)] // transforms
@@ -268,7 +268,7 @@ function layers(layer: LayerFactory): void {
         64, // widthVirtualPixels
         80, // heightVirtualPixels
         [translateX(24)], // transforms
-        (state, save, load, drop) => {
+        (save, load, drop) => {
           state.clickedOrTouched = true
           const currentTime = now
           const truthyOnSuccess = save(`a-key`, aJsonSerializableValue)
@@ -313,10 +313,6 @@ viewport with those of the display.
 Executed when the engine needs to know what to display to the user, and which
 interaction options exist, based on the current state.
 
-###### `state`
-
-A read-only view of the current state.
-
 ###### `draw`
 
 Draws the given `svg`.  The transform origin is the center of the SVG.
@@ -335,13 +331,6 @@ the last defined wins.
 
 A mutation callback is executed when an event occurs which could alter state,
 and will be followed by a re-`render`.
-
-###### `state`
-
-A mutable reference to the current state.
-
-Note: changing what `state` itself references will have no effect; instead,
-modify its contents.
 
 ###### `save`
 
@@ -373,6 +362,10 @@ Returns falsy and has no side effects when unsuccessful.
 #### `gameName`
 
 The name of the game from its path under `src/games`, as a string.
+
+###### `state`
+
+The current state; modify as you please.
 
 #### `saveLoadAvailable`
 
@@ -415,7 +408,7 @@ the render emits.
 ```typescript
 at(
   now + 32000,
-  (state, save, load, drop) => {
+  (save, load, drop) => {
     state.thirtyTwoSecondsElapsed = true
     const sameAsAboveTime = now
     const truthyOnSuccess = save(`a-key`, aJsonSerializableValue)
