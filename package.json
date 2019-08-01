@@ -17,7 +17,7 @@
     "@types/express": "4.17.0",
     "@types/html-minifier": "3.5.3",
     "@types/mkdirp-promise": "5.0.0",
-    "@types/node": "12.6.8",
+    "@types/node": "12.6.9",
     "@types/progress": "2.0.3",
     "@types/pug": "2.0.4",
     "@types/recursive-readdir": "2.2.0",
