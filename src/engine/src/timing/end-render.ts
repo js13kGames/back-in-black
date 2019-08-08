@@ -3,32 +3,33 @@ function engineTimingEndRender(): void {
     clearTimeout(engineTimeout)
   }
   engineTimeout = null
-  if (engineEarliestTimer !== null) {
-    if (engineEarliestTimer.at <= now) {
-      now = engineEarliestTimer.at
-      if (engineEarliestTimer.callback) {
-        engineEarliestTimer.callback()
+  const possibleNext = engineTimingNext()
+  if (possibleNext !== null) {
+    const next = possibleNext
+    if (next.at <= now) {
+      now = next.at
+      if (next.callback) {
+        next.callback()
       }
       engineRender()
     } else {
-      const capturedEarliestTimer = engineEarliestTimer
       engineMonotonic()
       setEngineTimeout()
       function setEngineTimeout(): void {
         engineTimeout = setTimeout(
           () => {
             engineMonotonic()
-            if (engineNow < capturedEarliestTimer.at) {
+            if (engineNow < next.at) {
               setEngineTimeout()
             } else {
-              now = capturedEarliestTimer.at
-              if (capturedEarliestTimer.callback) {
-                capturedEarliestTimer.callback()
+              now = next.at
+              if (next.callback) {
+                next.callback()
               }
               engineRender()
             }
           },
-          engineConvertBeatsToMilliseconds(capturedEarliestTimer.at - engineNow)
+          engineConvertBeatsToMilliseconds(next.at - engineNow)
         )
       }
     }
