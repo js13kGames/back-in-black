@@ -1,5 +1,4 @@
 function engineTimingStartRender(): void {
-  engineTimeOfLastRender = +new Date
   if (engineTimeout !== null) {
     clearTimeout(engineTimeout)
   }

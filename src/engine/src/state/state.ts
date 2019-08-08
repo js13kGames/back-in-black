@@ -1,7 +1,7 @@
 let state: State
-let now = 0
+let engineNow = 0
 
-const engineVersion = 0
+const engineVersion = 1
 
 type EngineState = {
   readonly engineVersion: number

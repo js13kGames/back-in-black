@@ -1,5 +1,5 @@
 let engineTimeout: null | number = null
-let engineTimeOfLastRender: number
+let now = 0
 
 let engineEarliestTimer: null | {
   readonly at: number

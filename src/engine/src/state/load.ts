@@ -6,7 +6,7 @@ function engineLoadState(): void {
     state = initial()
   } else {
     state = possibleState.state
-    now = possibleState.now
+    now = engineNow = possibleState.now
   }
   engineDrop(gameName)
 }

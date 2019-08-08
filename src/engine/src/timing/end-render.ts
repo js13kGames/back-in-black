@@ -5,16 +5,25 @@ function engineTimingEndRender(): void {
       engineRender()
     } else {
       const capturedEarliestTimer = engineEarliestTimer
-      engineTimeout = setTimeout(
-        () => {
-          now = capturedEarliestTimer.at
-          if (capturedEarliestTimer.callback) {
-            capturedEarliestTimer.callback()
-          }
-          engineRender()
-        },
-        engineEarliestTimer.at - now
-      )
+      engineMonotonic()
+      setEngineTimeout()
+      function setEngineTimeout(): void {
+        engineTimeout = setTimeout(
+          () => {
+            engineMonotonic()
+            if (engineNow < capturedEarliestTimer.at) {
+              setEngineTimeout()
+            } else {
+              now = capturedEarliestTimer.at
+              if (capturedEarliestTimer.callback) {
+                capturedEarliestTimer.callback()
+              }
+              engineRender()
+            }
+          },
+          capturedEarliestTimer.at - engineNow
+        )
+      }
     }
   }
 }
