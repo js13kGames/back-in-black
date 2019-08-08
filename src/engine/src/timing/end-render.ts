@@ -6,6 +6,9 @@ function engineTimingEndRender(): void {
   if (engineEarliestTimer !== null) {
     if (engineEarliestTimer.at <= now) {
       now = engineEarliestTimer.at
+      if (engineEarliestTimer.callback) {
+        engineEarliestTimer.callback()
+      }
       engineRender()
     } else {
       const capturedEarliestTimer = engineEarliestTimer
