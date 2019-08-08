@@ -6,7 +6,7 @@ function engineTimingEndRender(): void {
   const possibleNext = engineTimingNext()
   if (possibleNext !== null) {
     const next = possibleNext
-    if (next.at <= now) {
+    if (next.at <= engineNow) {
       next.callback()
     } else {
       engineMonotonic()
