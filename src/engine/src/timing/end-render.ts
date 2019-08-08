@@ -7,9 +7,7 @@ function engineTimingEndRender(): void {
   if (possibleNext !== null) {
     const next = possibleNext
     if (next.at <= now) {
-      now = next.at
       next.callback()
-      engineRender()
     } else {
       engineMonotonic()
       setEngineTimeout()
@@ -20,9 +18,7 @@ function engineTimingEndRender(): void {
             if (engineNow < next.at) {
               setEngineTimeout()
             } else {
-              now = next.at
               next.callback()
-              engineRender()
             }
           },
           engineConvertBeatsToMilliseconds(next.at - engineNow)

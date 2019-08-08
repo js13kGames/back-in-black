@@ -6,9 +6,11 @@ function at(
     engineEarliestTimer = {
       at,
       callback(): void {
+        now = at
         if (callback) {
           callback()
         }
+        engineRender()
       }
     }
   }
