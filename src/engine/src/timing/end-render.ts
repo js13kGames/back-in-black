@@ -1,4 +1,8 @@
 function engineTimingEndRender(): void {
+  if (engineTimeout !== null) {
+    clearTimeout(engineTimeout)
+  }
+  engineTimeout = null
   if (engineEarliestTimer !== null) {
     if (engineEarliestTimer.at <= now) {
       now = engineEarliestTimer.at
