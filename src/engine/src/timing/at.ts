@@ -5,7 +5,11 @@ function at(
   if (engineEarliestTimer === null || engineEarliestTimer.at >= at) {
     engineEarliestTimer = {
       at,
-      callback
+      callback(): void {
+        if (callback) {
+          callback()
+        }
+      }
     }
   }
 }

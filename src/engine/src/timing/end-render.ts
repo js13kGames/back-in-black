@@ -8,9 +8,7 @@ function engineTimingEndRender(): void {
     const next = possibleNext
     if (next.at <= now) {
       now = next.at
-      if (next.callback) {
-        next.callback()
-      }
+      next.callback()
       engineRender()
     } else {
       engineMonotonic()
@@ -23,9 +21,7 @@ function engineTimingEndRender(): void {
               setEngineTimeout()
             } else {
               now = next.at
-              if (next.callback) {
-                next.callback()
-              }
+              next.callback()
               engineRender()
             }
           },

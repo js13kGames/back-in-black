@@ -3,5 +3,5 @@ let now = 0
 
 let engineEarliestTimer: null | {
   readonly at: number
-  readonly callback?: EngineMutationCallback
+  readonly callback: EngineMutationCallback
 }
