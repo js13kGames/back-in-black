@@ -327,3 +327,8 @@ function layers(
     }
   )
 }
+
+function audioReady(): () => void {
+  return () => {
+  }
+}

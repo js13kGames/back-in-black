@@ -263,6 +263,22 @@ that loaded from local storage, `initial` will be used instead.
 
 The number of beats per minute of the game's music.
 
+#### `audioReady`
+
+Executed immediately after the Web Audio API is initialized, for the creation of
+virtual instruments.  A function is returned which is executed once per beat to
+control said virtual instruments.  This may skip beats if timing problems occur.
+
+```typescript
+function audioReady(): () => void {
+  // audioContext is available here.
+  return function(): void {
+    // Executed every beat where possible.
+    // audioContext is available here.
+  }
+}
+```
+
 #### `layers`
 
 A function which is executed by the engine during startup to define which layers
@@ -363,6 +379,11 @@ When truthy, mutation callbacks' `save`, `load` and `drop` are likely to work.
 
 When falsy, mutation callbacks' `save`, `load` and `drop` will definitely not
 work.
+
+#### `audioContext`
+
+The current Web Audio API context.  This should only be used in the `audioReady`
+function and its returned callback.
 
 #### `Truthiness`
 

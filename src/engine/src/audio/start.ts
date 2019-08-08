@@ -1,4 +1,5 @@
 let audioContext: AudioContext
+let engineBeatCallback: () => void
 
 declare const webkitAudioContext: {
   prototype: AudioContext
@@ -15,4 +16,5 @@ function engineAudioStart(): void {
       return
     }
   }
+  engineBeatCallback = audioReady()
 }
