@@ -275,6 +275,7 @@ function audioReady(): () => void {
   return function(): void {
     // Executed every beat where possible.
     // audioContext is available here.
+    // audioTime is available here.
   }
 }
 ```
@@ -384,6 +385,12 @@ work.
 
 The current Web Audio API context.  This should only be used in the `audioReady`
 function and its returned callback.
+
+#### `audioTime`
+
+Converts a unit interval representing progress through the current beat to a Web
+Audio API time.  This should only be used in the `audioReady` function's
+returned callback.
 
 #### `Truthiness`
 
