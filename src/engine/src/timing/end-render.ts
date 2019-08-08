@@ -25,7 +25,7 @@ function engineTimingEndRender(): void {
               engineRender()
             }
           },
-          capturedEarliestTimer.at - engineNow
+          engineConvertBeatsToMilliseconds(capturedEarliestTimer.at - engineNow)
         )
       }
     }

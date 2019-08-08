@@ -8,9 +8,9 @@ function engineMonotonic(): void {
     : null
   const nextDateNow = +new Date
   if (nextAudioCurrentTime !== null && enginePreviousAudioCurrentTime !== null) {
-    delta = (nextAudioCurrentTime - enginePreviousAudioCurrentTime) * 1000
+    delta = engineConvertSecondsToBeats(nextAudioCurrentTime - enginePreviousAudioCurrentTime)
   } else if (enginePreviousDateNow !== null) {
-    delta = nextDateNow - enginePreviousDateNow
+    delta = engineConvertMillisecondsToBeats(nextDateNow - enginePreviousDateNow)
   }
   delta = Math.max(0, delta)
 
