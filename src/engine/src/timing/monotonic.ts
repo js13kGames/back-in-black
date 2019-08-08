@@ -1,9 +1,15 @@
+let enginePreviousAudioCurrentTime: null | number = null
 let enginePreviousDateNow: null | number = null
 
 function engineMonotonic(): void {
   let delta = 0
+  const nextAudioCurrentTime = audioContext && audioContext.state === `running`
+    ? audioContext.currentTime
+    : null
   const nextDateNow = +new Date
-  if (enginePreviousDateNow !== null) {
+  if (nextAudioCurrentTime !== null && enginePreviousAudioCurrentTime !== null) {
+    delta = (nextAudioCurrentTime - enginePreviousAudioCurrentTime) * 1000
+  } else if (enginePreviousDateNow !== null) {
     delta = nextDateNow - enginePreviousDateNow
   }
   delta = Math.max(0, delta)
@@ -17,5 +23,6 @@ function engineMonotonic(): void {
   delta = Math.min(delta, deltaCap)
 
   engineNow += delta
+  enginePreviousAudioCurrentTime = nextAudioCurrentTime
   enginePreviousDateNow = nextDateNow
 }
