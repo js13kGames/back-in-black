@@ -9,6 +9,7 @@ function engineTimingNextBeat(): null | {
     nextBeat++
   }
   if (enginePreviousAudioCurrentTime !== null) {
+    engineAudioTimeBase = enginePreviousAudioCurrentTime + engineConvertBeatsToSeconds(nextBeat - engineNow)
     return {
       at: nextBeat - 0.4,
       callback(): void {
