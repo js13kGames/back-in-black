@@ -11,4 +11,6 @@ onload = () => {
   onbeforeunload = () => {
     engineSaveState()
   }
+  onfocus = engineTimingResume
+  onblur = engineTimingSuspend
 }
