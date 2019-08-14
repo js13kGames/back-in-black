@@ -2,8 +2,7 @@ function loop(
   start: number,
   frames: ReadonlyArray<readonly [number, () => void]>
 ): void {
-  const elapsed = now - start
-  if (elapsed < 0) {
+  if (now < start) {
     at(start)
   } else {
     let loopDuration = 0
@@ -11,20 +10,19 @@ function loop(
       loopDuration += frame[0]
     }
 
-    const loopElapsed = elapsed % loopDuration
-    let accumulated = 0
+    let theEndOfThisFrame = start + Math.floor((now - start) / loopDuration) * loopDuration
     for (const frame of frames) {
-      accumulated += frame[0]
-      if (loopElapsed < accumulated) {
+      theEndOfThisFrame += frame[0]
+      if (now < theEndOfThisFrame) {
         frame[1]()
-        at(start + accumulated + elapsed - loopElapsed)
+        at(theEndOfThisFrame)
         return
       }
     }
 
     // This should be very unlikely.
-    accumulated += frames[0][0]
+    theEndOfThisFrame += frames[0][0]
     frames[0][1]()
-    at(start + accumulated + elapsed - loopElapsed)
+    at(theEndOfThisFrame)
   }
 }

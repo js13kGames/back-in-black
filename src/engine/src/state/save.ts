@@ -3,6 +3,6 @@ function engineSaveState(): void {
     engineVersion,
     gameVersion: version,
     state,
-    now
+    now: engineNow
   })
 }

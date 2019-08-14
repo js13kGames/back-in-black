@@ -259,6 +259,27 @@ storage does not contain a state, or the state is not usable.
 A number which identifies breaking changes to `State`.  If this does not match
 that loaded from local storage, `initial` will be used instead.
 
+#### `beatsPerMinute`
+
+The number of beats per minute of the game's music.
+
+#### `audioReady`
+
+Executed immediately after the Web Audio API is initialized, for the creation of
+virtual instruments.  A function is returned which is executed once per beat to
+control said virtual instruments.  This may skip beats if timing problems occur.
+
+```typescript
+function audioReady(): () => void {
+  // audioContext is available here.
+  return function(): void {
+    // Executed every beat where possible.
+    // audioContext is available here.
+    // audioTime is available here.
+  }
+}
+```
+
 #### `layers`
 
 A function which is executed by the engine during startup to define which layers
@@ -360,6 +381,17 @@ When truthy, mutation callbacks' `save`, `load` and `drop` are likely to work.
 When falsy, mutation callbacks' `save`, `load` and `drop` will definitely not
 work.
 
+#### `audioContext`
+
+The current Web Audio API context.  This should only be used in the `audioReady`
+function and its returned callback.
+
+#### `audioTime`
+
+Converts a unit interval representing progress through the current beat to a Web
+Audio API time.  This should only be used in the `audioReady` function's
+returned callback.
+
 #### `Truthiness`
 
 Either `1` or `undefined`.  Useful for indicating a `true`/`false` flag without
@@ -380,9 +412,9 @@ that mix value leaves the 0...1 range.
 
 ###### `now`
 
-A monotonic clock, which tracks the number of milliseconds which appear to have
-elapsed since the start of the game.  This may be somewhat inaccurate; there is
-a limit on how much time can "pass" in one go.
+A monotonic clock, which tracks the number of beats which appear to have elapsed
+since the start of the game.  This may be somewhat inaccurate; there is a limit
+on how much time can "pass" in one go.
 
 #### Render emitters
 
@@ -393,9 +425,9 @@ the render emits.
 
 ```typescript
 at(
-  now + 32000,
+  now + 32,
   () => {
-    state.thirtyTwoSecondsElapsed = true
+    state.thirtyTwoBeatsElapsed = true
     const sameAsAboveTime = now
   }
 )
@@ -422,15 +454,15 @@ emit anything.
 
 ```typescript
 animation(
-  now + 200,
+  now + 2,
   [
-    [300, () => { /* Rendered between now + 200 and now + 500. */ }],
-    [600, () => { /* Rendered between now + 500 and now + 1100. */ }],
-    [150, () => { /* Rendered between now + 1100 and now + 1250. */ }]
+    [3, () => { /* Rendered between now + 2 and now + 5. */ }],
+    [6, () => { /* Rendered between now + 5 and now + 11. */ }],
+    [1, () => { /* Rendered between now + 11 and now + 12. */ }]
   ],
   ended => {
-    /* Rendered after now + 1250. */
-    /* ended = now + 1250. */
+    /* Rendered after now + 12. */
+    /* ended = now + 12. */
   }
 )
 ```
@@ -460,19 +492,19 @@ triggered at the end of each frame.
 
 ```typescript
 loop(
-  now + 200,
+  now + 2,
   [
-    [300, () => {
-      /* Rendered between now + 200 and now + 500. */
-      /* Subsequently rendered between now + 1250 and now + 1550. */
+    [3, () => {
+      /* Rendered between now + 2 and now + 5. */
+      /* Subsequently rendered between now + 12 and now + 15. */
     }],
-    [600, () => {
-      /* Rendered between now + 500 and now + 1100. */
-      /* Subsequently rendered between now + 1550 and now + 2150. */
+    [6, () => {
+      /* Rendered between now + 5 and now + 11. */
+      /* Subsequently rendered between now + 15 and now + 21. */
     }],
-    [150, () => {
-      /* Rendered between now + 1100 and now + 1250. */
-      /* Subsequently rendered between now + 2150 and now + 2300. */
+    [1, () => {
+      /* Rendered between now + 11 and now + 12. */
+      /* Subsequently rendered between now + 21 and now + 22. */
     }]
   ]
 )

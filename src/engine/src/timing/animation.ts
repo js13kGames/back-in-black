@@ -5,21 +5,20 @@ function animation(
     ended: number
   ) => void
 ): void {
-  const elapsed = now - start
-  if (elapsed < 0) {
+  if (now < start) {
     at(start)
   } else {
-    let accumulated = 0
+    let theEndOfThisFrame = start
     for (const frame of frames) {
-      accumulated += frame[0]
-      if (elapsed < accumulated) {
+      theEndOfThisFrame += frame[0]
+      if (now < theEndOfThisFrame) {
         frame[1]()
-        at(start + accumulated)
+        at(theEndOfThisFrame)
         return
       }
     }
     if (pastEnd) {
-      pastEnd(start + accumulated)
+      pastEnd(theEndOfThisFrame)
     }
   }
 }

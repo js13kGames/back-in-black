@@ -1,9 +1,16 @@
 onload = () => {
   engineLoadState()
+  engineAudioStart()
   engineCreateLayers()
-  onresize = engineRender
+  engineMonotonic()
+  onresize = () => {
+    engineMonotonic()
+    engineRender()
+  }
   engineRender()
   onbeforeunload = () => {
     engineSaveState()
   }
+  onfocus = engineTimingResume
+  onblur = engineTimingSuspend
 }

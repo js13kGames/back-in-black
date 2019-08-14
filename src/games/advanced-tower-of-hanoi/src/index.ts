@@ -1,4 +1,5 @@
 const version = 0
+const beatsPerMinute = 120
 
 const enum Tower {
   Start,
@@ -214,20 +215,20 @@ function layers(
             && !state.towers[Tower.Middle].length
             && dropTower === Tower.Goal
           const liftedAndDroppedInSameTower = dropTower === liftTower
-          const timeSpentMovingBetweenTowers = liftedAndDroppedInSameTower ? 0 : 100
+          const timeSpentMovingBetweenTowers = liftedAndDroppedInSameTower ? 0 : 0.25
           animation(
             drop.started,
             [
               [timeSpentMovingBetweenTowers, () => drawPiece(linearInterpolate(liftTower, dropTower, 1 / 2), 8, piece, PieceFrame.AtRest)],
               [timeSpentMovingBetweenTowers, () => drawPiece(dropTower, 8, piece, PieceFrame.AtRest)],
-              [100, () => {
+              [0.25, () => {
                 drawPiece(dropTower, linearInterpolate(8, heightOfDropTower, 1 / 2), piece, PieceFrame.AtRest)
               }],
-              [100, () => {
+              [0.25, () => {
                 drawPiece(dropTower, heightOfDropTower, piece, PieceFrame.AtRest)
                 drawEffect(dropTower, heightOfDropTower, piece, EffectFrame.Landing0)
               }],
-              [100, () => {
+              [0.25, () => {
                 drawPiece(dropTower, heightOfDropTower, piece, PieceFrame.AtRest)
                 drawEffect(dropTower, heightOfDropTower, piece, EffectFrame.Landing1)
               }]
@@ -256,11 +257,11 @@ function layers(
           animation(
             lift.started,
             [
-              [100, () => {
+              [0.25, () => {
                 drawEffect(liftTower, heightOfLiftTower, piece, EffectFrame.Rising0)
                 drawPiece(liftTower, heightOfLiftTower, piece, PieceFrame.AtRest)
               }],
-              [100, () => {
+              [0.25, () => {
                 drawEffect(liftTower, heightOfLiftTower, piece, EffectFrame.Rising1)
                 drawPiece(liftTower, linearInterpolate(heightOfLiftTower, 8, 1 / 2), piece, PieceFrame.AtRest)
               }]
@@ -268,8 +269,8 @@ function layers(
             ended => loop(
               ended,
               [
-                [250, () => drawPiece(liftTower, 8, piece, PieceFrame.Hovering0)],
-                [250, () => drawPiece(liftTower, 8, piece, PieceFrame.Hovering1)]
+                [0.5, () => drawPiece(liftTower, 8, piece, PieceFrame.Hovering0)],
+                [0.5, () => drawPiece(liftTower, 8, piece, PieceFrame.Hovering1)]
               ]
             )
           )
@@ -325,4 +326,9 @@ function layers(
       hitbox(140, 40, [translate(213, 24)], () => state = initial())
     }
   )
+}
+
+function audioReady(): () => void {
+  return () => {
+  }
 }

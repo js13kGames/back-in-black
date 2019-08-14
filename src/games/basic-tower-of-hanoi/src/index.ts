@@ -1,4 +1,5 @@
 const version = 0
+const beatsPerMinute = 1
 
 type State = {
   lifting: null | {
@@ -76,4 +77,9 @@ function layers(
       )
     }
   )
+}
+
+function audioReady(): () => void {
+  return () => {
+  }
 }

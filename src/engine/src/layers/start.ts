@@ -75,14 +75,13 @@ function engineCreateLayers(): void {
           function handler(
             e: Event
           ): void {
-            if (engineEarliestTimer !== null) {
-              const timeOfRender = +new Date
-              const elapsed = Math.min(
-                engineEarliestTimer.at - now,
-                timeOfRender - engineTimeOfLastRender
-              )
-              now += elapsed
+            if (audioContext && audioContext.state == `suspended`) {
+              audioContext.resume()
             }
+            engineMonotonic()
+            now = engineEarliestTimer === null
+              ? engineNow
+              : Math.min(engineEarliestTimer.at, engineNow)
             callback()
             engineRender()
             e.preventDefault()
