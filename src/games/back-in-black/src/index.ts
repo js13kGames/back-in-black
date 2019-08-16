@@ -1,10 +1,37 @@
-const version = 0
+const version = 1
 const beatsPerMinute = 80
 
-type State = null
+type Phase = {
+  type: `blank`
+} | {
+  type: `title`
+} | {
+  type: `levelSelect`
+}
+
+type State = {
+  unlockedLevels: number
+  from: {
+    readonly phase: Phase
+    readonly started: number
+  }
+  to: null | {
+    readonly phase: Phase
+    readonly started: number
+  }
+}
 
 function initial(): State {
-  return null
+  return {
+    unlockedLevels: 1,
+    from: {
+      phase: {
+        type: `title`
+      },
+      started: now
+    },
+    to: null
+}
 }
 
 const roomSpacing = 42
