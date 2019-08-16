@@ -10,6 +10,10 @@ function initial(): State {
 const roomSpacing = 42
 const safeAreaWidthVirtualPixels = roomSpacing * 8
 const safeAreaHeightVirtualPixels = roomSpacing * 6
+const halfSafeAreaWidthVirtualPixels = safeAreaWidthVirtualPixels / 2
+const halfSafeAreaHeightVirtualPixels = safeAreaHeightVirtualPixels / 2
+const doubleSafeAreaWidthVirtualPixels = safeAreaWidthVirtualPixels * 2
+const doubleSafeAreaHeightVirtualPixels = safeAreaHeightVirtualPixels * 2
 
 const font: { readonly [character: string]: EngineSvg } = {
   a: font_a_svg,
@@ -55,8 +59,8 @@ function layers(
   layer: LayerFactory
 ): void {
   layer(
-    safeAreaWidthVirtualPixels, safeAreaWidthVirtualPixels,
-    safeAreaHeightVirtualPixels, safeAreaHeightVirtualPixels,
+    safeAreaWidthVirtualPixels, doubleSafeAreaWidthVirtualPixels,
+    safeAreaHeightVirtualPixels, doubleSafeAreaHeightVirtualPixels,
     0, 0,
     (draw, hitbox) => {
       draw(room_empty_svg, [translate(roomSpacing * 5, roomSpacing * 0)])
