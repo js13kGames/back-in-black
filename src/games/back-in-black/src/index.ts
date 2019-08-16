@@ -114,6 +114,16 @@ const transitionFrames: ReadonlyArray<EngineSvg> = [
   transition_i_svg
 ]
 const transitionDuration = 0.6
+
+function enterPhase(phase: Phase): void {
+  if (!state.to) {
+    state.to = {
+      phase,
+      started: now
+    }
+  }
+}
+
 function layers(
   layer: LayerFactory
 ): void {
@@ -129,16 +139,9 @@ function layers(
             doubleSafeAreaWidthVirtualPixels,
             doubleSafeAreaHeightVirtualPixels,
             [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)],
-            () => {
-              if (!state.to) {
-                state.to = {
-                  phase: {
+            () => enterPhase({
                     type: `levelSelect`
-                  },
-                  started: now
-                }
-              }
-            }
+            })
           )
           break
         case `levelSelect`:
@@ -147,19 +150,12 @@ function layers(
             doubleSafeAreaWidthVirtualPixels,
             doubleSafeAreaHeightVirtualPixels,
             [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)],
-            () => {
-              if (!state.to) {
-                state.to = {
-                  phase: {
+            () => enterPhase({
                     type: `title`
-                  },
-                  started: now
-                }
-              }
-            }
+            })
           )
           break
-      }
+                }
       animation(state.from.started, transitionFrames.slice(1).map((frame, i) => [
         transitionDuration / (transitionFrames.length - 1),
         () => {
