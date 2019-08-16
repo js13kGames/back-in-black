@@ -102,25 +102,72 @@ function layers(
     safeAreaHeightVirtualPixels, doubleSafeAreaHeightVirtualPixels,
     0, 0,
     (draw, hitbox) => {
-      draw(room_empty_svg, [translate(roomSpacing * 5, roomSpacing * 0)])
-      draw(room_empty_svg, [translate(roomSpacing * 5, roomSpacing * 1)])
-      draw(room_empty_svg, [translate(roomSpacing * 5, roomSpacing * 2)])
-      draw(room_empty_svg, [translate(roomSpacing * 5, roomSpacing * 3)])
-      draw(room_empty_svg, [translate(roomSpacing * 5, roomSpacing * 4)])
-      draw(room_empty_svg, [translate(roomSpacing * 5, roomSpacing * 5)])
-      draw(room_empty_svg, [translate(roomSpacing * 5, roomSpacing * 6)])
-      draw(room_empty_svg, [translate(roomSpacing * 2, roomSpacing * 3)])
-      draw(room_empty_svg, [translate(roomSpacing * 3, roomSpacing * 3)])
-      draw(room_empty_svg, [translate(roomSpacing * 3, roomSpacing * 4)])
-      draw(room_empty_svg, [translate(roomSpacing * 4, roomSpacing * 4)])
-      draw(player_walk_svg, [translate(roomSpacing * 4, roomSpacing * 4)])
-      draw(room_switch_a_svg, [translate(roomSpacing * 4, roomSpacing * 3)])
-      draw(corridor_empty_svg, [translate(roomSpacing * 2, roomSpacing * 3)])
-      draw(corridor_door_closed_svg, [translate(roomSpacing * 3, roomSpacing * 3)])
-      draw(corridor_empty_svg, [translate(roomSpacing * 4, roomSpacing * 3), rotate(90)])
-      draw(corridor_stairs_svg, [translate(roomSpacing * 3, roomSpacing * 3), rotate(90)])
-      draw(corridor_goal_open_svg, [translate(roomSpacing * 2, roomSpacing * 3), rotate(180)])
-      draw(corridor_ledge_svg, [translate(roomSpacing * 3, roomSpacing * 4)])
+      switch (state.from.phase.type) {
+        case `title`:
+          draw(background_title_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
+          hitbox(
+            doubleSafeAreaWidthVirtualPixels,
+            doubleSafeAreaHeightVirtualPixels,
+            [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)],
+            () => {
+              if (!state.to) {
+                state.to = {
+                  phase: {
+                    type: `levelSelect`
+                  },
+                  started: now
+                }
+              }
+            }
+          )
+          break
+        case `levelSelect`:
+          draw(background_levelSelect_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
+          hitbox(
+            doubleSafeAreaWidthVirtualPixels,
+            doubleSafeAreaHeightVirtualPixels,
+            [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)],
+            () => {
+              if (!state.to) {
+                state.to = {
+                  phase: {
+                    type: `title`
+                  },
+                  started: now
+                }
+              }
+            }
+          )
+          break
+      }
+      animation(state.from.started, transitionFrames.slice(1).map((frame, i) => [
+        transitionDuration / (transitionFrames.length - 1),
+        () => {
+          frame
+          for (let j = i; j < transitionFrames.length; j++) {
+            draw(transitionFrames[j], [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
+          }
+        }
+      ]))
+      if (state.to) {
+        const to = state.to
+        animation(to.started, transitionFrames.slice(1).map((frame, i) => [
+          transitionDuration / (transitionFrames.length - 1),
+          () => {
+            frame
+            for (let j = 0; j <= i; j++) {
+              draw(transitionFrames[j], [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
+            }
+          }
+        ]))
+        at(to.started + transitionDuration, () => {
+          state.from = {
+            phase: to.phase,
+            started: now
+          }
+          state.to = null
+        })
+      }
       hitbox
     }
   )
