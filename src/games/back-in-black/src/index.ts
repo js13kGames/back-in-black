@@ -60,7 +60,7 @@ function initial(): State {
       started: now
     },
     to: null
-}
+  }
 }
 
 const roomSpacing = 42
@@ -282,7 +282,7 @@ function layers(
             doubleSafeAreaHeightVirtualPixels,
             [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)],
             () => enterPhase({
-                    type: `levelSelect`
+              type: `levelSelect`
             })
           )
           break
@@ -292,12 +292,67 @@ function layers(
             doubleSafeAreaWidthVirtualPixels,
             doubleSafeAreaHeightVirtualPixels,
             [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)],
-            () => enterPhase({
-                    type: `title`
-            })
+            () => enterGamePhase(0)
           )
           break
-                }
+        case `game`:
+          const gamePhase = state.from.phase
+          draw(background_game_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
+          const level = levels[gamePhase.level]
+          for (const room of level.rooms) {
+            const transforms = [
+              translate(room.x * roomSpacing, room.y * roomSpacing)
+            ]
+            switch (room.type) {
+              case `empty`:
+                draw(room_empty_svg, transforms)
+                break
+              case `switch`:
+                draw(gamePhase.switch ? room_switch_a_svg : room_switch_b_svg, transforms)
+                break
+              case `mcguffin`:
+                draw(room_mcguffin_svg, transforms)
+                break
+            }
+          }
+
+          for (const corridor of level.corridors) {
+            const transforms = [
+              translate(corridor.x * roomSpacing, corridor.y * roomSpacing),
+              rotate(facingDegrees[corridor.facing])
+            ]
+            switch (corridor.type) {
+              case `empty`:
+                draw(corridor_empty_svg, transforms)
+                break
+              case `ledge`:
+                draw(corridor_ledge_svg, transforms)
+                break
+              case `stairs`:
+                draw(corridor_stairs_svg, transforms)
+                break
+              case `openDoor`:
+                draw(gamePhase.switch == `a` ? corridor_door_open_svg : corridor_door_closed_svg, transforms)
+                break
+              case `closedDoor`:
+                draw(gamePhase.switch == `b` ? corridor_door_open_svg : corridor_door_closed_svg, transforms)
+                break
+              case `goal`:
+                draw(corridor_goal_closed_svg, transforms)
+                break
+            }
+          }
+
+          animation(gamePhase.startedWalking, [
+            [4, () => loop(gamePhase.startedWalking, [
+              [0.25, () => draw(player_walk_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing]), scaleY(-1)])],
+              [0.25, () => draw(player_walk_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])])]
+            ])]
+          ],
+            () => draw(player_idle_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])]))
+
+          break
+      }
       animation(state.from.started, transitionFrames.slice(1).map((frame, i) => [
         transitionDuration / (transitionFrames.length - 1),
         () => {
