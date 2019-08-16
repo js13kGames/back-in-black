@@ -1,6 +1,26 @@
 const version = 1
 const beatsPerMinute = 80
 
+type Facing =
+  | `north`
+  | `east`
+  | `south`
+  | `west`
+
+const facingDegrees: { readonly [facing in Facing]: number } = {
+  north: 270,
+  east: 0,
+  south: 90,
+  west: 180,
+}
+
+const facingReverse: { readonly [facing in Facing]: Facing } = {
+  north: `south`,
+  east: `west`,
+  south: `north`,
+  west: `east`
+}
+
 type Phase = {
   type: `blank`
 } | {
