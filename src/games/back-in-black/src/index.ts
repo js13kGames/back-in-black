@@ -27,6 +27,15 @@ type Phase = {
   type: `title`
 } | {
   type: `levelSelect`
+} | {
+  type: `game`
+  readonly level: number
+  switch: `a` | `b`
+  x: number
+  y: number
+  facing: Facing
+  taken: boolean
+  startedWalking: number
 }
 
 type State = {
@@ -122,6 +131,21 @@ function enterPhase(phase: Phase): void {
       started: now
     }
   }
+}
+
+function enterGamePhase(level: number): void {
+  const levelValue = levels[level]
+  const goal = levelValue.corridors.filter(corridor => corridor.type == `goal`)[0]
+  enterPhase({
+    type: `game`,
+    level,
+    switch: `a`,
+    x: goal.x,
+    y: goal.y,
+    facing: facingReverse[goal.facing],
+    taken: false,
+    startedWalking: now + transitionDuration
+  })
 }
 
 function layers(
