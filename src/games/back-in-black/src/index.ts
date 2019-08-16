@@ -55,6 +55,18 @@ const font: { readonly [character: string]: EngineSvg } = {
   ",": font_comma_svg
 }
 
+const transitionFrames: ReadonlyArray<EngineSvg> = [
+  transition_a_svg,
+  transition_b_svg,
+  transition_c_svg,
+  transition_d_svg,
+  transition_e_svg,
+  transition_f_svg,
+  transition_g_svg,
+  transition_h_svg,
+  transition_i_svg
+]
+const transitionDuration = 0.6
 function layers(
   layer: LayerFactory
 ): void {
