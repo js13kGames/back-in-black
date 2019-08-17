@@ -1,4 +1,4 @@
-const version = 2
+const version = 3
 const beatsPerMinute = 80
 
 type BlankPhase = {
@@ -20,7 +20,7 @@ type GamePhase = {
   x: number
   y: number
   facing: Facing
-  taken: boolean
+  taken: null | number
   startedWalking: number
 }
 
@@ -90,7 +90,7 @@ function enterGamePhase(level: number): void {
     x: goal.x,
     y: goal.y,
     facing: facingReverse[goal.facing],
-    taken: false,
+    taken: null,
     startedWalking: now + 0.25
   })
 }

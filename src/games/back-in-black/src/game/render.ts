@@ -103,7 +103,7 @@ function renderGame(gamePhase: GamePhase): void {
             break
 
           case `goal`:
-            canPass = gamePhase.taken
+            canPass = gamePhase.taken != null
             break
         }
         break
