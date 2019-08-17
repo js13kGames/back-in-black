@@ -396,6 +396,46 @@ Makes a JSON-serializable type immutable.
 Linearly interpolates between two values by a unit interval, extrapolating if
 that mix value leaves the 0...1 range.
 
+#### `dotProduct`
+
+```typescript
+console.log(dotProduct(3, 4, 5, 6)) // 39
+```
+
+Calculates the dot product of two vectors.
+
+#### `magnitudeSquared`
+
+```typescript
+console.log(magnitudeSquared(3, 4)) // 15
+```
+
+Calculates the square of the magnitude of a vector.
+
+#### `magnitude`
+
+```typescript
+console.log(magnitude(3, 4)) // 3.872983346
+```
+
+Calculates the magnitude of a vector.
+
+#### `distanceSquared`
+
+```typescript
+console.log(distanceSquared(8, 20, 5, 16)) // 15
+```
+
+Calculates the square of the distance between two vectors.
+
+#### `distance`
+
+```typescript
+console.log(distance(8, 20, 5, 16)) // 3.872983346
+```
+
+Calculates the distance between two vectors.
+
 ###### `now`
 
 A monotonic clock, which tracks the number of beats which appear to have elapsed
