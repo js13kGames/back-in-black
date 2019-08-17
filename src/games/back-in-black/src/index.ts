@@ -22,6 +22,7 @@ type GamePhase = {
   facing: Facing
   taken?: number
   startedWalking: number
+  won?: number
 }
 
 type Phase =

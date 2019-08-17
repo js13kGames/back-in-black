@@ -175,6 +175,7 @@ function renderGame(gamePhase: GamePhase): void {
 
           case `goal`:
             canPass = gamePhase.taken != null
+            gamePhase.won = now + walkDuration
             break
         }
         break
