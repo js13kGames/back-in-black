@@ -185,6 +185,8 @@ function renderGame(gamePhase: GamePhase): void {
             break
           }
         }
+      } else {
+        gamePhase.startedWalking = now - walkDuration
       }
     })
   }
