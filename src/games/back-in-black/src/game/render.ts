@@ -90,30 +90,49 @@ function renderGame(gamePhase: GamePhase): void {
   const steps = 8
   const walkDuration = 1
 
-  until(gamePhase.taken, () => {
-    iterativeAnimation(
-      gamePhase.startedWalking,
-      walkDuration / steps,
-      steps,
-      i => draw(
-        player_walk_svg,
-        [
-          translate(
-            (gamePhase.x - facingX[gamePhase.facing] * (steps - i) / steps) * roomSpacing,
-            (gamePhase.y - facingY[gamePhase.facing] * (steps - i) / steps) * roomSpacing
-          ),
-          rotate(facingDegrees[gamePhase.facing]),
-          scaleY(i % 2 ? 1 : -1)
-        ]),
-      ended => loop(
-        ended,
-        [
-          [0.5, () => draw(player_idle_a_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])])],
-          [0.5, () => draw(player_idle_b_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])])]
-        ]
+  switchAt(gamePhase.taken,
+    () => {
+      iterativeAnimation(
+        gamePhase.startedWalking,
+        walkDuration / steps,
+        steps,
+        i => draw(
+          player_walk_svg,
+          [
+            translate(
+              (gamePhase.x - facingX[gamePhase.facing] * (steps - i) / steps) * roomSpacing,
+              (gamePhase.y - facingY[gamePhase.facing] * (steps - i) / steps) * roomSpacing
+            ),
+            rotate(facingDegrees[gamePhase.facing]),
+            scaleY(i % 2 ? 1 : -1)
+          ]),
+        ended => loop(
+          ended,
+          [
+            [0.5, () => draw(player_idle_a_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])])],
+            [0.5, () => draw(player_idle_b_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])])]
+          ]
+        )
       )
-    )
-  })
+    }, () => {
+      iterativeAnimation(
+        gamePhase.startedWalking,
+        walkDuration / steps,
+        steps,
+        i => draw(
+          player_silhouette_svg,
+          [
+            translate(
+              (gamePhase.x - facingX[gamePhase.facing] * (steps - i) / steps) * roomSpacing,
+              (gamePhase.y - facingY[gamePhase.facing] * (steps - i) / steps) * roomSpacing
+            ),
+            rotate(facingDegrees[gamePhase.facing]),
+            scaleY(i % 2 ? 1 : -1)
+          ]
+        )
+      )
+    }
+  )
 
   const keySpacing = 34
   function key(x: number, y: number, label: string, facing: Facing): void {
