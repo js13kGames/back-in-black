@@ -123,7 +123,7 @@ function enterGamePhase(level: number): void {
   })
 }
 
-function drawPhase(phase: Phase): void {
+function renderPhase(phase: Phase): void {
   switch (phase.type) {
     case `title`:
       draw(background_title_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
@@ -303,7 +303,7 @@ function layers(
         transitionFrameDuration,
         transitionFrames.length - 1,
         i => {
-          drawPhase(state.from)
+          renderPhase(state.from)
 
           for (let j = 0; j < i; j++) {
             draw(transitionFrames[j], [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
@@ -314,13 +314,13 @@ function layers(
           transitionFrameDuration,
           transitionFrames.length - 1,
           i => {
-            drawPhase(state.to)
+            renderPhase(state.to)
 
             for (let j = i; j < transitionFrames.length; j++) {
               draw(transitionFrames[j], [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
             }
           },
-          () => drawPhase(state.to)
+          () => renderPhase(state.to)
         )
       )
     }
