@@ -115,6 +115,24 @@ function renderGame(gamePhase: GamePhase): void {
         gamePhase.x += facingX[facing]
         gamePhase.y += facingY[facing]
         gamePhase.startedWalking = now
+
+        for (const room of level.rooms) {
+          if (room.x == gamePhase.x && room.y == gamePhase.y) {
+            switch (room.type) {
+              case `switch`:
+                gamePhase.switch = gamePhase.switch == `a`
+                  ? `b`
+                  : `a`
+                break
+              case `mcguffin`:
+                if (gamePhase.taken == null) {
+                  gamePhase.taken = now + walkDuration
+                }
+                break
+            }
+            break
+          }
+        }
       }
     })
   }
