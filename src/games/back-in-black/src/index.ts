@@ -1,4 +1,4 @@
-const version = 1
+const version = 2
 const beatsPerMinute = 80
 
 type Facing =
@@ -40,26 +40,21 @@ type Phase = {
 
 type State = {
   unlockedLevels: number
-  from: {
-    readonly phase: Phase
-    readonly started: number
-  }
-  to: null | {
-    readonly phase: Phase
-    readonly started: number
-  }
+  from: Phase
+  to: Phase
+  started: number
 }
 
 function initial(): State {
   return {
     unlockedLevels: 1,
     from: {
-      phase: {
-        type: `title`
-      },
-      started: now
+      type: `blank`
     },
-    to: null
+    to: {
+      type: `title`
+    },
+    started: now
   }
 }
 
@@ -122,7 +117,8 @@ const transitionFrames: ReadonlyArray<EngineSvg> = [
   transition_h_svg,
   transition_i_svg
 ]
-const transitionDuration = 0.6
+const transitionDuration = 1.2
+const transitionFrameDuration = transitionDuration / (transitionFrames.length * 2 - 1)
 
 const levels: ReadonlyArray<{
   readonly name: string
@@ -243,11 +239,10 @@ const levels: ReadonlyArray<{
 }]
 
 function enterPhase(phase: Phase): void {
-  if (!state.to) {
-    state.to = {
-      phase,
-      started: now
-    }
+  if (state.started + transitionDuration <= now) {
+    state.from = state.to
+    state.to = phase
+    state.started = now
   }
 }
 
@@ -388,36 +383,31 @@ function layers(
     safeAreaHeightVirtualPixels, doubleSafeAreaHeightVirtualPixels,
     0, 0,
     () => {
-      drawPhase(state.from.phase)
-      animation(state.from.started, transitionFrames.slice(1).map((frame, i) => [
-        transitionDuration / (transitionFrames.length - 1),
-        () => {
-          frame
-          for (let j = i; j < transitionFrames.length; j++) {
+      iterativeAnimation(
+        state.started,
+        transitionFrameDuration,
+        transitionFrames.length - 1,
+        i => {
+          drawPhase(state.from)
+
+          for (let j = 0; j < i; j++) {
             draw(transitionFrames[j], [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
           }
-        }
-      ]))
-      if (state.to) {
-        const to = state.to
-        animation(to.started, transitionFrames.slice(1).map((frame, i) => [
-          transitionDuration / (transitionFrames.length - 1),
-          () => {
-            frame
-            for (let j = 0; j <= i; j++) {
+        },
+        started => iterativeAnimation(
+          started,
+          transitionFrameDuration,
+          transitionFrames.length - 1,
+          i => {
+            drawPhase(state.to)
+
+            for (let j = i; j < transitionFrames.length; j++) {
               draw(transitionFrames[j], [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
             }
-          }
-        ]))
-        at(to.started + transitionDuration, () => {
-          state.from = {
-            phase: to.phase,
-            started: now
-          }
-          state.to = null
-        })
-      }
-      hitbox
+          },
+          () => drawPhase(state.to)
+        )
+      )
     }
   )
 }
