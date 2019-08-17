@@ -1,3 +1,4 @@
+import * as path from "path"
 import * as typeScript from "typescript"
 import StepBase from "../../step-base"
 import ActionStepBase from "../action-step-base"
@@ -42,6 +43,10 @@ export default class CombineTypeScriptStep extends ActionStepBase {
     const host = typeScript.createCompilerHost({})
 
     host.getSourceFile = (fileName: string, languageVersion: typeScript.ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): typeScript.SourceFile | undefined => {
+
+      // TypeScript always seems to use forward slashes.
+      fileName = fileName.replace(/\//g, path.sep)
+
       if (!Object.prototype.hasOwnProperty.call(allSourceFiles, fileName)) {
         const message = `Request for unexpected file ${JSON.stringify(fileName)}.`
         if (onError !== undefined) {
