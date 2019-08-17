@@ -1,13 +1,19 @@
 const version = 2
 const beatsPerMinute = 80
 
-type Phase = {
+type BlankPhase = {
   type: `blank`
-} | {
+}
+
+type TitlePhase = {
   type: `title`
-} | {
+}
+
+type LevelSelectPhase = {
   type: `levelSelect`
-} | {
+}
+
+type GamePhase = {
   type: `game`
   readonly level: number
   switch: `a` | `b`
@@ -17,6 +23,12 @@ type Phase = {
   taken: boolean
   startedWalking: number
 }
+
+type Phase =
+  | BlankPhase
+  | TitlePhase
+  | LevelSelectPhase
+  | GamePhase
 
 type State = {
   unlockedLevels: number
