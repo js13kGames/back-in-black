@@ -387,10 +387,6 @@ the overhead of `return !1` or similar.
 
 Types which can be serialized to or deserialized from JSON.
 
-#### `DeepReadonly<T>`/`IDeepReadonlyArray<T>`/`IDeepReadonlyObject<T>`
-
-Makes a JSON-serializable type immutable.
-
 #### `linearInterpolate`
 
 Linearly interpolates between two values by a unit interval, extrapolating if
