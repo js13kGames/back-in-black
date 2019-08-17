@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.1289063"
-     inkscape:cx="123.02495"
-     inkscape:cy="224.78248"
+     inkscape:zoom="2.2578126"
+     inkscape:cx="425.67313"
+     inkscape:cy="302.28544"
      inkscape:document-units="px"
      inkscape:current-layer="svg8"
      showgrid="true"
@@ -75,4 +75,20 @@
      height="252"
      x="168"
      y="126" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+     x="216"
+     y="196"
+     id="text816"><tspan
+       sodipodi:role="line"
+       id="tspan814"
+       x="216"
+       y="196"
+       style="font-size:14.66666667px">level select placeholder</tspan><tspan
+       sodipodi:role="line"
+       x="216"
+       y="246"
+       id="tspan818"
+       style="font-size:14.66666667px">(just click)</tspan></text>
 </svg>
