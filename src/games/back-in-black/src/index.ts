@@ -351,6 +351,22 @@ function layers(
           ],
             () => draw(player_idle_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])]))
 
+          const keySpacing = 34
+          function key(x: number, y: number, label: string, facing: Facing): void {
+            x -= 0.5
+            y -= 0.5
+            const transforms = [translate(safeAreaWidthVirtualPixels - keySpacing * x, safeAreaHeightVirtualPixels - keySpacing * y)]
+            draw(hud_key_svg, transforms)
+            draw(font[label], transforms)
+            hitbox(keySpacing, keySpacing, transforms, () => {
+              gamePhase.facing = facing
+              gamePhase.startedWalking = now
+            })
+          }
+          key(1, 1, `d`, `east`)
+          key(2, 1, `s`, `south`)
+          key(2, 2, `w`, `north`)
+          key(3, 1, `a`, `west`)
           break
       }
       animation(state.from.started, transitionFrames.slice(1).map((frame, i) => [
