@@ -29,7 +29,7 @@ function renderGame(gamePhase: GamePhase): void {
           draw(game_room_empty_svg, transforms)
           break
         case `switch`:
-          draw(gamePhase.switch ? game_room_switch_a_svg : game_room_switch_b_svg, transforms)
+          draw(gamePhase.switch == 'a' ? game_room_switch_a_svg : game_room_switch_b_svg, transforms)
           break
         case `mcguffin`:
           loop(state.started, [
