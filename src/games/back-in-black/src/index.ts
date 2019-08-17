@@ -345,13 +345,23 @@ function drawPhase(phase: Phase): void {
         }
       }
 
-      animation(gamePhase.startedWalking, [
-        [4, () => loop(gamePhase.startedWalking, [
-          [0.25, () => draw(player_walk_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing]), scaleY(-1)])],
-          [0.25, () => draw(player_walk_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])])]
-        ])]
-      ],
-        () => draw(player_idle_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])]))
+      const steps = 8
+      iterativeAnimation(
+        gamePhase.startedWalking,
+        0.125,
+        steps,
+        i => draw(
+          player_walk_svg,
+          [
+            translate(
+              (gamePhase.x - facingX[gamePhase.facing] * (steps - i) / steps) * roomSpacing,
+              (gamePhase.y - facingY[gamePhase.facing] * (steps - i) / steps) * roomSpacing
+            ),
+            rotate(facingDegrees[gamePhase.facing]),
+            scaleY(i % 2 ? 1 : -1)
+          ]),
+        () => draw(player_idle_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])])
+      )
 
       const keySpacing = 34
       function key(x: number, y: number, label: string, facing: Facing): void {
