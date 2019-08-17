@@ -371,10 +371,51 @@ function drawPhase(phase: Phase): void {
         draw(hud_key_svg, transforms)
         draw(font[label], transforms)
         hitbox(keySpacing, keySpacing, transforms, () => {
-          gamePhase.x += facingX[facing]
-          gamePhase.y += facingY[facing]
+          let canPass = false
+          for (const corridor of level.corridors) {
+            const atOrigin = corridor.facing == facing
+              && corridor.x == gamePhase.x
+              && corridor.y == gamePhase.y
+            const destinationX = corridor.x + facingX[corridor.facing]
+            const destinationY = corridor.y + facingY[corridor.facing]
+            const atDestination = facingReverse[corridor.facing] == facing
+              && destinationX == gamePhase.x
+              && destinationY == gamePhase.y
+            if (!atOrigin && !atDestination) {
+              continue
+            }
+            switch (corridor.type) {
+              case `empty`:
+              case `stairs`:
+                canPass = true
+                break
+
+              case `ledge`:
+                canPass = atOrigin
+                break
+
+              case `openDoor`:
+                canPass = gamePhase.switch == `a`
+                break
+
+              case `closedDoor`:
+                canPass = gamePhase.switch == `b`
+                break
+
+              case `goal`:
+                canPass = gamePhase.taken
+                break
+            }
+            break
+          }
+
           gamePhase.facing = facing
-          gamePhase.startedWalking = now
+
+          if (canPass) {
+            gamePhase.x += facingX[facing]
+            gamePhase.y += facingY[facing]
+            gamePhase.startedWalking = now
+          }
         })
       }
       key(1, 1, `d`, `east`)
