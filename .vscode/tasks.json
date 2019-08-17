@@ -5,6 +5,17 @@
       "label": "Run",
       "type": "shell",
       "command": "npm install && npm run-script cli",
+      "windows": {
+        "options": {
+          "shell": {
+            "executable": "C:\\Windows\\System32\\cmd.exe",
+            "args": [
+              "/d",
+              "/c"
+            ]
+          }
+        }
+      },
       "group": {
         "kind": "build",
         "isDefault": true
