@@ -1,0 +1,3 @@
+function engineKeyInputStartRender(): void {
+  engineKeyInputCallbacks = {}
+}

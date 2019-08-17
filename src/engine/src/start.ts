@@ -11,6 +11,7 @@ onload = () => {
   onbeforeunload = () => {
     engineSaveState()
   }
+  onkeydown = engineKeyInputHandleKey
   onfocus = engineTimingResume
   onblur = engineTimingSuspend
 }

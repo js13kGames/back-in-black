@@ -436,6 +436,11 @@ console.log(distance(8, 20, 5, 16)) // 3.872983346
 
 Calculates the distance between two vectors.
 
+#### `KeyCode`
+
+A type which represents a [HTML5 key code](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code).
+This maps to a location on the keyboard, not what the key is mapped to.
+
 ###### `now`
 
 A monotonic clock, which tracks the number of beats which appear to have elapsed
@@ -484,6 +489,17 @@ is not taken to ensure they are not present on the following `render`.
 
 If multiple are defined, the last defined with the earliest time takes
 priority.  Only one can fire per `render`.
+
+##### `mapKey`
+
+```typescript
+mapKey(`KeyA`, () => {
+  state.aKeyPressed = true
+})
+```
+
+Maps a `KeyCode` to a mutation callback.  If multiple are defined with the same
+`KeyCode`, the last defined takes priority.
 
 #### Render Helpers
 
