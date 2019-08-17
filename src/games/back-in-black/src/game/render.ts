@@ -135,13 +135,15 @@ function renderGame(gamePhase: GamePhase): void {
   )
 
   const keySpacing = 34
-  function key(x: number, y: number, label: string, facing: Facing): void {
+  function key(x: number, y: number, label: string, facing: Facing, keyCode: KeyCode): void {
     x -= 0.5
     y -= 0.5
     const transforms = [translate(safeAreaWidthVirtualPixels - keySpacing * x, safeAreaHeightVirtualPixels - keySpacing * y)]
     draw(game_hud_key_svg, transforms)
     draw(font[label], transforms)
-    hitbox(keySpacing, keySpacing, transforms, () => {
+    hitbox(keySpacing, keySpacing, transforms, press)
+    mapKey(keyCode, press)
+    function press(): void {
       let canPass = false
       for (const corridor of level.corridors) {
         const atOrigin = corridor.facing == facing
@@ -208,12 +210,12 @@ function renderGame(gamePhase: GamePhase): void {
       } else {
         gamePhase.startedWalking = now - walkDuration
       }
-    })
+    }
   }
-  key(1, 1, `d`, `east`)
-  key(2, 1, `s`, `south`)
-  key(2, 2, `w`, `north`)
-  key(3, 1, `a`, `west`)
+  key(1, 1, `d`, `east`, `KeyD`)
+  key(2, 1, `s`, `south`, `KeyS`)
+  key(2, 2, `w`, `north`, `KeyW`)
+  key(3, 1, `a`, `west`, `KeyA`)
 
   const glyphWidth = 16
   const glyphHeight = 32
