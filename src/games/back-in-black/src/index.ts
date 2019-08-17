@@ -367,6 +367,22 @@ function layers(
           key(2, 1, `s`, `south`)
           key(2, 2, `w`, `north`)
           key(3, 1, `a`, `west`)
+
+          const glyphWidth = 16
+          const glyphHeight = 32
+
+          function write(x: number, y: number, text: string): void {
+            x -= (text.length - 1) * glyphWidth / 2
+            for (let i = 0; i < text.length; i++) {
+              const character = text.charAt(i)
+              if (character != ` `) {
+                draw(font[character], [translate(x, y)])
+              }
+              x += glyphWidth
+            }
+          }
+
+          write(halfSafeAreaWidthVirtualPixels, glyphHeight / 2, level.name)
           break
       }
       animation(state.from.started, transitionFrames.slice(1).map((frame, i) => [
