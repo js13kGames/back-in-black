@@ -1,5 +1,5 @@
 function renderGame(gamePhase: GamePhase): void {
-  draw(background_game_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
+  draw(game_background_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
   const level = levels[gamePhase.level]
 
   let mcguffinX = 0
@@ -26,16 +26,16 @@ function renderGame(gamePhase: GamePhase): void {
       ]
       switch (room.type) {
         case `empty`:
-          draw(room_empty_svg, transforms)
+          draw(game_room_empty_svg, transforms)
           break
         case `switch`:
-          draw(gamePhase.switch ? room_switch_a_svg : room_switch_b_svg, transforms)
+          draw(gamePhase.switch ? game_room_switch_a_svg : game_room_switch_b_svg, transforms)
           break
         case `mcguffin`:
           loop(state.started, [
-            [0.25, () => draw(room_mcguffin_a_svg, transforms)],
-            [0.25, () => draw(room_mcguffin_b_svg, transforms)],
-            [0.25, () => draw(room_mcguffin_c_svg, transforms)]
+            [0.25, () => draw(game_room_mcguffin_a_svg, transforms)],
+            [0.25, () => draw(game_room_mcguffin_b_svg, transforms)],
+            [0.25, () => draw(game_room_mcguffin_c_svg, transforms)]
           ])
           break
       }
@@ -58,8 +58,8 @@ function renderGame(gamePhase: GamePhase): void {
     if (corridor.type == `goal`) {
       switchAt(
         shutsOff,
-        () => draw(corridor_goal_closed_svg, transforms),
-        () => draw(corridor_goal_open_svg, transforms)
+        () => draw(game_corridor_goal_closed_svg, transforms),
+        () => draw(game_corridor_goal_open_svg, transforms)
       )
     } else {
       until(
@@ -67,19 +67,19 @@ function renderGame(gamePhase: GamePhase): void {
         () => {
           switch (corridor.type) {
             case `empty`:
-              draw(corridor_empty_svg, transforms)
+              draw(game_corridor_empty_svg, transforms)
               break
             case `ledge`:
-              draw(corridor_ledge_svg, transforms)
+              draw(game_corridor_ledge_svg, transforms)
               break
             case `stairs`:
-              draw(corridor_stairs_svg, transforms)
+              draw(game_corridor_stairs_svg, transforms)
               break
             case `openDoor`:
-              draw(gamePhase.switch == `a` ? corridor_door_open_svg : corridor_door_closed_svg, transforms)
+              draw(gamePhase.switch == `a` ? game_corridor_door_open_svg : game_corridor_door_closed_svg, transforms)
               break
             case `closedDoor`:
-              draw(gamePhase.switch == `b` ? corridor_door_open_svg : corridor_door_closed_svg, transforms)
+              draw(gamePhase.switch == `b` ? game_corridor_door_open_svg : game_corridor_door_closed_svg, transforms)
               break
           }
         }
@@ -97,7 +97,7 @@ function renderGame(gamePhase: GamePhase): void {
         walkDuration / steps,
         steps,
         i => draw(
-          player_walk_svg,
+          game_player_walk_svg,
           [
             translate(
               (gamePhase.x - facingX[gamePhase.facing] * (steps - i) / steps) * roomSpacing,
@@ -109,8 +109,8 @@ function renderGame(gamePhase: GamePhase): void {
         ended => loop(
           ended,
           [
-            [0.5, () => draw(player_idle_a_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])])],
-            [0.5, () => draw(player_idle_b_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])])]
+            [0.5, () => draw(game_player_idle_a_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])])],
+            [0.5, () => draw(game_player_idle_b_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])])]
           ]
         )
       )
@@ -120,7 +120,7 @@ function renderGame(gamePhase: GamePhase): void {
         walkDuration / steps,
         steps,
         i => draw(
-          player_silhouette_svg,
+          game_player_silhouette_svg,
           [
             translate(
               (gamePhase.x - facingX[gamePhase.facing] * (steps - i) / steps) * roomSpacing,
@@ -139,7 +139,7 @@ function renderGame(gamePhase: GamePhase): void {
     x -= 0.5
     y -= 0.5
     const transforms = [translate(safeAreaWidthVirtualPixels - keySpacing * x, safeAreaHeightVirtualPixels - keySpacing * y)]
-    draw(hud_key_svg, transforms)
+    draw(game_hud_key_svg, transforms)
     draw(font[label], transforms)
     hitbox(keySpacing, keySpacing, transforms, () => {
       let canPass = false
