@@ -1,34 +1,35 @@
 matrix:
-- dist: trusty
-  language: node_js
-  node_js:
-  - node
-  install:
-  - npm ci
-  script:
-  - npm run-script ci
-  deploy:
-    provider: releases
-    api_key:
-      secure: "ryqDQ5v5gCsL0d/PT+ZAFIJVtk7ura4uFLva4H80+FtB5lhGu2pyxfQOJFht3pAPd0fq0D65gZUrl+8wk6f/iJKsHnGy+HD1YpG/s/xXUBS25sKdnm/Dz7b5zKiBN3kHXV9oAUfSBfwcsNRoXJp57HzmXO45XavQpYMy4EmvzfQ52DUcTdW6gX8wrD5tVSNAIuk3aQmNcN3Zs73wRSG+yPw5cvUq8T4bfyc8bLmZCEVzIlHanzFYK6XfpuDsimIbHaestMHSn2V9z4hurGrjno4cg48dfNFsDNa1uzuUimFkL7rWa6Q8ahE01FdZuDbBVqKWxgTZRPqO5h6thvk2mgIRQrLU6G07NjAtXHKleRrQ/5fOBdcFHEQxn6StNE0qB7iGWt2bgmUbxoVFSz1EqIT8GzvX1ndsjFODkRbSRhNJzeClkECMn1CEmqdTRdqFHq3P+9yi6ETQcc5Z2ZPaBjvBwdaLxh1kmhm5owhTaVvWfmrNCA9Zqns4oq5La4OTGOWDeFgDlC+3agqWLICJvT7j3YEWhsc11qSyFp5QsUw+CVwtCW41MIQY79aH3l2gJV/HcEgCSs0mbfn0gqqscfQtt23FARpQJo7LMZN2Gi/0nlOXBFw5HxQuhyEdnw7rFtRNFGvULyOOg0LyuOgkDLsvd8LmnNeycKtC/E608YI="
-    file_glob: true
-    file: dist/*
-    skip_cleanup: true
-    on:
-      branch: master
-- os: windows
-  language: node_js
-  node_js:
-  - node
-  install:
-  - npm ci
-  script:
-  - npm run-script ci
-- os: osx
-  language: node_js
-  node_js:
-  - node
-  install:
-  - npm ci
-  script:
-  - npm run-script ci
+  include:
+  - dist: trusty
+    language: node_js
+    node_js:
+    - node
+    install:
+    - npm ci
+    script:
+    - npm run-script ci
+    deploy:
+      provider: releases
+      api_key:
+        secure: "ryqDQ5v5gCsL0d/PT+ZAFIJVtk7ura4uFLva4H80+FtB5lhGu2pyxfQOJFht3pAPd0fq0D65gZUrl+8wk6f/iJKsHnGy+HD1YpG/s/xXUBS25sKdnm/Dz7b5zKiBN3kHXV9oAUfSBfwcsNRoXJp57HzmXO45XavQpYMy4EmvzfQ52DUcTdW6gX8wrD5tVSNAIuk3aQmNcN3Zs73wRSG+yPw5cvUq8T4bfyc8bLmZCEVzIlHanzFYK6XfpuDsimIbHaestMHSn2V9z4hurGrjno4cg48dfNFsDNa1uzuUimFkL7rWa6Q8ahE01FdZuDbBVqKWxgTZRPqO5h6thvk2mgIRQrLU6G07NjAtXHKleRrQ/5fOBdcFHEQxn6StNE0qB7iGWt2bgmUbxoVFSz1EqIT8GzvX1ndsjFODkRbSRhNJzeClkECMn1CEmqdTRdqFHq3P+9yi6ETQcc5Z2ZPaBjvBwdaLxh1kmhm5owhTaVvWfmrNCA9Zqns4oq5La4OTGOWDeFgDlC+3agqWLICJvT7j3YEWhsc11qSyFp5QsUw+CVwtCW41MIQY79aH3l2gJV/HcEgCSs0mbfn0gqqscfQtt23FARpQJo7LMZN2Gi/0nlOXBFw5HxQuhyEdnw7rFtRNFGvULyOOg0LyuOgkDLsvd8LmnNeycKtC/E608YI="
+      file_glob: true
+      file: dist/*
+      skip_cleanup: true
+      on:
+        branch: master
+  - os: windows
+    language: node_js
+    node_js:
+    - node
+    install:
+    - npm ci
+    script:
+    - npm run-script ci
+  - os: osx
+    language: node_js
+    node_js:
+    - node
+    install:
+    - npm ci
+    script:
+    - npm run-script ci
