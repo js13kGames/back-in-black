@@ -584,6 +584,87 @@ This is:
 The appropriate render callback (if any) will be executed, and a re-render
 triggered at the end of each frame.
 
+##### `after`
+
+```typescript
+after(
+  now + 2,
+  () => {
+    /* Rendered after now + 2. */
+  }
+)
+```
+
+```typescript
+after(
+  undefined,
+  () => {
+    /* Never rendered. */
+  }
+)
+```
+
+Does nothing until the given time, but then re-renders at the specified time,
+executing the render callback.
+
+Does nothing if no time is given.
+
+##### `until`
+
+```typescript
+until(
+  now + 2,
+  () => {
+    /* Rendered until now + 2. */
+  }
+)
+```
+
+```typescript
+until(
+  undefined,
+  () => {
+    /* Always rendered. */
+  }
+)
+```
+
+Executes the render callback.  Re-renders at the specified time, after which it
+is no longer executed.
+
+Always executes the render callback if no time is given.
+
+##### `switchAt`
+
+```typescript
+switchAt(
+  now + 2,
+  () => {
+    /* Rendered until now + 2. */
+  },
+  () => {
+    /* Rendered after now + 2. */
+  }
+)
+```
+
+```typescript
+switchAt(
+  undefined,
+  () => {
+    /* Always rendered. */
+  },
+  () => {
+    /* Never rendered. */
+  }
+)
+```
+
+Executes the first render callback.  Re-renders at the specified time, after
+which it instead renders the second render callback.
+
+Always executes the first render callback if no time is given.
+
 #### Mutation Callback Helpers
 
 These are intended to be used only during a mutation callback.
