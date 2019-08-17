@@ -361,6 +361,8 @@ function drawPhase(phase: Phase): void {
         draw(hud_key_svg, transforms)
         draw(font[label], transforms)
         hitbox(keySpacing, keySpacing, transforms, () => {
+          gamePhase.x += facingX[facing]
+          gamePhase.y += facingY[facing]
           gamePhase.facing = facing
           gamePhase.startedWalking = now
         })
