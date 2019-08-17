@@ -7,16 +7,5 @@ type LayerFactory = (
   viewportMaximumHeightVirtualPixels: number,
   viewportHorizontalAlignmentSignedUnitInterval: number,
   viewportVerticalAlignmentSignedUnitInterval: number,
-  render: (
-    draw: (
-      src: EngineSvg,
-      transforms: ReadonlyArray<EngineTransform>
-    ) => void,
-    hitbox: (
-      widthVirtualPixels: number,
-      heightVirtualPixels: number,
-      transforms: ReadonlyArray<EngineTransform>,
-      callback: EngineMutationCallback
-    ) => void
-  ) => void
+  render: () => void
 ) => void

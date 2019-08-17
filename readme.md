@@ -294,7 +294,7 @@ function layers(layer: LayerFactory): void {
     400, // viewportMaximumHeightVirtualPixels
     0, // viewportHorizontalAlignmentSignedUnitInterval
     0, // viewportVerticalAlignmentSignedUnitInterval
-    (draw, hitbox) => {
+    () => {
       draw(
         anExample_svg,
         [translateX(24)] // transforms
@@ -344,20 +344,6 @@ viewport with those of the display.
 
 Executed when the engine needs to know what to display to the user, and which
 interaction options exist, based on the current state.
-
-###### `draw`
-
-Draws the given `svg`.  The transform origin is the center of the SVG.
-
-###### `hitbox`
-
-Defines a clickable or touchable area within the viewport which triggers a
-mutation callback.
-
-As with `draw`, the transform origin is the center of the hitbox.
-
-If multiple hitboxes overlap, within the same layer or between multiple layers,
-the last defined wins.
 
 ##### Mutation callbacks
 
@@ -420,6 +406,20 @@ on how much time can "pass" in one go.
 
 These can be called during a layer's render callback to describe something which
 the render emits.
+
+##### `draw`
+
+Draws the given `svg`.  The transform origin is the center of the SVG.
+
+##### `hitbox`
+
+Defines a clickable or touchable area within the viewport which triggers a
+mutation callback.
+
+As with `draw`, the transform origin is the center of the hitbox.
+
+If multiple hitboxes overlap, within the same layer or between multiple layers,
+the last defined wins.
 
 ##### `at`
 

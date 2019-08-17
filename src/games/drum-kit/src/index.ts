@@ -26,7 +26,7 @@ function layers(
     safeAreaWidthVirtualPixels, fullWidthVirtualPixels,
     safeAreaHeightVirtualPixels, fullHeightVirtualPixels,
     0, 0,
-    (draw, hitbox) => {
+    () => {
       draw(background_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
 
       // Kick

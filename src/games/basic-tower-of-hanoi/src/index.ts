@@ -35,7 +35,7 @@ function layers(
     safeAreaWidthVirtualPixels, fullWidthVirtualPixels,
     safeAreaHeightVirtualPixels, fullHeightVirtualPixels,
     0, 0,
-    (draw, hitbox) => {
+    () => {
       draw(background_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
       const won = state.towers[2].length === 5
       let xVirtualPixels = halfTowerWidthVirtualPixels

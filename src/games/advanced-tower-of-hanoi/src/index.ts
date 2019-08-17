@@ -138,7 +138,7 @@ function layers(
     safeAreaWidthVirtualPixels, 640,
     safeAreaHeightVirtualPixels, 480,
     0, 0,
-    (draw, hitbox) => {
+    () => {
       hitbox
       const drawnPieces: {
         readonly x: number

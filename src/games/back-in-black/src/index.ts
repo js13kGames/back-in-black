@@ -273,7 +273,7 @@ function layers(
     safeAreaWidthVirtualPixels, doubleSafeAreaWidthVirtualPixels,
     safeAreaHeightVirtualPixels, doubleSafeAreaHeightVirtualPixels,
     0, 0,
-    (draw, hitbox) => {
+    () => {
       switch (state.from.phase.type) {
         case `title`:
           draw(background_title_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
