@@ -1,67 +1,107 @@
 function renderGame(gamePhase: GamePhase): void {
   draw(background_game_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
   const level = levels[gamePhase.level]
+
+  let mcguffinX = 0
+  let mcguffinY = 0
+
   for (const room of level.rooms) {
-    const transforms = [
-      translate(room.x * roomSpacing, room.y * roomSpacing)
-    ]
-    switch (room.type) {
-      case `empty`:
-        draw(room_empty_svg, transforms)
-        break
-      case `switch`:
-        draw(gamePhase.switch ? room_switch_a_svg : room_switch_b_svg, transforms)
-        break
-      case `mcguffin`:
-        draw(room_mcguffin_svg, transforms)
-        break
+    if (room.type == `mcguffin`) {
+      mcguffinX = room.x
+      mcguffinY = room.y
+      break
+    }
+  }
+
+  const shutdownRate = 0.4
+
+  for (const room of level.rooms) {
+    if (gamePhase.taken === undefined) {
+      renderRoom()
+    } else {
+      until(gamePhase.taken + Math.pow(distance(mcguffinX, mcguffinY, room.x, room.y), shutdownRate), renderRoom)
+    }
+
+    function renderRoom(): void {
+      const transforms = [
+        translate(room.x * roomSpacing, room.y * roomSpacing)
+      ]
+      switch (room.type) {
+        case `empty`:
+          draw(room_empty_svg, transforms)
+          break
+        case `switch`:
+          draw(gamePhase.switch ? room_switch_a_svg : room_switch_b_svg, transforms)
+          break
+        case `mcguffin`:
+          draw(room_mcguffin_svg, transforms)
+          break
+      }
     }
   }
 
   for (const corridor of level.corridors) {
-    const transforms = [
-      translate(corridor.x * roomSpacing, corridor.y * roomSpacing),
-      rotate(facingDegrees[corridor.facing])
-    ]
-    switch (corridor.type) {
-      case `empty`:
-        draw(corridor_empty_svg, transforms)
-        break
-      case `ledge`:
-        draw(corridor_ledge_svg, transforms)
-        break
-      case `stairs`:
-        draw(corridor_stairs_svg, transforms)
-        break
-      case `openDoor`:
-        draw(gamePhase.switch == `a` ? corridor_door_open_svg : corridor_door_closed_svg, transforms)
-        break
-      case `closedDoor`:
-        draw(gamePhase.switch == `b` ? corridor_door_open_svg : corridor_door_closed_svg, transforms)
-        break
-      case `goal`:
-        draw(corridor_goal_closed_svg, transforms)
-        break
+    if (gamePhase.taken === undefined) {
+      renderCorridor()
+    } else {
+      until(
+        gamePhase.taken + Math.min(
+          Math.pow(distance(mcguffinX, mcguffinY, corridor.x, corridor.y), shutdownRate),
+          Math.pow(distance(mcguffinX, mcguffinY, corridor.x + facingX[corridor.facing], corridor.y + facingY[corridor.facing]), shutdownRate)
+        ),
+        renderCorridor
+      )
+    }
+
+    function renderCorridor(): void {
+      const transforms = [
+        translate(corridor.x * roomSpacing, corridor.y * roomSpacing),
+        rotate(facingDegrees[corridor.facing])
+      ]
+      switch (corridor.type) {
+        case `empty`:
+          draw(corridor_empty_svg, transforms)
+          break
+        case `ledge`:
+          draw(corridor_ledge_svg, transforms)
+          break
+        case `stairs`:
+          draw(corridor_stairs_svg, transforms)
+          break
+        case `openDoor`:
+          draw(gamePhase.switch == `a` ? corridor_door_open_svg : corridor_door_closed_svg, transforms)
+          break
+        case `closedDoor`:
+          draw(gamePhase.switch == `b` ? corridor_door_open_svg : corridor_door_closed_svg, transforms)
+          break
+        case `goal`:
+          draw(corridor_goal_closed_svg, transforms)
+          break
+      }
     }
   }
 
   const steps = 8
-  iterativeAnimation(
-    gamePhase.startedWalking,
-    0.125,
-    steps,
-    i => draw(
-      player_walk_svg,
-      [
-        translate(
-          (gamePhase.x - facingX[gamePhase.facing] * (steps - i) / steps) * roomSpacing,
-          (gamePhase.y - facingY[gamePhase.facing] * (steps - i) / steps) * roomSpacing
-        ),
-        rotate(facingDegrees[gamePhase.facing]),
-        scaleY(i % 2 ? 1 : -1)
-      ]),
-    () => draw(player_idle_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])])
-  )
+  const walkDuration = 1
+
+  until(gamePhase.taken, () => {
+    iterativeAnimation(
+      gamePhase.startedWalking,
+      walkDuration / steps,
+      steps,
+      i => draw(
+        player_walk_svg,
+        [
+          translate(
+            (gamePhase.x - facingX[gamePhase.facing] * (steps - i) / steps) * roomSpacing,
+            (gamePhase.y - facingY[gamePhase.facing] * (steps - i) / steps) * roomSpacing
+          ),
+          rotate(facingDegrees[gamePhase.facing]),
+          scaleY(i % 2 ? 1 : -1)
+        ]),
+      () => draw(player_idle_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])])
+    )
+  })
 
   const keySpacing = 34
   function key(x: number, y: number, label: string, facing: Facing): void {
