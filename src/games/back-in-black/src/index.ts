@@ -266,6 +266,120 @@ function enterGamePhase(level: number): void {
   })
 }
 
+function drawPhase(phase: Phase): void {
+  switch (phase.type) {
+    case `title`:
+      draw(background_title_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
+      hitbox(
+        doubleSafeAreaWidthVirtualPixels,
+        doubleSafeAreaHeightVirtualPixels,
+        [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)],
+        () => enterPhase({
+          type: `levelSelect`
+        })
+      )
+      break
+    case `levelSelect`:
+      draw(background_levelSelect_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
+      hitbox(
+        doubleSafeAreaWidthVirtualPixels,
+        doubleSafeAreaHeightVirtualPixels,
+        [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)],
+        () => enterGamePhase(0)
+      )
+      break
+    case `game`:
+      const gamePhase = phase
+      draw(background_game_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
+      const level = levels[gamePhase.level]
+      for (const room of level.rooms) {
+        const transforms = [
+          translate(room.x * roomSpacing, room.y * roomSpacing)
+        ]
+        switch (room.type) {
+          case `empty`:
+            draw(room_empty_svg, transforms)
+            break
+          case `switch`:
+            draw(gamePhase.switch ? room_switch_a_svg : room_switch_b_svg, transforms)
+            break
+          case `mcguffin`:
+            draw(room_mcguffin_svg, transforms)
+            break
+        }
+      }
+
+      for (const corridor of level.corridors) {
+        const transforms = [
+          translate(corridor.x * roomSpacing, corridor.y * roomSpacing),
+          rotate(facingDegrees[corridor.facing])
+        ]
+        switch (corridor.type) {
+          case `empty`:
+            draw(corridor_empty_svg, transforms)
+            break
+          case `ledge`:
+            draw(corridor_ledge_svg, transforms)
+            break
+          case `stairs`:
+            draw(corridor_stairs_svg, transforms)
+            break
+          case `openDoor`:
+            draw(gamePhase.switch == `a` ? corridor_door_open_svg : corridor_door_closed_svg, transforms)
+            break
+          case `closedDoor`:
+            draw(gamePhase.switch == `b` ? corridor_door_open_svg : corridor_door_closed_svg, transforms)
+            break
+          case `goal`:
+            draw(corridor_goal_closed_svg, transforms)
+            break
+        }
+      }
+
+      animation(gamePhase.startedWalking, [
+        [4, () => loop(gamePhase.startedWalking, [
+          [0.25, () => draw(player_walk_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing]), scaleY(-1)])],
+          [0.25, () => draw(player_walk_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])])]
+        ])]
+      ],
+        () => draw(player_idle_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])]))
+
+      const keySpacing = 34
+      function key(x: number, y: number, label: string, facing: Facing): void {
+        x -= 0.5
+        y -= 0.5
+        const transforms = [translate(safeAreaWidthVirtualPixels - keySpacing * x, safeAreaHeightVirtualPixels - keySpacing * y)]
+        draw(hud_key_svg, transforms)
+        draw(font[label], transforms)
+        hitbox(keySpacing, keySpacing, transforms, () => {
+          gamePhase.facing = facing
+          gamePhase.startedWalking = now
+        })
+      }
+      key(1, 1, `d`, `east`)
+      key(2, 1, `s`, `south`)
+      key(2, 2, `w`, `north`)
+      key(3, 1, `a`, `west`)
+
+      const glyphWidth = 16
+      const glyphHeight = 32
+
+      function write(x: number, y: number, text: string): void {
+        x -= (text.length - 1) * glyphWidth / 2
+        for (let i = 0; i < text.length; i++) {
+          const character = text.charAt(i)
+          if (character != ` `) {
+            draw(font[character], [translate(x, y)])
+          }
+          x += glyphWidth
+        }
+      }
+
+      write(halfSafeAreaWidthVirtualPixels, glyphHeight / 2, level.name)
+      break
+  }
+}
+
 function layers(
   layer: LayerFactory
 ): void {
@@ -274,117 +388,7 @@ function layers(
     safeAreaHeightVirtualPixels, doubleSafeAreaHeightVirtualPixels,
     0, 0,
     () => {
-      switch (state.from.phase.type) {
-        case `title`:
-          draw(background_title_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
-          hitbox(
-            doubleSafeAreaWidthVirtualPixels,
-            doubleSafeAreaHeightVirtualPixels,
-            [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)],
-            () => enterPhase({
-              type: `levelSelect`
-            })
-          )
-          break
-        case `levelSelect`:
-          draw(background_levelSelect_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
-          hitbox(
-            doubleSafeAreaWidthVirtualPixels,
-            doubleSafeAreaHeightVirtualPixels,
-            [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)],
-            () => enterGamePhase(0)
-          )
-          break
-        case `game`:
-          const gamePhase = state.from.phase
-          draw(background_game_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
-          const level = levels[gamePhase.level]
-          for (const room of level.rooms) {
-            const transforms = [
-              translate(room.x * roomSpacing, room.y * roomSpacing)
-            ]
-            switch (room.type) {
-              case `empty`:
-                draw(room_empty_svg, transforms)
-                break
-              case `switch`:
-                draw(gamePhase.switch ? room_switch_a_svg : room_switch_b_svg, transforms)
-                break
-              case `mcguffin`:
-                draw(room_mcguffin_svg, transforms)
-                break
-            }
-          }
-
-          for (const corridor of level.corridors) {
-            const transforms = [
-              translate(corridor.x * roomSpacing, corridor.y * roomSpacing),
-              rotate(facingDegrees[corridor.facing])
-            ]
-            switch (corridor.type) {
-              case `empty`:
-                draw(corridor_empty_svg, transforms)
-                break
-              case `ledge`:
-                draw(corridor_ledge_svg, transforms)
-                break
-              case `stairs`:
-                draw(corridor_stairs_svg, transforms)
-                break
-              case `openDoor`:
-                draw(gamePhase.switch == `a` ? corridor_door_open_svg : corridor_door_closed_svg, transforms)
-                break
-              case `closedDoor`:
-                draw(gamePhase.switch == `b` ? corridor_door_open_svg : corridor_door_closed_svg, transforms)
-                break
-              case `goal`:
-                draw(corridor_goal_closed_svg, transforms)
-                break
-            }
-          }
-
-          animation(gamePhase.startedWalking, [
-            [4, () => loop(gamePhase.startedWalking, [
-              [0.25, () => draw(player_walk_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing]), scaleY(-1)])],
-              [0.25, () => draw(player_walk_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])])]
-            ])]
-          ],
-            () => draw(player_idle_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])]))
-
-          const keySpacing = 34
-          function key(x: number, y: number, label: string, facing: Facing): void {
-            x -= 0.5
-            y -= 0.5
-            const transforms = [translate(safeAreaWidthVirtualPixels - keySpacing * x, safeAreaHeightVirtualPixels - keySpacing * y)]
-            draw(hud_key_svg, transforms)
-            draw(font[label], transforms)
-            hitbox(keySpacing, keySpacing, transforms, () => {
-              gamePhase.facing = facing
-              gamePhase.startedWalking = now
-            })
-          }
-          key(1, 1, `d`, `east`)
-          key(2, 1, `s`, `south`)
-          key(2, 2, `w`, `north`)
-          key(3, 1, `a`, `west`)
-
-          const glyphWidth = 16
-          const glyphHeight = 32
-
-          function write(x: number, y: number, text: string): void {
-            x -= (text.length - 1) * glyphWidth / 2
-            for (let i = 0; i < text.length; i++) {
-              const character = text.charAt(i)
-              if (character != ` `) {
-                draw(font[character], [translate(x, y)])
-              }
-              x += glyphWidth
-            }
-          }
-
-          write(halfSafeAreaWidthVirtualPixels, glyphHeight / 2, level.name)
-          break
-      }
+      drawPhase(state.from.phase)
       animation(state.from.started, transitionFrames.slice(1).map((frame, i) => [
         transitionDuration / (transitionFrames.length - 1),
         () => {
