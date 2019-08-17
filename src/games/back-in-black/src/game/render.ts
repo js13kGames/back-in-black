@@ -16,13 +16,11 @@ function renderGame(gamePhase: GamePhase): void {
   const shutdownRate = 0.4
 
   for (const room of level.rooms) {
-    if (gamePhase.taken === undefined) {
-      renderRoom()
-    } else {
-      until(gamePhase.taken + Math.pow(distance(mcguffinX, mcguffinY, room.x, room.y), shutdownRate), renderRoom)
-    }
+    const shutsOff = gamePhase.taken === undefined
+      ? undefined
+      : gamePhase.taken + Math.pow(distance(mcguffinX, mcguffinY, room.x, room.y), shutdownRate)
 
-    function renderRoom(): void {
+    until(shutsOff, () => {
       const transforms = [
         translate(room.x * roomSpacing, room.y * roomSpacing)
       ]
@@ -37,48 +35,46 @@ function renderGame(gamePhase: GamePhase): void {
           draw(room_mcguffin_svg, transforms)
           break
       }
-    }
+    })
   }
 
   for (const corridor of level.corridors) {
-    if (gamePhase.taken === undefined) {
-      renderCorridor()
-    } else {
-      until(
-        gamePhase.taken + Math.min(
-          Math.pow(distance(mcguffinX, mcguffinY, corridor.x, corridor.y), shutdownRate),
-          Math.pow(distance(mcguffinX, mcguffinY, corridor.x + facingX[corridor.facing], corridor.y + facingY[corridor.facing]), shutdownRate)
-        ),
-        renderCorridor
+    const shutsOff = gamePhase.taken === undefined
+      ? undefined
+      : gamePhase.taken + Math.min(
+        Math.pow(distance(mcguffinX, mcguffinY, corridor.x, corridor.y), shutdownRate),
+        Math.pow(distance(mcguffinX, mcguffinY, corridor.x + facingX[corridor.facing], corridor.y + facingY[corridor.facing]), shutdownRate)
       )
-    }
 
-    function renderCorridor(): void {
-      const transforms = [
-        translate(corridor.x * roomSpacing, corridor.y * roomSpacing),
-        rotate(facingDegrees[corridor.facing])
-      ]
-      switch (corridor.type) {
-        case `empty`:
-          draw(corridor_empty_svg, transforms)
-          break
-        case `ledge`:
-          draw(corridor_ledge_svg, transforms)
-          break
-        case `stairs`:
-          draw(corridor_stairs_svg, transforms)
-          break
-        case `openDoor`:
-          draw(gamePhase.switch == `a` ? corridor_door_open_svg : corridor_door_closed_svg, transforms)
-          break
-        case `closedDoor`:
-          draw(gamePhase.switch == `b` ? corridor_door_open_svg : corridor_door_closed_svg, transforms)
-          break
-        case `goal`:
-          draw(corridor_goal_closed_svg, transforms)
-          break
+    until(
+      shutsOff,
+      () => {
+        const transforms = [
+          translate(corridor.x * roomSpacing, corridor.y * roomSpacing),
+          rotate(facingDegrees[corridor.facing])
+        ]
+        switch (corridor.type) {
+          case `empty`:
+            draw(corridor_empty_svg, transforms)
+            break
+          case `ledge`:
+            draw(corridor_ledge_svg, transforms)
+            break
+          case `stairs`:
+            draw(corridor_stairs_svg, transforms)
+            break
+          case `openDoor`:
+            draw(gamePhase.switch == `a` ? corridor_door_open_svg : corridor_door_closed_svg, transforms)
+            break
+          case `closedDoor`:
+            draw(gamePhase.switch == `b` ? corridor_door_open_svg : corridor_door_closed_svg, transforms)
+            break
+          case `goal`:
+            draw(corridor_goal_closed_svg, transforms)
+            break
+        }
       }
-    }
+    )
   }
 
   const steps = 8
