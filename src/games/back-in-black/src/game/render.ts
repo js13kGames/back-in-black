@@ -230,4 +230,28 @@ function renderGame(gamePhase: GamePhase): void {
   }
 
   write(halfSafeAreaWidthVirtualPixels, glyphHeight / 2, level.name)
+
+  after(gamePhase.won, () => {
+    const buttonWidth = 218
+    const buttonHeight = 32
+    const messageY = halfSafeAreaHeightVirtualPixels - buttonHeight * 1.5
+    write(halfSafeAreaWidthVirtualPixels, messageY, `nice job`)
+    const nextY = messageY + buttonHeight
+    const nextTransforms = [translate(halfSafeAreaWidthVirtualPixels, nextY)]
+    draw(game_hud_button_svg, nextTransforms)
+    write(halfSafeAreaWidthVirtualPixels, nextY, `next`)
+    hitbox(buttonWidth, buttonHeight, nextTransforms, () => enterGamePhase(gamePhase.level + 1))
+
+    const retryY = nextY + buttonHeight
+    const retryTransforms = [translate(halfSafeAreaWidthVirtualPixels, retryY)]
+    draw(game_hud_button_svg, retryTransforms)
+    write(halfSafeAreaWidthVirtualPixels, retryY, `retry`)
+    hitbox(buttonWidth, buttonHeight, retryTransforms, () => enterGamePhase(gamePhase.level))
+
+    const menuY = retryY + buttonHeight
+    const menuTransforms = [translate(halfSafeAreaWidthVirtualPixels, menuY)]
+    draw(game_hud_button_svg, menuTransforms)
+    write(halfSafeAreaWidthVirtualPixels, menuY, `level select`)
+    hitbox(buttonWidth, buttonHeight, menuTransforms, () => enterPhase({ type: `levelSelect` }))
+  })
 }
