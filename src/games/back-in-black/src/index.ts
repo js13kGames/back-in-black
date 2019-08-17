@@ -21,6 +21,20 @@ const facingReverse: { readonly [facing in Facing]: Facing } = {
   west: `east`
 }
 
+const facingX: { readonly [facing in Facing]: number } = {
+  north: 0,
+  east: 1,
+  south: 0,
+  west: -1
+}
+
+const facingY: { readonly [facing in Facing]: number } = {
+  north: -1,
+  east: 0,
+  south: 1,
+  west: 0
+}
+
 type Phase = {
   type: `blank`
 } | {
