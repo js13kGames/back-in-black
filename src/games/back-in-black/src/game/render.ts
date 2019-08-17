@@ -29,7 +29,11 @@ function renderGame(gamePhase: GamePhase): void {
           draw(game_room_empty_svg, transforms)
           break
         case `switch`:
-          draw(gamePhase.switch == 'a' ? game_room_switch_a_svg : game_room_switch_b_svg, transforms)
+          switchAt(
+            gamePhase.switchChanged,
+            () => draw(gamePhase.switch == 'b' ? game_room_switch_a_svg : game_room_switch_b_svg, transforms),
+            () => draw(gamePhase.switch == 'a' ? game_room_switch_a_svg : game_room_switch_b_svg, transforms)
+          )
           break
         case `mcguffin`:
           loop(state.started, [
@@ -76,10 +80,18 @@ function renderGame(gamePhase: GamePhase): void {
               draw(game_corridor_stairs_svg, transforms)
               break
             case `openDoor`:
-              draw(gamePhase.switch == `a` ? game_corridor_door_open_svg : game_corridor_door_closed_svg, transforms)
+              switchAt(
+                gamePhase.switchChanged,
+                () => draw(gamePhase.switch == `b` ? game_corridor_door_open_svg : game_corridor_door_closed_svg, transforms),
+                () => draw(gamePhase.switch == `a` ? game_corridor_door_open_svg : game_corridor_door_closed_svg, transforms)
+              )
               break
             case `closedDoor`:
-              draw(gamePhase.switch == `b` ? game_corridor_door_open_svg : game_corridor_door_closed_svg, transforms)
+              switchAt(
+                gamePhase.switchChanged,
+                () => draw(gamePhase.switch == `a` ? game_corridor_door_open_svg : game_corridor_door_closed_svg, transforms),
+                () => draw(gamePhase.switch == `b` ? game_corridor_door_open_svg : game_corridor_door_closed_svg, transforms)
+              )
               break
           }
         }
@@ -197,6 +209,7 @@ function renderGame(gamePhase: GamePhase): void {
                 gamePhase.switch = gamePhase.switch == `a`
                   ? `b`
                   : `a`
+                gamePhase.switchChanged = now + walkDuration
                 break
               case `mcguffin`:
                 if (gamePhase.taken == null) {
