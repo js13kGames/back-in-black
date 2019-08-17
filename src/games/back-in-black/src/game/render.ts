@@ -105,7 +105,13 @@ function renderGame(gamePhase: GamePhase): void {
           rotate(facingDegrees[gamePhase.facing]),
           scaleY(i % 2 ? 1 : -1)
         ]),
-      () => draw(player_idle_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])])
+      ended => loop(
+        ended,
+        [
+          [0.5, () => draw(player_idle_a_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])])],
+          [0.5, () => draw(player_idle_b_svg, [translate(gamePhase.x * roomSpacing, gamePhase.y * roomSpacing), rotate(facingDegrees[gamePhase.facing])])]
+        ]
+      )
     )
   })
 
