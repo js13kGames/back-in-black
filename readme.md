@@ -356,7 +356,7 @@ and will be followed by a re-`render`.
 
 The name of the game from its path under `src/games`, as a string.
 
-###### `state`
+#### `state`
 
 The current state; modify as you please.
 
@@ -437,7 +437,7 @@ Calculates the distance between two vectors.
 A type which represents a [HTML5 key code](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code).
 This maps to a location on the keyboard, not what the key is mapped to.
 
-###### `now`
+#### `now`
 
 A monotonic clock, which tracks the number of beats which appear to have elapsed
 since the start of the game.  This may be somewhat inaccurate; there is a limit
