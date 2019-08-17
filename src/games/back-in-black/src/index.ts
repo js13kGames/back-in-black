@@ -271,7 +271,7 @@ function enterGamePhase(level: number): void {
     y: goal.y,
     facing: facingReverse[goal.facing],
     taken: false,
-    startedWalking: now + transitionDuration
+    startedWalking: now + 0.25
   })
 }
 
