@@ -510,6 +510,40 @@ loop(
 )
 ```
 
+##### `iterativeAnimation`
+
+```typescript
+iterativeAnimation(
+  now + 2,
+  4,
+  5,
+  i => {
+    /* Rendered with i = 0 at now + 2. */
+    /* Rendered with i = 1 at now + 6. */
+    /* Rendered with i = 2 at now + 10. */
+    /* Rendered with i = 3 at now + 14. */
+    /* Rendered with i = 4 at now + 18. */
+  }
+  ended => {
+    /* Rendered after now + 22. */
+    /* ended = now + 22. */
+  }
+)
+```
+
+Describes a "one-shot" animation which counts from zero up to a given value.
+
+This is:
+
+- A time at which to start playing the animation.
+- The duration of each frame.
+- The number of frames (the exclusive upper bound of `i`).
+- A render callback to call while the animation is playing.
+- A render callback to execute once the animation finishes.
+
+The appropriate render callback (if any) will be executed, and a re-render
+triggered at the end of each frame.
+
 #### Mutation Callback Helpers
 
 These are intended to be used only during a mutation callback.
