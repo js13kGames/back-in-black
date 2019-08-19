@@ -29,54 +29,54 @@ const pieceHeightVirtualPixels = 20
 const pieces = [piece0_svg, piece1_svg, piece2_svg, piece3_svg, piece4_svg]
 
 function layers(
-  layer: LayerFactory
+  // layer: LayerFactory
 ): void {
-  layer(
-    safeAreaWidthVirtualPixels, fullWidthVirtualPixels,
-    safeAreaHeightVirtualPixels, fullHeightVirtualPixels,
-    0, 0,
-    () => {
-      draw(background_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
-      const won = state.towers[2].length === 5
-      let xVirtualPixels = halfTowerWidthVirtualPixels
-      for (let towerIndex = 0; towerIndex < 3; towerIndex++) {
-        const towerValues = state.towers[towerIndex]
-        let yVirtualPixels = 175.5
-        for (const piece of towerValues) {
-          draw(pieces[piece], [translate(xVirtualPixels, yVirtualPixels)])
-          yVirtualPixels -= pieceHeightVirtualPixels
-        }
-        if (state.lifting === null && towerValues.length && !won) {
-          hitbox(towerWidthVirtualPixels, safeAreaHeightVirtualPixels, [translate(xVirtualPixels, halfSafeAreaHeightVirtualPixels)], () => {
-            state.lifting = {
-              piece: towerValues[towerValues.length - 1],
-              fromTower: towerIndex
-            }
-            towerValues.pop()
-          })
-        } else if (state.lifting !== null && (!towerValues.length || state.lifting.piece > towerValues[towerValues.length - 1])) {
-          const lifting = state.lifting
-          hitbox(towerWidthVirtualPixels, safeAreaHeightVirtualPixels, [translate(xVirtualPixels, halfSafeAreaHeightVirtualPixels)], () => {
-            towerValues.push(lifting.piece)
-            state.lifting = null
-          })
-        }
-        xVirtualPixels += towerWidthVirtualPixels
-      }
-      if (state.lifting !== null) {
-        draw(pieces[state.lifting.piece], [translate(halfTowerWidthVirtualPixels + towerWidthVirtualPixels * state.lifting.fromTower, 65)])
-      }
-      if (won) {
-        draw(win_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
-      }
-      hitbox(
-        35,
-        37.5,
-        [translate(halfSafeAreaWidthVirtualPixels, 25)],
-        () => state = initial()
-      )
-    }
-  )
+  // layer(
+  //   safeAreaWidthVirtualPixels, fullWidthVirtualPixels,
+  //   safeAreaHeightVirtualPixels, fullHeightVirtualPixels,
+  //   0, 0,
+  //   () => {
+  //     draw(background_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
+  //     const won = state.towers[2].length === 5
+  //     let xVirtualPixels = halfTowerWidthVirtualPixels
+  //     for (let towerIndex = 0; towerIndex < 3; towerIndex++) {
+  //       const towerValues = state.towers[towerIndex]
+  //       let yVirtualPixels = 175.5
+  //       for (const piece of towerValues) {
+  //         draw(pieces[piece], [translate(xVirtualPixels, yVirtualPixels)])
+  //         yVirtualPixels -= pieceHeightVirtualPixels
+  //       }
+  //       if (state.lifting === null && towerValues.length && !won) {
+  //         hitbox(towerWidthVirtualPixels, safeAreaHeightVirtualPixels, [translate(xVirtualPixels, halfSafeAreaHeightVirtualPixels)], () => {
+  //           state.lifting = {
+  //             piece: towerValues[towerValues.length - 1],
+  //             fromTower: towerIndex
+  //           }
+  //           towerValues.pop()
+  //         })
+  //       } else if (state.lifting !== null && (!towerValues.length || state.lifting.piece > towerValues[towerValues.length - 1])) {
+  //         const lifting = state.lifting
+  //         hitbox(towerWidthVirtualPixels, safeAreaHeightVirtualPixels, [translate(xVirtualPixels, halfSafeAreaHeightVirtualPixels)], () => {
+  //           towerValues.push(lifting.piece)
+  //           state.lifting = null
+  //         })
+  //       }
+  //       xVirtualPixels += towerWidthVirtualPixels
+  //     }
+  //     if (state.lifting !== null) {
+  //       draw(pieces[state.lifting.piece], [translate(halfTowerWidthVirtualPixels + towerWidthVirtualPixels * state.lifting.fromTower, 65)])
+  //     }
+  //     if (won) {
+  //       draw(win_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
+  //     }
+  //     hitbox(
+  //       35,
+  //       37.5,
+  //       [translate(halfSafeAreaWidthVirtualPixels, 25)],
+  //       () => state = initial()
+  //     )
+  //   }
+  // )
 }
 
 function audioReady(): () => void {

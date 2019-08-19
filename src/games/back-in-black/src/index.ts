@@ -126,40 +126,40 @@ function renderPhase(phase: Phase): void {
 }
 
 function layers(
-  layer: LayerFactory
+  // layer: LayerFactory
 ): void {
-  layer(
-    safeAreaWidthVirtualPixels, doubleSafeAreaWidthVirtualPixels,
-    safeAreaHeightVirtualPixels, doubleSafeAreaHeightVirtualPixels,
-    0, 0,
-    () => {
-      iterativeAnimation(
-        state.started,
-        transitionFrameDuration,
-        transitionFrames.length - 1,
-        i => {
-          renderPhase(state.from)
+  // layer(
+  //   safeAreaWidthVirtualPixels, doubleSafeAreaWidthVirtualPixels,
+  //   safeAreaHeightVirtualPixels, doubleSafeAreaHeightVirtualPixels,
+  //   0, 0,
+  //   () => {
+  //     iterativeAnimation(
+  //       state.started,
+  //       transitionFrameDuration,
+  //       transitionFrames.length - 1,
+  //       i => {
+  //         renderPhase(state.from)
 
-          for (let j = 0; j < i; j++) {
-            draw(transitionFrames[j], [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
-          }
-        },
-        started => iterativeAnimation(
-          started,
-          transitionFrameDuration,
-          transitionFrames.length - 1,
-          i => {
-            renderPhase(state.to)
+  //         for (let j = 0; j < i; j++) {
+  //           draw(transitionFrames[j], [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
+  //         }
+  //       },
+  //       started => iterativeAnimation(
+  //         started,
+  //         transitionFrameDuration,
+  //         transitionFrames.length - 1,
+  //         i => {
+  //           renderPhase(state.to)
 
-            for (let j = i; j < transitionFrames.length; j++) {
-              draw(transitionFrames[j], [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
-            }
-          },
-          () => renderPhase(state.to)
-        )
-      )
-    }
-  )
+  //           for (let j = i; j < transitionFrames.length; j++) {
+  //             draw(transitionFrames[j], [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
+  //           }
+  //         },
+  //         () => renderPhase(state.to)
+  //       )
+  //     )
+  //   }
+  // )
 }
 
 function audioReady(): () => void {

@@ -20,57 +20,57 @@ let hat: undefined | ((at: number, duration: number) => void)
 let cowbell: undefined | ((at: number) => void)
 
 function layers(
-  layer: LayerFactory
+  // layer: LayerFactory
 ): void {
-  layer(
-    safeAreaWidthVirtualPixels, fullWidthVirtualPixels,
-    safeAreaHeightVirtualPixels, fullHeightVirtualPixels,
-    0, 0,
-    () => {
-      draw(background_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
+  // layer(
+  //   safeAreaWidthVirtualPixels, fullWidthVirtualPixels,
+  //   safeAreaHeightVirtualPixels, fullHeightVirtualPixels,
+  //   0, 0,
+  //   () => {
+  //     draw(background_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
 
-      // Kick
-      hitbox(90, 110, [translate(170, 165)], () => {
-        if (kick) {
-          kick(audioContext.currentTime)
-        }
-      })
+  //     // Kick
+  //     hitbox(90, 110, [translate(170, 165)], () => {
+  //       if (kick) {
+  //         kick(audioContext.currentTime)
+  //       }
+  //     })
 
-      // Snare
-      hitbox(90, 55, [translate(205, 82.5)], () => {
-        if (snare) {
-          snare(audioContext.currentTime)
-        }
-      })
+  //     // Snare
+  //     hitbox(90, 55, [translate(205, 82.5)], () => {
+  //       if (snare) {
+  //         snare(audioContext.currentTime)
+  //       }
+  //     })
 
-      // Closed Hat
-      hitbox(85, 50, [translate(110, 80)], () => {
-        if (hat) {
-          hat(audioContext.currentTime, 0.05)
-        }
-      })
+  //     // Closed Hat
+  //     hitbox(85, 50, [translate(110, 80)], () => {
+  //       if (hat) {
+  //         hat(audioContext.currentTime, 0.05)
+  //       }
+  //     })
 
-      // Open Hat
-      hitbox(95, 45, [translate(170, 37.5)], () => {
-        if (hat) {
-          hat(audioContext.currentTime, 0.15)
-        }
-      })
+  //     // Open Hat
+  //     hitbox(95, 45, [translate(170, 37.5)], () => {
+  //       if (hat) {
+  //         hat(audioContext.currentTime, 0.15)
+  //       }
+  //     })
 
-      // Cowbell
-      hitbox(30, 45, [translate(232.5, 135)], () => {
-        if (cowbell) {
-          cowbell(audioContext.currentTime)
-        }
-      })
+  //     // Cowbell
+  //     hitbox(30, 45, [translate(232.5, 135)], () => {
+  //       if (cowbell) {
+  //         cowbell(audioContext.currentTime)
+  //       }
+  //     })
 
-      // Metronome
-      hitbox(22.5, 35, [translate(88.75, 139)], () => { })
+  //     // Metronome
+  //     hitbox(22.5, 35, [translate(88.75, 139)], () => { })
 
-      // Tape Recorder
-      hitbox(40, 45, [translate(80, 190)], () => { })
-    }
-  )
+  //     // Tape Recorder
+  //     hitbox(40, 45, [translate(80, 190)], () => { })
+  //   }
+  // )
 }
 
 function audioReady(): () => void {
