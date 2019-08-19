@@ -19,7 +19,8 @@ export default class HostStep extends ActionStepBase {
     return new Promise(
       (resolve, reject) => express()
         .get(/^\/([a-z]|[a-z][a-z0-9-]{0,48}[a-z0-9])$/, (request, response) => {
-          const html = this.tryGetHtml(request.params[0])
+          const gameName = Array.isArray(request.params) ? request.params[0] : request.params[0]
+          const html = this.tryGetHtml(gameName)
           if (html === null) {
             response.sendStatus(404)
           } else {
@@ -33,7 +34,8 @@ export default class HostStep extends ActionStepBase {
           }
         })
         .get(/^\/([a-z]|[a-z][a-z0-9-]{0,48}[a-z0-9])\/uuid$/, (request, response) => {
-          const html = this.tryGetHtml(request.params[0])
+          const gameName = Array.isArray(request.params) ? request.params[0] : request.params[0]
+          const html = this.tryGetHtml(gameName)
           if (html === null) {
             response.sendStatus(404)
           } else {
