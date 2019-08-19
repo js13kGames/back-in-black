@@ -98,31 +98,32 @@ function enterGamePhase(level: number): void {
 }
 
 function renderPhase(phase: Phase): void {
-  switch (phase.type) {
-    case `title`:
-      draw(background_title_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
-      hitbox(
-        doubleSafeAreaWidthVirtualPixels,
-        doubleSafeAreaHeightVirtualPixels,
-        [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)],
-        () => enterPhase({
-          type: `levelSelect`
-        })
-      )
-      break
-    case `levelSelect`:
-      draw(background_levelSelect_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
-      hitbox(
-        doubleSafeAreaWidthVirtualPixels,
-        doubleSafeAreaHeightVirtualPixels,
-        [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)],
-        () => enterGamePhase(0)
-      )
-      break
-    case `game`:
-      renderGame(phase)
-      break
-  }
+  phase
+  // switch (phase.type) {
+  //   case `title`:
+  //     draw(background_title_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
+  //     hitbox(
+  //       doubleSafeAreaWidthVirtualPixels,
+  //       doubleSafeAreaHeightVirtualPixels,
+  //       [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)],
+  //       () => enterPhase({
+  //         type: `levelSelect`
+  //       })
+  //     )
+  //     break
+  //   case `levelSelect`:
+  //     draw(background_levelSelect_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
+  //     hitbox(
+  //       doubleSafeAreaWidthVirtualPixels,
+  //       doubleSafeAreaHeightVirtualPixels,
+  //       [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)],
+  //       () => enterGamePhase(0)
+  //     )
+  //     break
+  //   case `game`:
+  //     renderGame(phase)
+  //     break
+  // }
 }
 
 function layers(
