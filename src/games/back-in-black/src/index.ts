@@ -48,7 +48,7 @@ function initial(): State {
     to: {
       type: `title`
     },
-    started: now
+    started: 0 // now
   }
 }
 
@@ -75,26 +75,28 @@ const transitionDuration = 1.2
 const transitionFrameDuration = transitionDuration / (transitionFrames.length * 2 - 1)
 
 function enterPhase(phase: Phase): void {
-  if (state.started + transitionDuration <= now) {
-    state.from = state.to
-    state.to = phase
-    state.started = now
-  }
+  phase
+  // if (state.started + transitionDuration <= now) {
+  //   state.from = state.to
+  //   state.to = phase
+  //   state.started = now
+  // }
 }
 
 function enterGamePhase(level: number): void {
-  const levelValue = levels[level]
-  const goal = levelValue.corridors.filter(corridor => corridor.type == `goal`)[0]
-  enterPhase({
-    type: `game`,
-    level,
-    switch: `a`,
-    switchChanged: now,
-    x: goal.x,
-    y: goal.y,
-    facing: facingReverse[goal.facing],
-    startedWalking: now + 0.25
-  })
+  level
+  // const levelValue = levels[level]
+  // const goal = levelValue.corridors.filter(corridor => corridor.type == `goal`)[0]
+  // enterPhase({
+  //   type: `game`,
+  //   level,
+  //   switch: `a`,
+  //   switchChanged: now,
+  //   x: goal.x,
+  //   y: goal.y,
+  //   facing: facingReverse[goal.facing],
+  //   startedWalking: now + 0.25
+  // })
 }
 
 function renderPhase(phase: Phase): void {

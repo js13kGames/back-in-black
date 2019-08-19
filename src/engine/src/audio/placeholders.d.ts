@@ -1,1 +1,1 @@
-declare function audioReady(): () => void
+declare function audioReady(): void

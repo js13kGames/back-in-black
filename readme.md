@@ -259,79 +259,16 @@ storage does not contain a state, or the state is not usable.
 A number which identifies breaking changes to `State`.  If this does not match
 that loaded from local storage, `initial` will be used instead.
 
-#### `beatsPerMinute`
-
-The number of beats per minute of the game's music.
-
 #### `audioReady`
 
 Executed immediately after the Web Audio API is initialized, for the creation of
-virtual instruments.  A function is returned which is executed once per beat to
-control said virtual instruments.  This may skip beats if timing problems occur.
+virtual instruments.
 
 ```typescript
 function audioReady(): () => void {
   // audioContext is available here.
-  return function(): void {
-    // Executed every beat where possible.
-    // audioContext is available here.
-    // audioTime is available here.
-  }
 }
 ```
-
-#### `layers`
-
-A function which is executed by the engine during startup to define which layers
-are to be rendered.
-
-```typescript
-function layers(layer: LayerFactory): void {
-  layer(
-    320, // viewportMinimumWidthVirtualPixels
-    420, // viewportMaximumWidthVirtualPixels
-    240, // viewportMinimumHeightVirtualPixels
-    400, // viewportMaximumHeightVirtualPixels
-    0, // viewportHorizontalAlignmentSignedUnitInterval
-    0, // viewportVerticalAlignmentSignedUnitInterval
-    () => {
-      /* Render here. */
-    }
-  )
-}
-```
-
-##### `viewportMinimumWidthVirtualPixels`/`viewportMaximumWidthVirtualPixels`/`viewportMinimumHeightVirtualPixels`/`viewportMaximumHeightVirtualPixels`
-
-The X axis runs from left to right, while the Y axis runs from top to bottom.
-
-A "virtual resolution" is specified, which maps to SVG pixels.  The `minimum`
-`width` and `height` define the "safe area" which is guaranteed to be visible.
-This will be made as large as possible without cropping it or distorting the
-aspect ratio.
-
-The `maximum` `width` and `height` define how much margin is visible around the
-"safe area" when the display resolution's aspect ratio does not match that of
-the "safe area".
-
-For instance, in the above example, if the screen is wider than a 4:3 aspect
-ratio, up to 50 extra virtual pixels will be shown left of X 0, and a further
-50 right of X 320.  The viewport will be cropped beyond the "maximum".
-
-###### `viewportHorizontalAlignmentSignedUnitInterval`/`viewportVerticalAlignmentSignedUnitInterval`
-
-Viewports are alignable to display borders, for elements such as buttons which
-should be near the edges of devices.
-
-Horizontal and vertical alignment are signed unit intervals, where -1 aligns the
-left and top borders of the viewport with those of the display, 0 centers the
-viewport on the display, and 1 aligns the right and bottom borders of the
-viewport with those of the display.
-
-##### `render`
-
-Executed when the engine needs to know what to display to the user, and which
-interaction options exist, based on the current state.
 
 ##### Mutation callbacks
 
@@ -358,13 +295,7 @@ work.
 #### `audioContext`
 
 The current Web Audio API context.  This should only be used in the `audioReady`
-function and its returned callback.
-
-#### `audioTime`
-
-Converts a unit interval representing progress through the current beat to a Web
-Audio API time.  This should only be used in the `audioReady` function's
-returned callback.
+function.
 
 #### `Truthiness`
 
@@ -424,12 +355,6 @@ Calculates the distance between two vectors.
 
 A type which represents a [HTML5 key code](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code).
 This maps to a location on the keyboard, not what the key is mapped to.
-
-#### `now`
-
-A monotonic clock, which tracks the number of beats which appear to have elapsed
-since the start of the game.  This may be somewhat inaccurate; there is a limit
-on how much time can "pass" in one go.
 
 #### Render emitters
 
