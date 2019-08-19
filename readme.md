@@ -295,10 +295,7 @@ function layers(layer: LayerFactory): void {
     0, // viewportHorizontalAlignmentSignedUnitInterval
     0, // viewportVerticalAlignmentSignedUnitInterval
     () => {
-      draw(
-        anExample_svg,
-        [translateX(24)] // transforms
-      )
+      /* Render here. */
     }
   )
 }
@@ -438,10 +435,6 @@ on how much time can "pass" in one go.
 
 These can be called during a layer's render callback to describe something which
 the render emits.
-
-##### `draw`
-
-Draws the given `svg`.  The transform origin is the center of the SVG.
 
 ##### `mapKey`
 
