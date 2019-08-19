@@ -299,15 +299,6 @@ function layers(layer: LayerFactory): void {
         anExample_svg,
         [translateX(24)] // transforms
       )
-      hitbox(
-        64, // widthVirtualPixels
-        80, // heightVirtualPixels
-        [translateX(24)], // transforms
-        () => {
-          state.clickedOrTouched = true
-          const currentTime = now
-        }
-      )
     }
   )
 }
@@ -451,16 +442,6 @@ the render emits.
 ##### `draw`
 
 Draws the given `svg`.  The transform origin is the center of the SVG.
-
-##### `hitbox`
-
-Defines a clickable or touchable area within the viewport which triggers a
-mutation callback.
-
-As with `draw`, the transform origin is the center of the hitbox.
-
-If multiple hitboxes overlap, within the same layer or between multiple layers,
-the last defined wins.
 
 ##### `mapKey`
 
