@@ -1,7 +1,6 @@
 onload = () => {
   engineLoadState()
   engineAudioStart()
-  engineCreateLayers()
   engineMonotonic()
   onresize = () => {
     engineMonotonic()
