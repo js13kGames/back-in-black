@@ -494,6 +494,84 @@ hitbox defined in the last viewport defined takes priority.
 
 Hitboxes cannot be animated.
 
+##### Easings
+
+These describe how a subject object will interpolate between the current
+keyframe and the next.
+
+###### `linear`
+
+```typescript
+
+// Configure the keyframe to interpolate from.
+
+linear(groupOrSprite)
+
+// Elapse, then configure the keyframe to interpolate to.
+
+```
+
+Interpolates linearly; at a constant rate.  This makes the start and end of the
+motion somewhat abrupt.
+
+###### `easeOut`
+
+```typescript
+
+// Configure the keyframe to interpolate from.
+
+easeOut(groupOrSprite)
+
+// Elapse, then configure the keyframe to interpolate to.
+
+```
+
+Interpolates quickly, decelerating towards the end.
+
+###### `easeIn`
+
+```typescript
+
+// Configure the keyframe to interpolate from.
+
+easeIn(groupOrSprite)
+
+// Elapse, then configure the keyframe to interpolate to.
+
+```
+
+Interpolates slowly, accelerating towards the end.
+
+###### `easeInOut`
+
+```typescript
+
+// Configure the keyframe to interpolate from.
+
+easeInOut(groupOrSprite)
+
+// Elapse, then configure the keyframe to interpolate to.
+
+```
+
+Interpolates slowly, accelerates towards the middle, then decelerates again
+towards the end.
+
+###### `ease`
+
+```typescript
+
+// Configure the keyframe to interpolate from.
+
+ease(groupOrSprite)
+
+// Elapse, then configure the keyframe to interpolate to.
+
+```
+
+Interpolates at moderate speed, accelerates towards the middle, then decelerates
+again towards the end.
+
 ##### Transforms
 
 These manipulate the current keyframe of the subject object.  If the subject
