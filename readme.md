@@ -423,6 +423,25 @@ const createdSprite = sprite(parentViewportOrGroup, importedFile_svg)
 
 Sprites display imported SVG files.
 
+##### `hitbox`
+
+```typescript
+hitbox(
+  parentViewport,
+  leftVirtualPixels,
+  topVirtualPixels,
+  widthVirtualPixels,
+  heightVirtualPixels,
+  () => {
+    state.aKeyPressed = true
+  }
+)
+```
+
+Maps an area of the display to a mutation callback, which is then executed when
+that area is clicked on or touched.  If multiple cover the same area, the last
+hitbox defined in the last viewport defined takes priority.
+
 ##### `mapKey`
 
 ```typescript
