@@ -215,10 +215,9 @@ It is not good for:
 ### Architecture
 
 ```
-                              .-> sprites
-initial -.-> state -> render -|-> hitboxes -.
-         |                    '-> timers --.|
-         '----------------------------------'
+initial -.-> state -> render -> viewports -.-> groups/sprites
+         |                                 '-> hitboxes --.
+         '------------------------------------------------'
 ```
 
 #### State
