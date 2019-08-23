@@ -1,8 +1,8 @@
 onload = () => {
-  engineLoadState()
+  engineStateLoad()
   engineAudioStart()
   engineRender()
-  onbeforeunload = engineSaveState
+  onbeforeunload = engineStateSave
   onkeydown = engineKeyInputHandleKey
   onblur = engineAudioSuspend
   onresize = engineViewportsResize
