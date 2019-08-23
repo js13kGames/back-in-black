@@ -366,6 +366,35 @@ This maps to a location on the keyboard, not what the key is mapped to.
 These can be called during the render callback to describe something which the
 render emits.
 
+##### `phase`
+
+```typescript
+
+// First phase.
+
+phase()
+
+// Second phase.
+
+phase()
+
+// Third phase.
+
+phase()
+
+// Final, looping phase.
+
+```
+
+Phases can be thought of as "bookmarks" in the animation described during
+`render`.  Phases can be used for skipping; for instance, you might have a
+sequence of events which can be individually skipped but do not otherwise
+require any user input.
+
+The last phase loops.  If no looping animation is desired at all, this can be
+prevented by making the last phase empty (e.g. calling `phase` at the end of
+`render`).
+
 ##### viewport
 
 ```typescript
