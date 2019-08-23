@@ -270,6 +270,11 @@ function audioReady(): () => void {
 }
 ```
 
+#### `render`
+
+Executed when `state` is known to have changed, to re-render the scene.  See
+Render Emitters for details on what can be done in this callback.
+
 ##### Mutation callbacks
 
 A mutation callback is executed when an event occurs which could alter state,
@@ -360,6 +365,63 @@ This maps to a location on the keyboard, not what the key is mapped to.
 
 These can be called during the render callback to describe something which the
 render emits.
+
+##### viewport
+
+```typescript
+const createdViewport = viewport(
+  320, // viewportMinimumWidthVirtualPixels
+  420, // viewportMaximumWidthVirtualPixels
+  240, // viewportMinimumHeightVirtualPixels
+  400, // viewportMaximumHeightVirtualPixels
+  0, // viewportHorizontalAlignmentSignedUnitInterval
+  0, // viewportVerticalAlignmentSignedUnitInterval
+)
+```
+
+##### `viewportMinimumWidthVirtualPixels`/`viewportMaximumWidthVirtualPixels`/`viewportMinimumHeightVirtualPixels`/`viewportMaximumHeightVirtualPixels`
+
+The X axis runs from left to right, while the Y axis runs from top to bottom.
+
+A "virtual resolution" is specified, which maps to SVG pixels.  The `minimum`
+`width` and `height` define the "safe area" which is guaranteed to be visible.
+This will be made as large as possible without cropping it or distorting the
+aspect ratio.
+
+The `maximum` `width` and `height` define how much margin is visible around the
+"safe area" when the display resolution's aspect ratio does not match that of
+the "safe area".
+
+For instance, in the above example, if the screen is wider than a 4:3 aspect
+ratio, up to 50 extra virtual pixels will be shown left of X 0, and a further
+50 right of X 320.  The viewport will be cropped beyond the "maximum".
+
+###### `viewportHorizontalAlignmentSignedUnitInterval`/`viewportVerticalAlignmentSignedUnitInterval`
+
+Viewports are alignable to display borders, for elements such as buttons which
+should be near the edges of devices.
+
+Horizontal and vertical alignment are signed unit intervals, where -1 aligns the
+left and top borders of the viewport with those of the display, 0 centers the
+viewport on the display, and 1 aligns the right and bottom borders of the
+viewport with those of the display.
+
+##### `group`
+
+```typescript
+const createdGroup = group(parentViewportOrGroup)
+```
+
+Groups are not themselves visible, but can be used to manipulate a set of other
+objects as a whole, or control render order.
+
+##### `sprite`
+
+```typescript
+const createdSprite = sprite(parentViewportOrGroup, importedFile_svg)
+```
+
+Sprites display imported SVG files.
 
 ##### `mapKey`
 
