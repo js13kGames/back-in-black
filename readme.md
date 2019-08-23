@@ -365,6 +365,20 @@ This maps to a location on the keyboard, not what the key is mapped to.
 These can be called during the render callback to describe something which the
 render emits.
 
+##### `elapse`
+
+```typescript
+
+// The time was 200.
+
+elapse(650)
+
+// The time is now 850.
+
+```
+
+Progress the timeline by the given number of milliseconds.
+
 ##### `phase`
 
 ```typescript
