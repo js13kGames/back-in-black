@@ -394,7 +394,7 @@ The last phase loops.  If no looping animation is desired at all, this can be
 prevented by making the last phase empty (e.g. calling `phase` at the end of
 `render`).
 
-##### viewport
+##### `viewport`
 
 ```typescript
 const createdViewport = viewport(
