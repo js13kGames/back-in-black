@@ -481,6 +481,30 @@ These manipulate the current keyframe of the subject object.  If the subject
 object has no keyframe at the current time, a new non-interpolating keyframe is
 created based on the previous keyframe first.
 
+##### `setOpacity`
+
+```typescript
+setOpacity(groupOrSprite, 0.4)
+```
+
+Sets the opacity, where 0 is fully transparent and 1 is fully opaque.
+
+##### `hide`
+
+```typescript
+hide(groupOrSprite)
+```
+
+Equivalent to `setOpacity(groupOrSprite, 0)`.
+
+##### `show`
+
+```typescript
+show(groupOrSprite)
+```
+
+Equivalent to `setOpacity(groupOrSprite, 1)`.
+
 ##### `translateX`
 
 ```typescript
