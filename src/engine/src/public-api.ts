@@ -59,6 +59,24 @@ function distance(
 
 type KeyCode = EngineKeyCode
 
+function viewport(
+  minimumWidthVirtualPixels: number,
+  minimumHeightVirtualPixels: number,
+  maximumWidthVirtualPixels: number,
+  maximumHeightVirtualPixels: number,
+  horizontalAlignmentSignedUnitInterval: number,
+  verticalAlignmentSignedUnitInterval: number,
+): EngineViewport {
+  return engineViewportsCreate(
+    minimumWidthVirtualPixels,
+    minimumHeightVirtualPixels,
+    maximumWidthVirtualPixels,
+    maximumHeightVirtualPixels,
+    horizontalAlignmentSignedUnitInterval,
+    verticalAlignmentSignedUnitInterval,
+  )
+}
+
 function mapKey(
   key: EngineKeyCode,
   callback: EngineMutationCallback

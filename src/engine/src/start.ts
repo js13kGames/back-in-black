@@ -5,4 +5,5 @@ onload = () => {
   onbeforeunload = engineSaveState
   onkeydown = engineKeyInputHandleKey
   onblur = engineAudioSuspend
+  onresize = engineViewportsResize
 }
