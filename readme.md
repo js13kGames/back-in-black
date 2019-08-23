@@ -412,7 +412,8 @@ the next `render`.  They cannot be animated.
 
 ##### `viewportMinimumWidthVirtualPixels`/`viewportMaximumWidthVirtualPixels`/`viewportMinimumHeightVirtualPixels`/`viewportMaximumHeightVirtualPixels`
 
-The X axis runs from left to right, while the Y axis runs from top to bottom.
+The X axis runs from center to right, while the Y axis runs from center to
+bottom.
 
 A "virtual resolution" is specified, which maps to SVG pixels.  The `minimum`
 `width` and `height` define the "safe area" which is guaranteed to be visible.
@@ -424,8 +425,8 @@ The `maximum` `width` and `height` define how much margin is visible around the
 the "safe area".
 
 For instance, in the above example, if the screen is wider than a 4:3 aspect
-ratio, up to 50 extra virtual pixels will be shown left of X 0, and a further
-50 right of X 320.  The viewport will be cropped beyond the "maximum".
+ratio, up to 50 extra virtual pixels will be shown left of X -160, and a further
+50 right of X 160.  The viewport will be cropped beyond the "maximum".
 
 ###### `viewportHorizontalAlignmentSignedUnitInterval`/`viewportVerticalAlignmentSignedUnitInterval`
 
