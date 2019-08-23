@@ -60,7 +60,7 @@ const halfSafeAreaHeightVirtualPixels = safeAreaHeightVirtualPixels / 2
 const doubleSafeAreaWidthVirtualPixels = safeAreaWidthVirtualPixels * 2
 const doubleSafeAreaHeightVirtualPixels = safeAreaHeightVirtualPixels * 2
 
-const transitionFrames: ReadonlyArray<EngineSvg> = [
+const transitionFrames: ReadonlyArray<EngineSpritesSvg> = [
   transition_a_svg,
   transition_b_svg,
   transition_c_svg,
