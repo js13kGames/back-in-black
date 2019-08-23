@@ -306,7 +306,7 @@ function.
 Either `1` or `undefined`.  Useful for indicating a `true`/`false` flag without
 the overhead of `return !1` or similar.
 
-#### `Json`/`IJsonArray`/`IJsonArrayAny`/`IJsonObject`
+#### `Json`
 
 Types which can be serialized to or deserialized from JSON.
 
