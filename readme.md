@@ -399,8 +399,8 @@ prevented by making the last phase empty (e.g. calling `phase` at the end of
 ```typescript
 const createdViewport = viewport(
   320, // viewportMinimumWidthVirtualPixels
-  420, // viewportMaximumWidthVirtualPixels
   240, // viewportMinimumHeightVirtualPixels
+  420, // viewportMaximumWidthVirtualPixels
   400, // viewportMaximumHeightVirtualPixels
   0, // viewportHorizontalAlignmentSignedUnitInterval
   0, // viewportVerticalAlignmentSignedUnitInterval
@@ -410,7 +410,7 @@ const createdViewport = viewport(
 Viewports sit directly under the root of the scene graph.  They persist until
 the next `render`.  They cannot be animated.
 
-##### `viewportMinimumWidthVirtualPixels`/`viewportMaximumWidthVirtualPixels`/`viewportMinimumHeightVirtualPixels`/`viewportMaximumHeightVirtualPixels`
+##### `viewportMinimumWidthVirtualPixels`/`viewportMinimumHeightVirtualPixels`/`viewportMaximumWidthVirtualPixels`/`viewportMaximumHeightVirtualPixels`
 
 The X axis runs from center to right, while the Y axis runs from center to
 bottom.
