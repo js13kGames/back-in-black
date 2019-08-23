@@ -1,4 +1,4 @@
-type KeyCode =
+type EngineKeyCode =
   | `Escape`
   | `Digit0`
   | `Digit1`

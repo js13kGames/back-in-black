@@ -1,14 +1,14 @@
-interface IJsonArray<T extends Json> extends ReadonlyArray<T> { }
-interface IJsonArrayAny extends ReadonlyArray<Json> { }
+interface IEngineJsonArray<T extends EngineJson> extends ReadonlyArray<T> { }
+interface IEngineJsonArrayAny extends ReadonlyArray<EngineJson> { }
 
-type Json =
+type EngineJson =
   | string
   | number
   | boolean
-  | IJsonArrayAny
-  | IJsonObject
+  | IEngineJsonArrayAny
+  | IEngineJsonObject
   | null
 
-interface IJsonObject {
-  readonly [key: string]: Json
+interface IEngineJsonObject {
+  readonly [key: string]: EngineJson
 }

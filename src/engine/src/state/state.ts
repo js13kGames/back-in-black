@@ -1,5 +1,3 @@
-let state: State
-
 const engineVersion = 3
 
 type EngineState = {

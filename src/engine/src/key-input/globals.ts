@@ -1,3 +1,3 @@
 let engineKeyInputCallbacks: {
-  [keyCode in KeyCode]?: EngineMutationCallback
+  [keyCode in EngineKeyCode]?: EngineMutationCallback
 }

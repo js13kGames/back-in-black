@@ -1,5 +1,5 @@
 function engineKeyInputHandleKey(e: KeyboardEvent): void {
-  const callback = engineKeyInputCallbacks[e.code as KeyCode]
+  const callback = engineKeyInputCallbacks[e.code as EngineKeyCode]
   if (callback) {
     callback()
     engineRender()

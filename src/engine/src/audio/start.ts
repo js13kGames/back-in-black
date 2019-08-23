@@ -1,5 +1,3 @@
-let audioContext: AudioContext
-
 declare const webkitAudioContext: {
   prototype: AudioContext
   new(contextOptions?: AudioContextOptions): AudioContext
