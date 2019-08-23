@@ -457,6 +457,8 @@ const createdSprite = sprite(parentViewportOrGroup, importedFile_svg)
 Sprites display imported SVG files.  They are hidden until the time at
 which they were created.
 
+Their origin is the center of the bounding box of the SVG.
+
 ##### `hitbox`
 
 ```typescript
