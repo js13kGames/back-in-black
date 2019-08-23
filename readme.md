@@ -358,8 +358,8 @@ This maps to a location on the keyboard, not what the key is mapped to.
 
 #### Render emitters
 
-These can be called during a layer's render callback to describe something which
-the render emits.
+These can be called during the render callback to describe something which the
+render emits.
 
 ##### `mapKey`
 
@@ -415,40 +415,74 @@ const truthyOnNonFailure = drop(`a-key`)
 
 #### Transforms
 
-These can be given to some functions when rendering a layer.
+These manipulate the current keyframe of the subject object.  If the subject
+object has no keyframe at the current time, a new non-interpolating keyframe is
+created based on the previous keyframe first.
 
 ##### `translateX`
 
-Returns a translation by the given number of virtual pixels on the X axis.
+```typescript
+translateX(groupOrSprite, 20)
+```
+
+Translates by the given number of virtual pixels on the X axis.
 
 ##### `translateY`
 
-Returns a translation by the given number of virtual pixels on the Y axis.
+```typescript
+translateY(groupOrSprite, 20)
+```
+
+Translates by the given number of virtual pixels on the Y axis.
 
 ##### `translate`
 
-Returns a translation by the given numbers of virtual pixels on the X and Y axes
+```typescript
+translate(groupOrSprite, 20, 65)
+```
+
+Translates by the given numbers of virtual pixels on the X and Y axes
 respectively.
 
-##### `rotation`
+##### `rotate`
 
-Returns a translation by the given number of degrees clockwise.
+```typescript
+rotate(groupOrSprite, 90)
+```
+
+Rotates by the given number of degrees clockwise.
 
 ##### `scaleX`
 
-Returns a scaling by the given factor on the X axis.
+```typescript
+scaleX(groupOrSprite, 2)
+```
+
+Scales by the given factor on the X axis.
 
 ##### `scaleY`
 
-Returns a scaling by the given factor on the Y axis.
+```typescript
+scaleY(groupOrSprite, 2)
+```
+
+Scales by the given factor on the Y axis.
 
 ##### `scale`
 
-Returns a scaling by the given factors on the X and Y axes respectively.
+```typescript
+scale(groupOrSprite, 2, 4)
+```
+
+Scales by the given factors on the X and Y axes respectively.
 
 ##### `scaleUniform`
 
-Returns a scaling by the given factor on the X and Y axes.
+```typescript
+scaleUniform(groupOrSprite, 2)
+```
+
+Scales by the given factor on the X and Y axes.
 
 ## Build pipeline
 
