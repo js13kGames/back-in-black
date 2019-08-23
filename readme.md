@@ -494,6 +494,101 @@ hitbox defined in the last viewport defined takes priority.
 
 Hitboxes cannot be animated.
 
+##### Transforms
+
+These manipulate the current keyframe of the subject object.  If the subject
+object has no keyframe at the current time, a new non-interpolating keyframe is
+created based on the previous keyframe first.
+
+###### `setOpacity`
+
+```typescript
+setOpacity(groupOrSprite, 0.4)
+```
+
+Sets the opacity, where 0 is fully transparent and 1 is fully opaque.
+
+###### `hide`
+
+```typescript
+hide(groupOrSprite)
+```
+
+Equivalent to `setOpacity(groupOrSprite, 0)`.
+
+###### `show`
+
+```typescript
+show(groupOrSprite)
+```
+
+Equivalent to `setOpacity(groupOrSprite, 1)`.
+
+###### `translateX`
+
+```typescript
+translateX(groupOrSprite, 20)
+```
+
+Translates by the given number of virtual pixels on the X axis.
+
+###### `translateY`
+
+```typescript
+translateY(groupOrSprite, 20)
+```
+
+Translates by the given number of virtual pixels on the Y axis.
+
+###### `translate`
+
+```typescript
+translate(groupOrSprite, 20, 65)
+```
+
+Translates by the given numbers of virtual pixels on the X and Y axes
+respectively.
+
+###### `rotate`
+
+```typescript
+rotate(groupOrSprite, 90)
+```
+
+Rotates by the given number of degrees clockwise.
+
+###### `scaleX`
+
+```typescript
+scaleX(groupOrSprite, 2)
+```
+
+Scales by the given factor on the X axis.
+
+###### `scaleY`
+
+```typescript
+scaleY(groupOrSprite, 2)
+```
+
+Scales by the given factor on the Y axis.
+
+###### `scale`
+
+```typescript
+scale(groupOrSprite, 2, 4)
+```
+
+Scales by the given factors on the X and Y axes respectively.
+
+###### `scaleUniform`
+
+```typescript
+scaleUniform(groupOrSprite, 2)
+```
+
+Scales by the given factor on the X and Y axes.
+
 ##### `mapKey`
 
 ```typescript
@@ -545,101 +640,6 @@ Returns falsy and has no side effects when unsuccessful.
 ```typescript
 const truthyOnNonFailure = drop(`a-key`)
 ```
-
-#### Transforms
-
-These manipulate the current keyframe of the subject object.  If the subject
-object has no keyframe at the current time, a new non-interpolating keyframe is
-created based on the previous keyframe first.
-
-##### `setOpacity`
-
-```typescript
-setOpacity(groupOrSprite, 0.4)
-```
-
-Sets the opacity, where 0 is fully transparent and 1 is fully opaque.
-
-##### `hide`
-
-```typescript
-hide(groupOrSprite)
-```
-
-Equivalent to `setOpacity(groupOrSprite, 0)`.
-
-##### `show`
-
-```typescript
-show(groupOrSprite)
-```
-
-Equivalent to `setOpacity(groupOrSprite, 1)`.
-
-##### `translateX`
-
-```typescript
-translateX(groupOrSprite, 20)
-```
-
-Translates by the given number of virtual pixels on the X axis.
-
-##### `translateY`
-
-```typescript
-translateY(groupOrSprite, 20)
-```
-
-Translates by the given number of virtual pixels on the Y axis.
-
-##### `translate`
-
-```typescript
-translate(groupOrSprite, 20, 65)
-```
-
-Translates by the given numbers of virtual pixels on the X and Y axes
-respectively.
-
-##### `rotate`
-
-```typescript
-rotate(groupOrSprite, 90)
-```
-
-Rotates by the given number of degrees clockwise.
-
-##### `scaleX`
-
-```typescript
-scaleX(groupOrSprite, 2)
-```
-
-Scales by the given factor on the X axis.
-
-##### `scaleY`
-
-```typescript
-scaleY(groupOrSprite, 2)
-```
-
-Scales by the given factor on the Y axis.
-
-##### `scale`
-
-```typescript
-scale(groupOrSprite, 2, 4)
-```
-
-Scales by the given factors on the X and Y axes respectively.
-
-##### `scaleUniform`
-
-```typescript
-scaleUniform(groupOrSprite, 2)
-```
-
-Scales by the given factor on the X and Y axes.
 
 ## Build pipeline
 
