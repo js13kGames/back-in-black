@@ -379,6 +379,9 @@ const createdViewport = viewport(
 )
 ```
 
+Viewports sit directly under the root of the scene graph.  They persist until
+the next `render`.  They cannot be animated.
+
 ##### `viewportMinimumWidthVirtualPixels`/`viewportMaximumWidthVirtualPixels`/`viewportMinimumHeightVirtualPixels`/`viewportMaximumHeightVirtualPixels`
 
 The X axis runs from left to right, while the Y axis runs from top to bottom.
@@ -413,7 +416,8 @@ const createdGroup = group(parentViewportOrGroup)
 ```
 
 Groups are not themselves visible, but can be used to manipulate a set of other
-objects as a whole, or control render order.
+objects as a whole, or control render order.  They are hidden until the time at
+which they were created.
 
 ##### `sprite`
 
@@ -421,7 +425,8 @@ objects as a whole, or control render order.
 const createdSprite = sprite(parentViewportOrGroup, importedFile_svg)
 ```
 
-Sprites display imported SVG files.
+Sprites display imported SVG files.  They are hidden until the time at
+which they were created.
 
 ##### `hitbox`
 
@@ -441,6 +446,8 @@ hitbox(
 Maps an area of the display to a mutation callback, which is then executed when
 that area is clicked on or touched.  If multiple cover the same area, the last
 hitbox defined in the last viewport defined takes priority.
+
+Hitboxes cannot be animated.
 
 ##### `mapKey`
 
