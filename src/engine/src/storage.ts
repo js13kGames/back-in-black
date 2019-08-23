@@ -3,7 +3,7 @@ try {
   saveLoadAvailable = 1
 } catch { }
 
-function engineSave<T extends EngineJson>(key: string, content: T): Truthiness {
+function engineStorageSave<T extends EngineJson>(key: string, content: T): Truthiness {
   if (saveLoadAvailable) {
     try {
       localStorage.setItem(key, JSON.stringify(content))
@@ -13,7 +13,7 @@ function engineSave<T extends EngineJson>(key: string, content: T): Truthiness {
   return
 }
 
-function engineLoad<T extends EngineJson>(key: string): null | T {
+function engineStorageLoad<T extends EngineJson>(key: string): null | T {
   if (saveLoadAvailable) {
     try {
       const json = localStorage.getItem(key)
@@ -25,7 +25,7 @@ function engineLoad<T extends EngineJson>(key: string): null | T {
   return null
 }
 
-function engineDrop(key: string): Truthiness {
+function engineStorageDrop(key: string): Truthiness {
   if (saveLoadAvailable) {
     try {
       localStorage.removeItem(key)

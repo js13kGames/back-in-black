@@ -85,13 +85,13 @@ function mapKey(
 }
 
 function save<T extends EngineJson>(name: string, content: T): Truthiness {
-  return engineSave(`${gameName}-${name}`, content)
+  return engineStorageSave(`${gameName}-${name}`, content)
 }
 
 function load<T extends EngineJson>(name: string): null | T {
-  return engineLoad(`${gameName}-${name}`)
+  return engineStorageLoad(`${gameName}-${name}`)
 }
 
 function drop(name: string): Truthiness {
-  return engineDrop(`${gameName}-${name}`)
+  return engineStorageDrop(`${gameName}-${name}`)
 }
