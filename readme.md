@@ -497,7 +497,21 @@ Hitboxes cannot be animated.
 ##### Easings
 
 These describe how a subject object will interpolate between the current
-keyframe and the next.
+keyframe and the next.  The default behaviour is `stepEnd`.
+
+###### `stepEnd`
+
+```typescript
+
+// Configure the group or sprite before the sudden transition.
+
+stepEnd(groupOrSprite)
+
+// Configure the group or sprite after the sudden transition.
+
+```
+
+Sets a hard transition; allows for changes without any interpolation.
 
 ###### `linear`
 
