@@ -3,6 +3,7 @@ let engineKeyInputCallbacks: {
 }
 
 function engineKeyInputHandleKey(e: KeyboardEvent): void {
+  engineAudioResume()
   const callback = engineKeyInputCallbacks[e.code as EngineKeyCode]
   if (callback) {
     callback()

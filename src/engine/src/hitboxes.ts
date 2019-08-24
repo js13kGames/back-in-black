@@ -18,6 +18,7 @@ function engineHitboxesCreate(
     e: Event
   ): void {
     e.preventDefault()
+    engineAudioResume()
     callback()
     engineRender()
   }
