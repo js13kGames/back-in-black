@@ -56,7 +56,7 @@ const enum PieceFrameLayer {
 const pieceFrames: {
   readonly [piece in Piece]: {
     readonly [frame in PieceFrame]: {
-      readonly [layer in PieceFrameLayer]: EngineSvg
+      readonly [layer in PieceFrameLayer]: EngineSpritesSvg
     }
   }
 } = [
@@ -96,7 +96,7 @@ const enum EffectFrame {
 
 const effectFrames: {
   readonly [piece in Piece]: {
-    readonly [frame in EffectFrame]: EngineSvg
+    readonly [frame in EffectFrame]: EngineSpritesSvg
   }
 } = [
     [
