@@ -87,6 +87,24 @@ function viewport(
   )
 }
 
+function hitbox(
+  viewport: EngineViewport,
+  leftVirtualPixels: number,
+  topVirtualPixels: number,
+  widthVirtualPixels: number,
+  heightVirtualPixels: number,
+  callback: () => void,
+): void {
+  engineHitboxesCreate(
+    viewport,
+    leftVirtualPixels,
+    topVirtualPixels,
+    widthVirtualPixels,
+    heightVirtualPixels,
+    callback
+  )
+}
+
 function mapKey(
   key: EngineKeyCode,
   callback: EngineMutationCallback
