@@ -35,6 +35,8 @@ function engineViewportsCreate(
   outerElement.style.position = `fixed`
   outerElement.style.overflow = `hidden`
   outerElement.style.transformOrigin = `0 0`
+  outerElement.style.userSelect = `none`
+  outerElement.style.touchAction = `manipulation`
 
   const innerElement = document.createElement(`div`)
   innerElement.style.position = `absolute`
