@@ -87,6 +87,19 @@ function viewport(
   )
 }
 
+function group(
+  parent: EngineViewport | EngineAnimation,
+): EngineAnimation {
+  return engineGroupsCreate(parent)
+}
+
+function sprite(
+  parent: EngineViewport | EngineAnimation,
+  svg: EngineSpritesSvg,
+): EngineAnimation {
+  return engineSpritesCreate(parent, svg)
+}
+
 function hitbox(
   viewport: EngineViewport,
   leftVirtualPixels: number,
@@ -103,6 +116,119 @@ function hitbox(
     heightVirtualPixels,
     callback
   )
+}
+
+function stepEnd(
+  animation: EngineAnimation,
+): void {
+  engineAnimationsCreateKeyframe(animation)
+}
+
+function linear(
+  animation: EngineAnimation,
+): void {
+  engineTransformsSetEasing(animation, `linear`)
+}
+
+function easeOut(
+  animation: EngineAnimation,
+): void {
+  engineTransformsSetEasing(animation, `ease-out`)
+}
+
+function easeIn(
+  animation: EngineAnimation,
+): void {
+  engineTransformsSetEasing(animation, `ease-in`)
+}
+
+function easeInOut(
+  animation: EngineAnimation,
+): void {
+  engineTransformsSetEasing(animation, `ease-in-out`)
+}
+
+function ease(
+  animation: EngineAnimation,
+): void {
+  engineTransformsSetEasing(animation, `ease`)
+}
+
+function setOpacity(
+  animation: EngineAnimation,
+  opacity: number,
+): void {
+  engineTransformsSetOpacity(animation, opacity)
+}
+
+function hide(
+  animation: EngineAnimation,
+): void {
+  engineTransformsSetOpacity(animation, 0)
+}
+
+function show(
+  animation: EngineAnimation,
+): void {
+  engineTransformsSetOpacity(animation, 1)
+}
+
+function translateX(
+  animation: EngineAnimation,
+  virtualPixels: number,
+): void {
+  engineTransformsApplyTransform(animation, `translateX(${virtualPixels}px)`)
+}
+
+function translateY(
+  animation: EngineAnimation,
+  virtualPixels: number,
+): void {
+  engineTransformsApplyTransform(animation, `translateY(${virtualPixels}px)`)
+}
+
+function translate(
+  animation: EngineAnimation,
+  xVirtualPixels: number,
+  yVirtualPixels: number,
+): void {
+  engineTransformsApplyTransform(animation, `translate(${xVirtualPixels}px,${yVirtualPixels}px)`)
+}
+
+function rotate(
+  animation: EngineAnimation,
+  degreesClockwise: number,
+): void {
+  engineTransformsApplyTransform(animation, `rotate(${degreesClockwise}deg)`)
+}
+
+function scaleX(
+  animation: EngineAnimation,
+  factor: number,
+): void {
+  engineTransformsApplyTransform(animation, `scaleX(${factor})`)
+}
+
+function scaleY(
+  animation: EngineAnimation,
+  factor: number,
+): void {
+  engineTransformsApplyTransform(animation, `scaleY(${factor})`)
+}
+
+function scale(
+  animation: EngineAnimation,
+  xFactor: number,
+  yFactor: number,
+): void {
+  engineTransformsApplyTransform(animation, `scale(${xFactor},${yFactor})`)
+}
+
+function scaleUniform(
+  animation: EngineAnimation,
+  factor: number,
+): void {
+  engineTransformsApplyTransform(animation, `scale(${factor})`)
 }
 
 function mapKey(
