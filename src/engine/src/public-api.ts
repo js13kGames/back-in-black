@@ -59,6 +59,16 @@ function distance(
 
 type KeyCode = EngineKeyCode
 
+function elapse(
+  milliseconds: number,
+): void {
+  engineAnimationsElapse(milliseconds)
+}
+
+function phase(): void {
+  engineAnimationsPhase()
+}
+
 function viewport(
   minimumWidthVirtualPixels: number,
   minimumHeightVirtualPixels: number,
