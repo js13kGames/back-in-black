@@ -1,6 +1,7 @@
 const enum EngineViewportKey {
-  OuterElement,
+  // This must share an index with EngineNodeKey.Element.
   InnerElement,
+  OuterElement,
   MinimumWidthVirtualPixels,
   MinimumHeightVirtualPixels,
   CropWidthVirtualPixels,
@@ -17,7 +18,7 @@ type EngineViewport = readonly [
   number,
   number,
   number,
-  number
+  number,
 ]
 
 const engineViewports: EngineViewport[] = []
@@ -50,8 +51,8 @@ function engineViewportsCreate(
   const cropHeightVirtualPixels = maximumHeightVirtualPixels - differenceBetweenMinimumAndMaximumHeightVirtualPixels * verticalAlignmentHalfAbsSignedUnitInterval
 
   const viewport: EngineViewport = [
-    outerElement,
     innerElement,
+    outerElement,
     minimumWidthVirtualPixels,
     minimumHeightVirtualPixels,
     cropWidthVirtualPixels,
