@@ -89,6 +89,7 @@ function enterGamePhase(level: number): void {
     x: goal.x,
     y: goal.y,
     facing: facingReverse[goal.facing],
+    walked: 1,
     state: `initial`,
   })
 }

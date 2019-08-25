@@ -105,7 +105,42 @@ function renderNonInteractiveGame(
     }
   }
 
-  return phase
+  const playerGroup = group(parent)
+  translate(playerGroup, gamePhase.x * roomSpacing, gamePhase.y * roomSpacing)
+  rotate(playerGroup, facingDegrees[gamePhase.facing])
+
+  const playerIdleA = sprite(playerGroup, game_player_idle_a_svg)
+  const playerIdleB = sprite(playerGroup, game_player_idle_b_svg)
+  const playerWalk = sprite(playerGroup, game_player_walk_svg)
+
+  hide(playerIdleB)
+
+  if (gamePhase.walked) {
+    hide(playerIdleA)
+    translateX(playerGroup, -roomSpacing)
+  } else {
+    hide(playerWalk)
+  }
+
+  return () => {
+    if (gamePhase.walked) {
+      linear(playerGroup)
+      for (let i = 0; i < 8; i++) {
+        elapse(50)
+        scaleY(playerWalk, -1)
+      }
+      translateX(playerGroup, roomSpacing)
+      hide(playerWalk)
+      show(playerIdleA)
+    }
+
+    phase()
+
+    elapse(500)
+    hide(playerIdleA)
+    show(playerIdleB)
+    elapse(500)
+  }
 }
 
 function renderInteractiveGame(
