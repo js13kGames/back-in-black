@@ -25,6 +25,8 @@ function renderNonInteractiveGame(
     readonly distance: number
   }[] = []
 
+  let roomIsSwitch: Truthiness
+
   for (const room of level.rooms) {
     const roomGroup = group(parent)
     translate(roomGroup, room.x * roomSpacing, room.y * roomSpacing)
@@ -41,6 +43,10 @@ function renderNonInteractiveGame(
         sprite(roomGroup, game_room_mcguffin_a_svg)
         break
       case `switch`:
+        if (room.x == gamePhase.x && room.y == gamePhase.y) {
+          roomIsSwitch = 1
+        }
+
         changeOnSwitch.push({
           parent: roomGroup,
           hide: sprite(
@@ -132,6 +138,14 @@ function renderNonInteractiveGame(
       translateX(playerGroup, roomSpacing)
       hide(playerWalk)
       show(playerIdleA)
+
+      if (roomIsSwitch) {
+        gamePhase.switch = gamePhase.switch == `a` ? `b` : `a`
+        for (const change of changeOnSwitch) {
+          hide(change.hide)
+          sprite(change.parent, change.show)
+    }
+      }
     }
 
     phase()
