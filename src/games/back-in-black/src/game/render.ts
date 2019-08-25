@@ -4,15 +4,34 @@ function renderNonInteractiveGame(
 ): () => void {
   const level = levels[gamePhase.level]
 
+  let mcguffinX = 0
+  let mcguffinY = 0
+  for (const room of level.rooms) {
+    if (room.type == `mcguffin`) {
+      mcguffinX = room.x
+      mcguffinY = room.y
+      break
+    }
+  }
+
   const changeOnSwitch: {
     readonly parent: EngineAnimation
     readonly hide: EngineAnimation
     readonly show: EngineSpritesSvg
   }[] = []
 
+  const hideWhenTaken: {
+    readonly hide: EngineAnimation
+    readonly distance: number
+  }[] = []
+
   for (const room of level.rooms) {
     const roomGroup = group(parent)
     translate(roomGroup, room.x * roomSpacing, room.y * roomSpacing)
+    hideWhenTaken.push({
+      hide: roomGroup,
+      distance: distanceSquared(room.x, room.y, mcguffinX, mcguffinY),
+    })
 
     switch (room.type) {
       case `empty`: {
@@ -40,6 +59,13 @@ function renderNonInteractiveGame(
     const corridorGroup = group(parent)
     translate(corridorGroup, corridor.x * roomSpacing, corridor.y * roomSpacing)
     rotate(corridorGroup, facingDegrees[corridor.facing])
+    hideWhenTaken.push({
+      hide: corridorGroup,
+      distance: Math.min(
+        distanceSquared(corridor.x, corridor.y, mcguffinX, mcguffinY),
+        distanceSquared(corridor.x + facingX[corridor.facing], corridor.y + facingY[corridor.facing], mcguffinX, mcguffinY)
+      )
+    })
 
     switch (corridor.type) {
       case `empty`:
