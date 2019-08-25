@@ -74,7 +74,7 @@ function enterPhase(phase: Phase): void {
 
   state.root = {
     type: `transition`,
-    from: state.root.type == `transition` ? state.root.to : state.root,
+    from: state.root,
     to: phase
   }
 }
@@ -108,6 +108,8 @@ function renderNonInteractivePhase(
     case `game`:
       return renderNonInteractiveGame(parent, phase_)
     case `transition`:
+      state.root = phase_.to
+
       if (phase_.from) {
         const fromContainer = group(parent)
         renderNonInteractivePhase(fromContainer, phase_.from)
