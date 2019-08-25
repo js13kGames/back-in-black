@@ -1,9 +1,5 @@
-const version = 5
+const version = 6
 const beatsPerMinute = 80
-
-type BlankPhase = {
-  type: `blank`
-}
 
 type TitlePhase = {
   type: `title`
@@ -17,38 +13,39 @@ type GamePhase = {
   type: `game`
   readonly level: number
   switch: `a` | `b`
-  switchChanged: number
   x: number
   y: number
   facing: Facing
-  taken?: number
-  startedWalking: number
-  won?: number
+  walked?: Truthiness
+  state: `initial` | `taken` | `won`
+}
+
+type TransitionPhase = {
+  readonly type: `transition`
+  readonly from?: Phase
+  readonly to: Phase
 }
 
 type Phase =
-  | BlankPhase
   | TitlePhase
   | LevelSelectPhase
   | GamePhase
+  | TransitionPhase
 
 type State = {
   unlockedLevels: number
-  from: Phase
-  to: Phase
-  started: number
+  root: Phase
 }
 
 function initial(): State {
   return {
     unlockedLevels: 1,
-    from: {
-      type: `blank`
-    },
-    to: {
-      type: `title`
-    },
-    started: 0 // now
+    root: {
+      type: `transition`,
+      to: {
+        type: `title`
+      }
+    }
   }
 }
 
@@ -71,98 +68,131 @@ const transitionFrames: ReadonlyArray<EngineSpritesSvg> = [
   transition_h_svg,
   transition_i_svg
 ]
-const transitionDuration = 1.2
-const transitionFrameDuration = transitionDuration / (transitionFrames.length * 2 - 1)
+const transitionFrameDuration = 30
 
 function enterPhase(phase: Phase): void {
-  phase
-  // if (state.started + transitionDuration <= now) {
-  //   state.from = state.to
-  //   state.to = phase
-  //   state.started = now
-  // }
+
+  state.root = {
+    type: `transition`,
+    from: state.root.type == `transition` ? state.root.to : state.root,
+    to: phase
+  }
 }
 
 function enterGamePhase(level: number): void {
-  level
-  // const levelValue = levels[level]
-  // const goal = levelValue.corridors.filter(corridor => corridor.type == `goal`)[0]
-  // enterPhase({
-  //   type: `game`,
-  //   level,
-  //   switch: `a`,
-  //   switchChanged: now,
-  //   x: goal.x,
-  //   y: goal.y,
-  //   facing: facingReverse[goal.facing],
-  //   startedWalking: now + 0.25
-  // })
+  const levelValue = levels[level]
+  const goal = levelValue.corridors.filter(corridor => corridor.type == `goal`)[0]
+  enterPhase({
+    type: `game`,
+    level,
+    switch: `a`,
+    x: goal.x,
+    y: goal.y,
+    facing: facingReverse[goal.facing],
+    state: `initial`,
+  })
 }
 
-function renderPhase(phase: Phase): void {
-  phase
-  // switch (phase.type) {
-  //   case `title`:
-  //     draw(background_title_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
-  //     hitbox(
-  //       doubleSafeAreaWidthVirtualPixels,
-  //       doubleSafeAreaHeightVirtualPixels,
-  //       [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)],
-  //       () => enterPhase({
-  //         type: `levelSelect`
-  //       })
-  //     )
-  //     break
-  //   case `levelSelect`:
-  //     draw(background_levelSelect_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
-  //     hitbox(
-  //       doubleSafeAreaWidthVirtualPixels,
-  //       doubleSafeAreaHeightVirtualPixels,
-  //       [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)],
-  //       () => enterGamePhase(0)
-  //     )
-  //     break
-  //   case `game`:
-  //     renderGame(phase)
-  //     break
-  // }
+function renderNonInteractivePhase(
+  parent: EngineViewport | EngineAnimation,
+  phase_: Phase,
+): () => void {
+  switch (phase_.type) {
+    case `title`:
+      sprite(parent, background_title_svg)
+      return phase
+    case `levelSelect`:
+      sprite(parent, background_levelSelect_svg)
+      return phase
+    case `game`:
+      return renderNonInteractiveGame(parent, phase_)
+    case `transition`:
+      if (phase_.from) {
+        const fromContainer = group(parent)
+        renderNonInteractivePhase(fromContainer, phase_.from)
+
+        const toContainer = group(parent)
+        hide(toContainer)
+        const animateTo = renderNonInteractivePhase(toContainer, phase_.to)
+
+        return () => {
+          const sprites: EngineAnimation[] = []
+          for (const frame of transitionFrames) {
+            sprites.push(sprite(parent, frame))
+            elapse(transitionFrameDuration)
+          }
+          hide(fromContainer)
+
+          show(toContainer)
+          for (const frame of sprites) {
+            hide(frame)
+            elapse(transitionFrameDuration)
+          }
+
+          animateTo()
+        }
+      } else {
+        const animateTo = renderNonInteractivePhase(parent, phase_.to)
+
+        const sprites: EngineAnimation[] = []
+        for (const frame of transitionFrames) {
+          sprites.push(sprite(parent, frame))
+        }
+
+        return () => {
+          for (const frame of sprites) {
+            hide(frame)
+            elapse(transitionFrameDuration)
+          }
+
+          animateTo()
+        }
+      }
+  }
 }
 
-function layers(
-  // layer: LayerFactory
+function renderInteractivePhase(
+  mainViewport: EngineViewport,
+  phase: Phase,
 ): void {
-  // layer(
-  //   safeAreaWidthVirtualPixels, doubleSafeAreaWidthVirtualPixels,
-  //   safeAreaHeightVirtualPixels, doubleSafeAreaHeightVirtualPixels,
-  //   0, 0,
-  //   () => {
-  //     iterativeAnimation(
-  //       state.started,
-  //       transitionFrameDuration,
-  //       transitionFrames.length - 1,
-  //       i => {
-  //         renderPhase(state.from)
+  switch (phase.type) {
+    case `title`:
+      sprite(mainViewport, background_title_svg)
+      hitbox(
+        mainViewport,
+        -safeAreaWidthVirtualPixels, -safeAreaHeightVirtualPixels,
+        doubleSafeAreaWidthVirtualPixels, doubleSafeAreaHeightVirtualPixels,
+        () => enterPhase({
+          type: `levelSelect`
+        })
+      )
+      break
+    case `levelSelect`:
+      hitbox(
+        mainViewport,
+        -safeAreaWidthVirtualPixels, -safeAreaHeightVirtualPixels,
+        doubleSafeAreaWidthVirtualPixels, doubleSafeAreaHeightVirtualPixels,
+        () => enterGamePhase(0)
+      )
+      break
+    case `game`:
+      renderInteractiveGame(mainViewport, phase)
+      break
+    case `transition`:
+      renderInteractivePhase(mainViewport, phase.to)
+      break
+  }
+}
 
-  //         for (let j = 0; j < i; j++) {
-  //           draw(transitionFrames[j], [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
-  //         }
-  //       },
-  //       started => iterativeAnimation(
-  //         started,
-  //         transitionFrameDuration,
-  //         transitionFrames.length - 1,
-  //         i => {
-  //           renderPhase(state.to)
+function render(): void {
+  const mainViewport = viewport(
+    safeAreaWidthVirtualPixels, safeAreaHeightVirtualPixels,
+    doubleSafeAreaWidthVirtualPixels, doubleSafeAreaHeightVirtualPixels,
+    0, 0,
+  )
 
-  //           for (let j = i; j < transitionFrames.length; j++) {
-  //             draw(transitionFrames[j], [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
-  //           }
-  //         },
-  //         () => renderPhase(state.to)
-  //       )
-  //     )
-  //   }
-  // )
+  renderNonInteractivePhase(mainViewport, state.root)()
+  renderInteractivePhase(mainViewport, state.root)
 }
 
 function audioReady(): () => void {
