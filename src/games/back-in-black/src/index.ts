@@ -50,8 +50,8 @@ function initial(): State {
 }
 
 const roomSpacing = 42
-const safeAreaWidthVirtualPixels = roomSpacing * 8
-const safeAreaHeightVirtualPixels = roomSpacing * 6
+const safeAreaWidthVirtualPixels = roomSpacing * 7
+const safeAreaHeightVirtualPixels = roomSpacing * 5
 const halfSafeAreaWidthVirtualPixels = safeAreaWidthVirtualPixels / 2
 const halfSafeAreaHeightVirtualPixels = safeAreaHeightVirtualPixels / 2
 const doubleSafeAreaWidthVirtualPixels = safeAreaWidthVirtualPixels * 2
