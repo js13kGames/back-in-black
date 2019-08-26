@@ -25,19 +25,19 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="46.850704"
-     inkscape:cx="4.1760294"
-     inkscape:cy="8.1219756"
+     inkscape:zoom="11.712676"
+     inkscape:cx="0.12040208"
+     inkscape:cy="2.8763062"
      inkscape:document-units="px"
      inkscape:current-layer="layer13"
      showgrid="true"
      units="px"
      showguides="false"
      inkscape:snap-global="false"
-     inkscape:window-width="1662"
-     inkscape:window-height="1374"
-     inkscape:window-x="67"
-     inkscape:window-y="27"
+     inkscape:window-width="1920"
+     inkscape:window-height="1080"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="0"
      inkscape:pagecheckerboard="false">
     <inkscape:grid
@@ -55,7 +55,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -502,23 +502,19 @@
      inkscape:label="Walking"
      style="display:inline"
      transform="translate(0,-24)">
-    <path
-       style="fill:#060604;fill-opacity:1;stroke:none;stroke-opacity:1"
-       d="m 5.99999,29.211299 c -2.94553,1.83562 -5.25072,2.00638 -5.25072,2.00638 l 0.0854,2.13444 c 0,0 3.15897,-0.0427 5.20803,-1.36604 C 8.09176,30.662719 6,29.211299 6,29.211299 Z"
-       id="path1509"
-       inkscape:connector-curvature="0" />
-    <path
-       style="fill:#060604;fill-opacity:1;stroke:none;stroke-opacity:1"
-       d="m 11.56633,31.221969 c 0,0 -3.31329,1.76614 -3.65481,0.31472 -0.34151,-1.45142 1.80239,-3.47798 0.60711,-5.6978 -1.19529,-2.21982 -4.24906,-0.64676 -4.24906,-0.64676 l -0.064,1.1526 c 0,0 0.80376,0.0161 1.14527,0.69917 -0.86648,2.10086 -1.07218,1.63318 -0.0912,4.28935 0,0 0.2203,2.29305 2.7821,2.37842 2.56132,0.0854 4.06704,-1.19439 4.06704,-1.19439 z"
-       id="path1505"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccccccccc" />
+    <ellipse
+       style="fill:#000000;fill-opacity:1;stroke:#232a8d;stroke-width:1;stroke-opacity:1"
+       id="path884"
+       cx="7.018137"
+       cy="29.962893"
+       rx="2.218637"
+       ry="4.8598714" />
     <circle
        transform="scale(-1,1)"
-       style="fill:#060604;fill-opacity:1;stroke:none;stroke-opacity:1"
+       style="fill:#000000;fill-opacity:1;stroke:#232a8d;stroke-opacity:1"
        id="path1511"
-       cx="-8.6143522"
-       cy="29.477804"
+       cx="-7.1352611"
+       cy="29.447618"
        r="2.7747715" />
   </g>
 </svg>

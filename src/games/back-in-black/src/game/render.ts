@@ -115,9 +115,9 @@ function renderNonInteractiveGame(
   translate(playerGroup, gamePhase.x * roomSpacing, gamePhase.y * roomSpacing)
   rotate(playerGroup, facingDegrees[gamePhase.facing])
 
-  const playerIdleA = sprite(playerGroup, game_player_idle_a_svg)
-  const playerIdleB = sprite(playerGroup, game_player_idle_b_svg)
-  const playerWalk = sprite(playerGroup, game_player_walk_svg)
+  const playerIdleA = sprite(playerGroup, game_player_idle_a_lit_svg)
+  const playerIdleB = sprite(playerGroup, game_player_idle_b_lit_svg)
+  const playerWalk = sprite(playerGroup, game_player_walk_lit_svg)
 
   hide(playerIdleB)
 
