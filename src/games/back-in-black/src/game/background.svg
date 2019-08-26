@@ -9,13 +9,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="672"
-   height="504"
-   viewBox="0 0 672 504"
+   width="588"
+   height="420"
+   viewBox="0 0 588 420"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="game.svg">
+   sodipodi:docname="background.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -26,8 +26,8 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.5965146"
-     inkscape:cx="234.69373"
-     inkscape:cy="224.89269"
+     inkscape:cx="324.60258"
+     inkscape:cy="338.8528"
      inkscape:document-units="px"
      inkscape:current-layer="svg8"
      showgrid="true"
@@ -36,8 +36,8 @@
      inkscape:snap-global="true"
      inkscape:window-width="1662"
      inkscape:window-height="1374"
-     inkscape:window-x="67"
-     inkscape:window-y="27"
+     inkscape:window-x="98"
+     inkscape:window-y="232"
      inkscape:window-maximized="0"
      inkscape:pagecheckerboard="false"
      inkscape:measure-start="0,0"
@@ -62,17 +62,17 @@
     </rdf:RDF>
   </metadata>
   <rect
-     style="fill:#150d68;fill-opacity:1;stroke:none;stroke-width:0.99999982;stroke-opacity:1"
+     style="fill:#150d68;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
      id="rect812-3"
-     width="672"
-     height="504"
+     width="588"
+     height="420"
      x="0"
-     y="0" />
+     y="2.7999999e-07" />
   <rect
-     style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.99999982;stroke-opacity:1"
+     style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
      id="rect812"
-     width="336"
-     height="252"
-     x="168"
-     y="126" />
+     width="294"
+     height="210"
+     x="147"
+     y="105" />
 </svg>

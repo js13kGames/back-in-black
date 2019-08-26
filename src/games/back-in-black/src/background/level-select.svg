@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="672"
-   height="504"
-   viewBox="0 0 672 504"
+   width="588"
+   height="420"
+   viewBox="0 0 588 420"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.2578126"
-     inkscape:cx="425.67313"
-     inkscape:cy="302.28544"
+     inkscape:zoom="1.5965146"
+     inkscape:cx="263.25791"
+     inkscape:cy="292.89901"
      inkscape:document-units="px"
      inkscape:current-layer="svg8"
      showgrid="true"
@@ -62,33 +62,33 @@
     </rdf:RDF>
   </metadata>
   <rect
-     style="fill:#683b0d;fill-opacity:1;stroke:none;stroke-width:0.99999982;stroke-opacity:1"
+     style="fill:#683b0d;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
      id="rect812-3"
-     width="672"
-     height="504"
+     width="588"
+     height="420"
      x="0"
-     y="0" />
+     y="2.7999999e-07" />
   <rect
-     style="fill:#8f7311;fill-opacity:1;stroke:none;stroke-width:0.99999982;stroke-opacity:1"
+     style="fill:#8f7311;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
      id="rect812"
-     width="336"
-     height="252"
-     x="168"
-     y="126" />
+     width="294"
+     height="210"
+     x="147"
+     y="105" />
   <text
      xml:space="preserve"
      style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-     x="216"
-     y="196"
+     x="204.09908"
+     y="181.52646"
      id="text816"><tspan
        sodipodi:role="line"
        id="tspan814"
-       x="216"
-       y="196"
-       style="font-size:14.66666667px">level select placeholder</tspan><tspan
+       x="204.09908"
+       y="181.52646"
+       style="font-size:14.66666698px">level select placeholder</tspan><tspan
        sodipodi:role="line"
-       x="216"
-       y="246"
+       x="204.09908"
+       y="231.52646"
        id="tspan818"
-       style="font-size:14.66666667px">(just click)</tspan></text>
+       style="font-size:14.66666698px">(just click)</tspan></text>
 </svg>
