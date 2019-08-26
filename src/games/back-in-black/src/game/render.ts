@@ -25,8 +25,7 @@ function renderNonInteractiveGame(
     readonly distance: number
   }[] = []
 
-  let roomIsSwitch: Truthiness
-
+  if (gamePhase.state == `initial`) {
   for (const room of level.rooms) {
     const roomGroup = group(parent)
     translate(roomGroup, room.x * roomSpacing, room.y * roomSpacing)
@@ -43,10 +42,6 @@ function renderNonInteractiveGame(
         sprite(roomGroup, game_room_mcguffin_a_svg)
         break
       case `switch`:
-        if (room.x == gamePhase.x && room.y == gamePhase.y) {
-          roomIsSwitch = 1
-        }
-
         changeOnSwitch.push({
           parent: roomGroup,
           hide: sprite(
@@ -110,6 +105,7 @@ function renderNonInteractiveGame(
         throw null
     }
   }
+  }
 
   const playerGroup = group(parent)
   translate(playerGroup, gamePhase.x * roomSpacing, gamePhase.y * roomSpacing)
@@ -139,12 +135,36 @@ function renderNonInteractiveGame(
       hide(playerWalk)
       show(playerIdleA)
 
-      if (roomIsSwitch) {
+      for (const room of level.rooms) {
+        if (room.type == `switch` && room.x == gamePhase.x && room.y == gamePhase.y) {
         gamePhase.switch = gamePhase.switch == `a` ? `b` : `a`
         for (const change of changeOnSwitch) {
           hide(change.hide)
           sprite(change.parent, change.show)
     }
+      }
+    }
+
+      if (gamePhase.state == `initial` && gamePhase.x == mcguffinX && gamePhase.y == mcguffinY) {
+        while (hideWhenTaken.length) {
+          let shortestDistance = Infinity
+          for (const item of hideWhenTaken) {
+            if (item.distance < shortestDistance) {
+              shortestDistance = item.distance
+            }
+          }
+          for (let index = 0; index < hideWhenTaken.length;) {
+            const item = hideWhenTaken[index]
+            if (item.distance == shortestDistance) {
+              hide(item.hide)
+              hideWhenTaken.splice(index, 1)
+            } else {
+              index++
+            }
+          }
+          elapse(300)
+        }
+        gamePhase.state = `taken`
       }
     }
 
