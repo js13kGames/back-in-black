@@ -136,8 +136,11 @@ function renderNonInteractiveGame(
       show(playerIdleA)
     }
 
+    let outOfBounds = true
+
       for (const room of level.rooms) {
       if (room.x == gamePhase.x && room.y == gamePhase.y) {
+        outOfBounds = false
         switch (room.type) {
           case `switch`:
             if (gamePhase.walked) {
@@ -176,13 +179,19 @@ function renderNonInteractiveGame(
       }
     }
 
+    if (outOfBounds) {
+      gamePhase.state = `won`
+      hide(playerGroup)
     phase()
+    } else {
+      phase()
 
     elapse(500)
     hide(playerIdleA)
     show(playerIdleB)
     elapse(500)
   }
+}
 }
 
 function renderInteractiveGame(
