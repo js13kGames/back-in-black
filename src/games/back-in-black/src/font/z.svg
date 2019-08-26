@@ -26,8 +26,8 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="25.544232"
-     inkscape:cx="11.75289"
-     inkscape:cy="11.016931"
+     inkscape:cx="1.378728"
+     inkscape:cy="14.109606"
      inkscape:document-units="px"
      inkscape:current-layer="svg8"
      showgrid="true"
@@ -61,16 +61,10 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <rect
-     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-opacity:1"
-     id="rect1088"
-     width="12"
-     height="4"
-     x="1"
-     y="1" />
   <path
      style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-opacity:1"
-     d="M 13,21 H 1 V 17 L 7,9 h 4 l -6,8 h 8 z"
+     d="M 13,21 H 1 V 17 L 9,5 H 1 V 1 H 13 V 5 L 5,17 h 8 z"
      id="path1090"
-     inkscape:connector-curvature="0" />
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccccccccc" />
 </svg>

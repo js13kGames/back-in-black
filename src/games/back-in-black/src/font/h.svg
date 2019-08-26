@@ -26,7 +26,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="25.544232"
-     inkscape:cx="16.358792"
+     inkscape:cx="8.6466791"
      inkscape:cy="8.5586632"
      inkscape:document-units="px"
      inkscape:current-layer="svg8"
@@ -63,21 +63,7 @@
   </metadata>
   <path
      style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-opacity:1"
-     d="m 1,9 v 12 h 4 v -8 h 4 v 8 h 4 V 9 Z"
-     id="path945"
+     d="M 1,21 V 1 H 5 V 9 H 9 V 1 h 4 V 21 H 9 V 13 H 5 v 8 z"
+     id="path815"
      inkscape:connector-curvature="0" />
-  <rect
-     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-opacity:1"
-     id="rect947"
-     width="4"
-     height="4"
-     x="1"
-     y="1" />
-  <rect
-     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-opacity:1"
-     id="rect949"
-     width="4"
-     height="4"
-     x="9"
-     y="1" />
 </svg>
