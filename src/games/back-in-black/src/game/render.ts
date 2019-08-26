@@ -1,3 +1,35 @@
+const keys: ReadonlyArray<{
+  readonly facing: Facing
+  readonly keycode: KeyCode
+  readonly text: string
+  readonly x: number
+  readonly y: number
+}> = [{
+  facing: `north`,
+  keycode: `KeyW`,
+  text: `w`,
+  x: -2,
+  y: -2,
+}, {
+  facing: `east`,
+  keycode: `KeyD`,
+  text: `d`,
+  x: -1,
+  y: -1,
+}, {
+  facing: `south`,
+  keycode: `KeyS`,
+  text: `s`,
+  x: -2,
+  y: -1,
+}, {
+  facing: `west`,
+  keycode: `KeyA`,
+  text: `a`,
+  x: -3,
+  y: -1,
+}]
+
 function renderNonInteractiveGame(
   parent: EngineViewport | EngineAnimation,
   gamePhase: GamePhase,
@@ -187,6 +219,17 @@ function renderNonInteractiveGame(
       hide(playerGroup)
       phase()
     } else {
+      for (const key of keys) {
+        const keyGroup = group(parent)
+        translate(
+          keyGroup,
+          halfSafeAreaWidthVirtualPixels + key.x * 32 + 16,
+          halfSafeAreaHeightVirtualPixels + key.y * 32 + 16
+        )
+        sprite(keyGroup, game_hud_key_svg)
+        write(keyGroup, key.text)
+      }
+
       phase()
 
       elapse(500)
@@ -202,5 +245,66 @@ function renderInteractiveGame(
   gamePhase: GamePhase,
 ): void {
   mainViewport
-  gamePhase
+  if (gamePhase.state != `won`) {
+    for (const key of keys) {
+      mapKey(key.keycode, callback)
+      hitbox(
+        mainViewport,
+        halfSafeAreaWidthVirtualPixels + key.x * 32,
+        halfSafeAreaHeightVirtualPixels + key.y * 32,
+        32, 32,
+        callback
+      )
+
+      function callback() {
+        const level = levels[gamePhase.level]
+
+        gamePhase.facing = key.facing
+        delete gamePhase.walked
+
+        for (const corridor of level.corridors) {
+          const forward = corridor.x == gamePhase.x && corridor.y == gamePhase.y && corridor.facing == key.facing
+          const otherEndX = corridor.x + facingX[corridor.facing]
+          const otherEndY = corridor.y + facingY[corridor.facing]
+          const otherFacing = facingReverse[corridor.facing]
+          const reverse = otherEndX == gamePhase.x && otherEndY == gamePhase.y && otherFacing == key.facing
+
+          if (forward || reverse) {
+            switch (corridor.type) {
+              case `ledge`:
+                if (reverse) {
+                  return
+                }
+                break
+
+              case `openDoor`:
+                if (gamePhase.switch == `b`) {
+                  return
+                }
+                break
+
+              case `closedDoor`:
+                if (gamePhase.switch == `a`) {
+                  return
+                }
+                break
+
+              case `goal`:
+                if (gamePhase.state == `initial`) {
+                  return
+                }
+                gamePhase.state = `won`
+                break
+            }
+
+            gamePhase.x += facingX[key.facing]
+            gamePhase.y += facingY[key.facing]
+
+            gamePhase.walked = 1
+            return
+          }
+        }
+      }
+    }
+  }
 }
