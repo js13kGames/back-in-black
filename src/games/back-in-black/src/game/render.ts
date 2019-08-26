@@ -134,18 +134,23 @@ function renderNonInteractiveGame(
       translateX(playerGroup, roomSpacing)
       hide(playerWalk)
       show(playerIdleA)
+    }
 
       for (const room of level.rooms) {
-        if (room.type == `switch` && room.x == gamePhase.x && room.y == gamePhase.y) {
+      if (room.x == gamePhase.x && room.y == gamePhase.y) {
+        switch (room.type) {
+          case `switch`:
+            if (gamePhase.walked) {
         gamePhase.switch = gamePhase.switch == `a` ? `b` : `a`
         for (const change of changeOnSwitch) {
           hide(change.hide)
           sprite(change.parent, change.show)
     }
       }
-    }
+            break
 
-      if (gamePhase.state == `initial` && gamePhase.x == mcguffinX && gamePhase.y == mcguffinY) {
+          case `mcguffin`:
+            if (gamePhase.walked) {
         while (hideWhenTaken.length) {
           let shortestDistance = Infinity
           for (const item of hideWhenTaken) {
@@ -165,6 +170,9 @@ function renderNonInteractiveGame(
           elapse(300)
         }
         gamePhase.state = `taken`
+      }
+            break
+    }
       }
     }
 
