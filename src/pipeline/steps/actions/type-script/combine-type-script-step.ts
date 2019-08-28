@@ -103,11 +103,17 @@ export default class CombineTypeScriptStep extends ActionStepBase {
         if (typeof diagnostic.messageText === `string`) {
           message += `\n${fileName}${line}: ${JSON.stringify(diagnostic.messageText)}`
         } else {
-          let current: undefined | typeScript.DiagnosticMessageChain = diagnostic.messageText
-          while (current !== undefined) {
-            message += `\n${fileName}${line}: ${JSON.stringify(current.messageText)}`
-            current = current.next
+          function recurseChain(
+            chain: typeScript.DiagnosticMessageChain,
+          ): void {
+            message += `\n${fileName}${line}: ${JSON.stringify(chain.messageText)}`
+            if (chain.next) {
+              for (const item of chain.next) {
+                recurseChain(item)
+              }
+            }
           }
+          recurseChain(diagnostic.messageText)
         }
       }
       throw new Error(message)
