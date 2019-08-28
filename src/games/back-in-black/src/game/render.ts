@@ -30,6 +30,32 @@ const keys: ReadonlyArray<{
   y: -1,
 }]
 
+function postGameMenu(
+  phase: GamePhase,
+): Menu {
+  return {
+    title: `nice job`,
+    options: [{
+      label: `next`,
+      callback(): void {
+        enterGamePhase(phase.level + 1)
+      }
+    }, {
+      label: `retry`,
+      callback(): void {
+        enterGamePhase(phase.level)
+      }
+    }, {
+      label: `level select`,
+      callback(): void {
+        enterPhase({
+          type: `levelSelect`
+        })
+      }
+    }]
+  }
+}
+
 function renderNonInteractiveGame(
   parent: EngineViewport | EngineAnimation,
   gamePhase: GamePhase,
@@ -217,6 +243,7 @@ function renderNonInteractiveGame(
 
     if (outOfBounds) {
       hide(playerGroup)
+      renderNonInteractiveMenu(parent, postGameMenu(gamePhase))
       phase()
     } else {
       for (const key of keys) {
@@ -245,7 +272,9 @@ function renderInteractiveGame(
   gamePhase: GamePhase,
 ): void {
   mainViewport
-  if (gamePhase.state != `won`) {
+  if (gamePhase.state == `won`) {
+    renderInteractiveMenu(mainViewport, postGameMenu(gamePhase))
+  } else {
     for (const key of keys) {
       mapKey(key.keycode, callback)
       hitbox(
