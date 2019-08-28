@@ -1,15 +1,15 @@
 const version = 6
 const beatsPerMinute = 80
 
-type TitlePhase = {
+type TitleMode = {
   type: `title`
 }
 
-type LevelSelectPhase = {
+type LevelSelectMode = {
   type: `levelSelect`
 }
 
-type GamePhase = {
+type GameMode = {
   type: `game`
   readonly level: number
   switch: `a` | `b`
@@ -20,21 +20,21 @@ type GamePhase = {
   state: `initial` | `taken` | `won`
 }
 
-type TransitionPhase = {
+type TransitionMode = {
   readonly type: `transition`
-  readonly from?: Phase
-  readonly to: Phase
+  readonly from?: Mode
+  readonly to: Mode
 }
 
-type Phase =
-  | TitlePhase
-  | LevelSelectPhase
-  | GamePhase
-  | TransitionPhase
+type Mode =
+  | TitleMode
+  | LevelSelectMode
+  | GameMode
+  | TransitionMode
 
 type State = {
   unlockedLevels: number
-  root: Phase
+  root: Mode
 }
 
 function initial(): State {
@@ -70,19 +70,19 @@ const transitionFrames: ReadonlyArray<EngineSpritesSvg> = [
 ]
 const transitionFrameDuration = 30
 
-function enterPhase(phase: Phase): void {
+function enterMode(mode: Mode): void {
 
   state.root = {
     type: `transition`,
     from: state.root,
-    to: phase
+    to: mode
   }
 }
 
-function enterGamePhase(level: number): void {
+function enterGameMode(level: number): void {
   const levelValue = levels[level]
   const goal = levelValue.corridors.filter(corridor => corridor.type == `goal`)[0]
-  enterPhase({
+  enterMode({
     type: `game`,
     level,
     switch: `a`,
@@ -94,11 +94,11 @@ function enterGamePhase(level: number): void {
   })
 }
 
-function renderNonInteractivePhase(
+function renderNonInteractiveMode(
   parent: EngineViewport | EngineAnimation,
-  phase_: Phase,
+  mode: Mode,
 ): () => void {
-  switch (phase_.type) {
+  switch (mode.type) {
     case `title`:
       sprite(parent, background_title_svg)
       return phase
@@ -106,17 +106,17 @@ function renderNonInteractivePhase(
       sprite(parent, background_levelSelect_svg)
       return phase
     case `game`:
-      return renderNonInteractiveGame(parent, phase_)
+      return renderNonInteractiveGame(parent, mode)
     case `transition`:
-      state.root = phase_.to
+      state.root = mode.to
 
-      if (phase_.from) {
+      if (mode.from) {
         const fromContainer = group(parent)
-        renderNonInteractivePhase(fromContainer, phase_.from)
+        renderNonInteractiveMode(fromContainer, mode.from)
 
         const toContainer = group(parent)
         hide(toContainer)
-        const animateTo = renderNonInteractivePhase(toContainer, phase_.to)
+        const animateTo = renderNonInteractiveMode(toContainer, mode.to)
 
         return () => {
           const sprites: EngineAnimation[] = []
@@ -135,7 +135,7 @@ function renderNonInteractivePhase(
           animateTo()
         }
       } else {
-        const animateTo = renderNonInteractivePhase(parent, phase_.to)
+        const animateTo = renderNonInteractiveMode(parent, mode.to)
 
         const sprites: EngineAnimation[] = []
         for (const frame of transitionFrames) {
@@ -154,18 +154,18 @@ function renderNonInteractivePhase(
   }
 }
 
-function renderInteractivePhase(
+function renderInteractiveMode(
   mainViewport: EngineViewport,
-  phase: Phase,
+  mode: Mode,
 ): void {
-  switch (phase.type) {
+  switch (mode.type) {
     case `title`:
       sprite(mainViewport, background_title_svg)
       hitbox(
         mainViewport,
         -safeAreaWidthVirtualPixels, -safeAreaHeightVirtualPixels,
         doubleSafeAreaWidthVirtualPixels, doubleSafeAreaHeightVirtualPixels,
-        () => enterPhase({
+        () => enterMode({
           type: `levelSelect`
         })
       )
@@ -175,14 +175,14 @@ function renderInteractivePhase(
         mainViewport,
         -safeAreaWidthVirtualPixels, -safeAreaHeightVirtualPixels,
         doubleSafeAreaWidthVirtualPixels, doubleSafeAreaHeightVirtualPixels,
-        () => enterGamePhase(0)
+        () => enterGameMode(0)
       )
       break
     case `game`:
-      renderInteractiveGame(mainViewport, phase)
+      renderInteractiveGame(mainViewport, mode)
       break
     case `transition`:
-      renderInteractivePhase(mainViewport, phase.to)
+      renderInteractiveMode(mainViewport, mode.to)
       break
   }
 }
@@ -194,8 +194,8 @@ function render(): void {
     0, 0,
   )
 
-  renderNonInteractivePhase(mainViewport, state.root)()
-  renderInteractivePhase(mainViewport, state.root)
+  renderNonInteractiveMode(mainViewport, state.root)()
+  renderInteractiveMode(mainViewport, state.root)
 }
 
 function audioReady(): () => void {

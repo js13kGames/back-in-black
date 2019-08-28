@@ -31,24 +31,24 @@ const keys: ReadonlyArray<{
 }]
 
 function postGameMenu(
-  phase: GamePhase,
+  mode: GameMode,
 ): Menu {
   return {
     title: `nice job`,
     options: [{
       label: `next`,
       callback(): void {
-        enterGamePhase(phase.level + 1)
+        enterGameMode(mode.level + 1)
       }
     }, {
       label: `retry`,
       callback(): void {
-        enterGamePhase(phase.level)
+        enterGameMode(mode.level)
       }
     }, {
       label: `level select`,
       callback(): void {
-        enterPhase({
+        enterMode({
           type: `levelSelect`
         })
       }
@@ -58,9 +58,9 @@ function postGameMenu(
 
 function renderNonInteractiveGame(
   parent: EngineViewport | EngineAnimation,
-  gamePhase: GamePhase,
+  mode: GameMode,
 ): () => void {
-  const level = levels[gamePhase.level]
+  const level = levels[mode.level]
 
   const levelName = group(parent)
   translateY(levelName, 15 - halfSafeAreaHeightVirtualPixels)
@@ -87,7 +87,7 @@ function renderNonInteractiveGame(
     readonly distance: number
   }[] = []
 
-  if (gamePhase.state == `initial`) {
+  if (mode.state == `initial`) {
     for (const room of level.rooms) {
       const roomGroup = group(parent)
       translate(roomGroup, room.x * roomSpacing, room.y * roomSpacing)
@@ -108,9 +108,9 @@ function renderNonInteractiveGame(
             parent: roomGroup,
             hide: sprite(
               roomGroup,
-              gamePhase.switch == `a` ? game_room_switch_a_svg : game_room_switch_b_svg
+              mode.switch == `a` ? game_room_switch_a_svg : game_room_switch_b_svg
             ),
-            show: gamePhase.switch == `a` ? game_room_switch_b_svg : game_room_switch_a_svg,
+            show: mode.switch == `a` ? game_room_switch_b_svg : game_room_switch_a_svg,
           })
           break
         default:
@@ -145,9 +145,9 @@ function renderNonInteractiveGame(
             parent: corridorGroup,
             hide: sprite(
               corridorGroup,
-              gamePhase.switch == `a` ? game_corridor_door_open_svg : game_corridor_door_closed_svg
+              mode.switch == `a` ? game_corridor_door_open_svg : game_corridor_door_closed_svg
             ),
-            show: gamePhase.switch == `a` ? game_corridor_door_closed_svg : game_corridor_door_open_svg,
+            show: mode.switch == `a` ? game_corridor_door_closed_svg : game_corridor_door_open_svg,
           })
           break
         case `closedDoor`:
@@ -155,9 +155,9 @@ function renderNonInteractiveGame(
             parent: corridorGroup,
             hide: sprite(
               corridorGroup,
-              gamePhase.switch == `a` ? game_corridor_door_closed_svg : game_corridor_door_open_svg
+              mode.switch == `a` ? game_corridor_door_closed_svg : game_corridor_door_open_svg
             ),
-            show: gamePhase.switch == `a` ? game_corridor_door_open_svg : game_corridor_door_closed_svg,
+            show: mode.switch == `a` ? game_corridor_door_open_svg : game_corridor_door_closed_svg,
           })
           break
         case `goal`:
@@ -170,8 +170,8 @@ function renderNonInteractiveGame(
   }
 
   const playerGroup = group(parent)
-  translate(playerGroup, gamePhase.x * roomSpacing, gamePhase.y * roomSpacing)
-  rotate(playerGroup, facingDegrees[gamePhase.facing])
+  translate(playerGroup, mode.x * roomSpacing, mode.y * roomSpacing)
+  rotate(playerGroup, facingDegrees[mode.facing])
 
   const playerIdleA = sprite(playerGroup, game_player_idle_a_lit_svg)
   const playerIdleB = sprite(playerGroup, game_player_idle_b_lit_svg)
@@ -179,7 +179,7 @@ function renderNonInteractiveGame(
 
   hide(playerIdleB)
 
-  if (gamePhase.walked) {
+  if (mode.walked) {
     hide(playerIdleA)
     translateX(playerGroup, -roomSpacing)
   } else {
@@ -187,7 +187,7 @@ function renderNonInteractiveGame(
   }
 
   return () => {
-    if (gamePhase.walked) {
+    if (mode.walked) {
       linear(playerGroup)
       for (let i = 0; i < 8; i++) {
         elapse(50)
@@ -201,12 +201,12 @@ function renderNonInteractiveGame(
     let outOfBounds = true
 
     for (const room of level.rooms) {
-      if (room.x == gamePhase.x && room.y == gamePhase.y) {
+      if (room.x == mode.x && room.y == mode.y) {
         outOfBounds = false
         switch (room.type) {
           case `switch`:
-            if (gamePhase.walked) {
-              gamePhase.switch = gamePhase.switch == `a` ? `b` : `a`
+            if (mode.walked) {
+              mode.switch = mode.switch == `a` ? `b` : `a`
               for (const change of changeOnSwitch) {
                 hide(change.hide)
                 sprite(change.parent, change.show)
@@ -215,7 +215,7 @@ function renderNonInteractiveGame(
             break
 
           case `mcguffin`:
-            if (gamePhase.walked) {
+            if (mode.walked) {
               while (hideWhenTaken.length) {
                 let shortestDistance = Infinity
                 for (const item of hideWhenTaken) {
@@ -234,7 +234,7 @@ function renderNonInteractiveGame(
                 }
                 elapse(300)
               }
-              gamePhase.state = `taken`
+              mode.state = `taken`
             }
             break
         }
@@ -243,7 +243,7 @@ function renderNonInteractiveGame(
 
     if (outOfBounds) {
       hide(playerGroup)
-      renderNonInteractiveMenu(parent, postGameMenu(gamePhase))
+      renderNonInteractiveMenu(parent, postGameMenu(mode))
       phase()
     } else {
       for (const key of keys) {
@@ -269,11 +269,11 @@ function renderNonInteractiveGame(
 
 function renderInteractiveGame(
   mainViewport: EngineViewport,
-  gamePhase: GamePhase,
+  mode: GameMode,
 ): void {
   mainViewport
-  if (gamePhase.state == `won`) {
-    renderInteractiveMenu(mainViewport, postGameMenu(gamePhase))
+  if (mode.state == `won`) {
+    renderInteractiveMenu(mainViewport, postGameMenu(mode))
   } else {
     for (const key of keys) {
       mapKey(key.keycode, callback)
@@ -286,17 +286,17 @@ function renderInteractiveGame(
       )
 
       function callback() {
-        const level = levels[gamePhase.level]
+        const level = levels[mode.level]
 
-        gamePhase.facing = key.facing
-        delete gamePhase.walked
+        mode.facing = key.facing
+        delete mode.walked
 
         for (const corridor of level.corridors) {
-          const forward = corridor.x == gamePhase.x && corridor.y == gamePhase.y && corridor.facing == key.facing
+          const forward = corridor.x == mode.x && corridor.y == mode.y && corridor.facing == key.facing
           const otherEndX = corridor.x + facingX[corridor.facing]
           const otherEndY = corridor.y + facingY[corridor.facing]
           const otherFacing = facingReverse[corridor.facing]
-          const reverse = otherEndX == gamePhase.x && otherEndY == gamePhase.y && otherFacing == key.facing
+          const reverse = otherEndX == mode.x && otherEndY == mode.y && otherFacing == key.facing
 
           if (forward || reverse) {
             switch (corridor.type) {
@@ -307,29 +307,29 @@ function renderInteractiveGame(
                 break
 
               case `openDoor`:
-                if (gamePhase.switch == `b`) {
+                if (mode.switch == `b`) {
                   return
                 }
                 break
 
               case `closedDoor`:
-                if (gamePhase.switch == `a`) {
+                if (mode.switch == `a`) {
                   return
                 }
                 break
 
               case `goal`:
-                if (gamePhase.state == `initial`) {
+                if (mode.state == `initial`) {
                   return
                 }
-                gamePhase.state = `won`
+                mode.state = `won`
                 break
             }
 
-            gamePhase.x += facingX[key.facing]
-            gamePhase.y += facingY[key.facing]
+            mode.x += facingX[key.facing]
+            mode.y += facingY[key.facing]
 
-            gamePhase.walked = 1
+            mode.walked = 1
             return
           }
         }
