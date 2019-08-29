@@ -184,9 +184,11 @@ function renderNonInteractiveGame(
     translate(playerGroup, mode.x * roomSpacing, mode.y * roomSpacing)
     rotate(playerGroup, facingDegrees[mode.facing])
 
-    const playerIdleA = sprite(playerGroup, game_player_idle_a_lit_svg)
-    const playerIdleB = sprite(playerGroup, game_player_idle_b_lit_svg)
-    const playerWalk = sprite(playerGroup, game_player_walk_lit_svg)
+    const idleInDark = mode.state != `initial`
+
+    const playerIdleA = sprite(playerGroup, idleInDark ? game_player_idle_a_silhouette_svg : game_player_idle_a_lit_svg)
+    const playerIdleB = sprite(playerGroup, idleInDark ? game_player_idle_b_silhouette_svg : game_player_idle_b_lit_svg)
+    const playerWalk = sprite(playerGroup, idleInDark && mode.animation != `take` ? game_player_walk_silhouette_svg : game_player_walk_lit_svg)
 
     hide(playerIdleB)
 
