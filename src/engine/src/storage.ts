@@ -6,7 +6,7 @@ try {
 function engineStorageSave<T extends EngineJson>(key: string, content: T): Truthiness {
   if (saveLoadAvailable) {
     try {
-      localStorage.setItem(key, JSON.stringify(content))
+      localStorage.setItem(`${gameName}-${key}`, JSON.stringify(content))
       return 1
     } catch { }
   }
@@ -16,7 +16,7 @@ function engineStorageSave<T extends EngineJson>(key: string, content: T): Truth
 function engineStorageLoad<T extends EngineJson>(key: string): null | T {
   if (saveLoadAvailable) {
     try {
-      const json = localStorage.getItem(key)
+      const json = localStorage.getItem(`${gameName}-${key}`)
       if (json !== null) {
         return JSON.parse(json)
       }
@@ -28,7 +28,7 @@ function engineStorageLoad<T extends EngineJson>(key: string): null | T {
 function engineStorageDrop(key: string): Truthiness {
   if (saveLoadAvailable) {
     try {
-      localStorage.removeItem(key)
+      localStorage.removeItem(`${gameName}-${key}`)
       return 1
     } catch { }
   }

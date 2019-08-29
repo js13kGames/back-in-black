@@ -8,7 +8,7 @@ type EngineState = {
 }
 
 function engineStateLoad(): void {
-  const possibleState = engineStorageLoad<EngineState>(gameName)
+  const possibleState = engineStorageLoad<EngineState>(`state`)
   if (possibleState === null
     || possibleState.engineVersion !== engineStateVersion
     || possibleState.gameVersion !== version) {
@@ -18,11 +18,11 @@ function engineStateLoad(): void {
     state = possibleState.state
     beat = possibleState.beat
   }
-  engineStorageDrop(gameName)
+  engineStorageDrop(`state`)
 }
 
 function engineStateSave(): void {
-  engineStorageSave<EngineState>(gameName, {
+  engineStorageSave<EngineState>(`state`, {
     engineVersion: engineStateVersion,
     gameVersion: version,
     state,
