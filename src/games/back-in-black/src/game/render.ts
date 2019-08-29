@@ -337,7 +337,9 @@ function renderInteractiveGame(
                     mode.switch = mode.switch == `a` ? `b` : `a`
                     return
                 }
-
+                break
+              }
+            }
                 mode.animation = `walk`
                 return
               }
@@ -346,5 +348,3 @@ function renderInteractiveGame(
         }
       }
     }
-  }
-}
