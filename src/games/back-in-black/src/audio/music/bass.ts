@@ -32,21 +32,18 @@ function setUpBass(): void {
 }
 
 function bassOn(at: number, note: number): void {
-  at
-  note
-  // const startTime = audioTime(at)
-  // note += 3
-  // const frequency = 55 * Math.pow(2, note / 12)
-  // bassOscillatorA.frequency.setValueAtTime(frequency, startTime)
-  // bassOscillatorB.frequency.setValueAtTime(frequency, startTime)
-  // bassLowpass.frequency.setValueAtTime(2000, startTime)
-  // bassLowpass.frequency.linearRampToValueAtTime(500, startTime + 0.1)
-  // bassGain.gain.setValueAtTime(1, startTime)
-  // bassGain.gain.linearRampToValueAtTime(0.5, startTime + 0.15)
+  const startTime = beatTime(at)
+  note += 3
+  const frequency = 55 * Math.pow(2, note / 12)
+  bassOscillatorA.frequency.setValueAtTime(frequency, startTime)
+  bassOscillatorB.frequency.setValueAtTime(frequency, startTime)
+  bassLowpass.frequency.setValueAtTime(2000, startTime)
+  bassLowpass.frequency.linearRampToValueAtTime(500, startTime + 0.1)
+  bassGain.gain.setValueAtTime(1, startTime)
+  bassGain.gain.linearRampToValueAtTime(0.5, startTime + 0.15)
 }
 
 function bassOff(at: number): void {
-  at
-  // const startTime = audioTime(at)
-  // bassGain.gain.setValueAtTime(0, startTime)
+  const startTime = beatTime(at)
+  bassGain.gain.setValueAtTime(0, startTime)
 }

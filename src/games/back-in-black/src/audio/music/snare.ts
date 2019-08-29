@@ -24,16 +24,15 @@ function setUpSnare(): void {
 }
 
 function snare(at: number): void {
-  at
-  // const startTime = audioTime(at)
-  // snareGain.gain.setValueAtTime(1, startTime)
-  // snareBandpass.frequency.setValueAtTime(2000, startTime)
-  // snareOscillatorGain.gain.setValueAtTime(1, startTime)
-  // snareOscillator.frequency.setValueAtTime(100, startTime)
+  const startTime = beatTime(at)
+  snareGain.gain.setValueAtTime(1, startTime)
+  snareBandpass.frequency.setValueAtTime(2000, startTime)
+  snareOscillatorGain.gain.setValueAtTime(1, startTime)
+  snareOscillator.frequency.setValueAtTime(100, startTime)
 
-  // snareGain.gain.linearRampToValueAtTime(0.4, startTime + 0.1)
-  // snareGain.gain.linearRampToValueAtTime(0, startTime + 0.2)
-  // snareBandpass.frequency.linearRampToValueAtTime(1000, startTime + 0.15)
-  // snareOscillatorGain.gain.linearRampToValueAtTime(0, startTime + 0.08)
-  // snareOscillator.frequency.linearRampToValueAtTime(0, startTime + 0.08)
+  snareGain.gain.linearRampToValueAtTime(0.4, startTime + 0.1)
+  snareGain.gain.linearRampToValueAtTime(0, startTime + 0.2)
+  snareBandpass.frequency.linearRampToValueAtTime(1000, startTime + 0.15)
+  snareOscillatorGain.gain.linearRampToValueAtTime(0, startTime + 0.08)
+  snareOscillator.frequency.linearRampToValueAtTime(0, startTime + 0.08)
 }

@@ -17,9 +17,7 @@ function setUpHat(): void {
 }
 
 function hat(at: number, duration: number): void {
-  at
-  duration
-  // const startTime = audioTime(at)
-  // hatGain.gain.setValueAtTime(0.4, startTime)
-  // hatGain.gain.linearRampToValueAtTime(0, startTime + duration)
+  const startTime = beatTime(at)
+  hatGain.gain.setValueAtTime(0.4, startTime)
+  hatGain.gain.linearRampToValueAtTime(0, startTime + duration)
 }

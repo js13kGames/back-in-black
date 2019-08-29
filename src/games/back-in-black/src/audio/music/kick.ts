@@ -11,12 +11,11 @@ function setUpKick(): void {
 }
 
 function kick(at: number): void {
-  at
-  // const startTime = audioTime(at)
-  // kickOscillator.frequency.setValueAtTime(200, startTime)
-  // kickGain.gain.setValueAtTime(1, startTime)
+  const startTime = beatTime(at)
+  kickOscillator.frequency.setValueAtTime(200, startTime)
+  kickGain.gain.setValueAtTime(1, startTime)
 
-  // const endTime = startTime + 0.1
-  // kickOscillator.frequency.linearRampToValueAtTime(0, endTime)
-  // kickGain.gain.linearRampToValueAtTime(0, endTime)
+  const endTime = startTime + 0.1
+  kickOscillator.frequency.linearRampToValueAtTime(0, endTime)
+  kickGain.gain.linearRampToValueAtTime(0, endTime)
 }

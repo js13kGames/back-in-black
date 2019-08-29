@@ -27,20 +27,15 @@ function setUpLead(): void {
 }
 
 function leadOn(at: number, channel: 0 | 1, note: number): void {
-  at
-  channel
-  note
-  // const startTime = audioTime(at)
-  // note += 3
-  // const frequency = 220 * Math.pow(2, note / 12)
-  // leads[channel][0].frequency.setValueAtTime(frequency, startTime)
-  // leads[channel][1].frequency.setValueAtTime(frequency, startTime)
-  // leads[channel][2].gain.setValueAtTime(0.1, startTime)
+  const startTime = beatTime(at)
+  note += 3
+  const frequency = 220 * Math.pow(2, note / 12)
+  leads[channel][0].frequency.setValueAtTime(frequency, startTime)
+  leads[channel][1].frequency.setValueAtTime(frequency, startTime)
+  leads[channel][2].gain.setValueAtTime(0.1, startTime)
 }
 
 function leadOff(at: number, channel: 0 | 1): void {
-  at
-  channel
-  // const startTime = audioTime(at)
-  // leads[channel][2].gain.setValueAtTime(0, startTime)
+  const startTime = beatTime(at)
+  leads[channel][2].gain.setValueAtTime(0, startTime)
 }
