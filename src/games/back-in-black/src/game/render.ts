@@ -94,6 +94,8 @@ function renderNonInteractiveGame(
       readonly distance: number
     }[] = []
 
+    const mcguffinRoomGroupAndSprites: EngineAnimation[] = []
+
     if (mode.state == `initial` || mode.animation == `take`) {
       const switchState = mode.switch == (mode.animation == `switch` ? `b` : `a`)
 
@@ -110,7 +112,7 @@ function renderNonInteractiveGame(
             sprite(roomGroup, game_room_empty_svg)
           } break
           case `mcguffin`:
-            sprite(roomGroup, game_room_mcguffin_a_svg)
+            mcguffinRoomGroupAndSprites.push(roomGroup, sprite(roomGroup, game_room_mcguffin_a_svg))
             break
           case `switch`:
             changeOnSwitch.push({
@@ -255,10 +257,20 @@ function renderNonInteractiveGame(
 
         phase()
 
-        elapse(500)
+        elapse(333)
+        if (mcguffinRoomGroupAndSprites.length) {
+          hide(mcguffinRoomGroupAndSprites[1])
+          mcguffinRoomGroupAndSprites.push(sprite(mcguffinRoomGroupAndSprites[0], game_room_mcguffin_b_svg))
+        }
+        elapse(147)
         hide(playerIdleA)
         show(playerIdleB)
-        elapse(500)
+        elapse(147)
+        if (mcguffinRoomGroupAndSprites.length) {
+          hide(mcguffinRoomGroupAndSprites[2])
+          sprite(mcguffinRoomGroupAndSprites[0], game_room_mcguffin_c_svg)
+        }
+        elapse(333)
       }
     }
   }
