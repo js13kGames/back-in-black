@@ -264,8 +264,23 @@ Executed immediately after the Web Audio API is initialized, for the creation of
 virtual instruments.
 
 ```typescript
-function audioReady(): () => void {
+function audioReady(): void {
   // audioContext is available here.
+}
+```
+
+#### `beatsPerMinute`
+
+The number of beats per minute in the game's music.
+
+#### `renderBeat`
+
+Called once per beat while the music is playing.  Use this to generate the
+game's music, one beat at a time.
+
+```typescript
+function renderBeat(): void {
+  // audioContext, beat and beatTime are available here.
 }
 ```
 
@@ -299,7 +314,24 @@ work.
 #### `audioContext`
 
 The current Web Audio API context.  This should only be used in the `audioReady`
-function.
+and `renderBeat` functions.
+
+#### `beat`
+
+The number of beats of game music rendered so far.  This should only be used in
+the `renderBeat` function.
+
+#### `beatTime`
+
+Converts a unit interval into the beat being rendered into a Web Audio API time.
+
+```typescript
+const webAudioApiTimeOfBeatStart = beatTime(0)
+const webAudioApiTimeOfBeatMidpoint = beatTime(0.5)
+const webAudioApiTimeOfBeatEnd = beatTime(1)
+```
+
+This should only be used in the `renderBeat` function.
 
 #### `Truthiness`
 
