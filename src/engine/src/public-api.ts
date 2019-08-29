@@ -4,6 +4,8 @@ let saveLoadAvailable: Truthiness
 
 let audioContext: AudioContext
 
+let beat: number
+
 type Truthiness = 1 | undefined
 
 type Json = EngineJson
