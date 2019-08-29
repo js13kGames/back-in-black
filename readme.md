@@ -215,10 +215,9 @@ It is not good for:
 ### Architecture
 
 ```
-                              .-> sprites
-initial -.-> state -> render -|-> hitboxes -.
-         |                    '-> timers --.|
-         '----------------------------------'
+initial -.-> state -> render -> viewports -.-> groups/sprites
+         |                                 '-> hitboxes --.
+         '------------------------------------------------'
 ```
 
 #### State
@@ -259,91 +258,36 @@ storage does not contain a state, or the state is not usable.
 A number which identifies breaking changes to `State`.  If this does not match
 that loaded from local storage, `initial` will be used instead.
 
-#### `beatsPerMinute`
-
-The number of beats per minute of the game's music.
-
 #### `audioReady`
 
 Executed immediately after the Web Audio API is initialized, for the creation of
-virtual instruments.  A function is returned which is executed once per beat to
-control said virtual instruments.  This may skip beats if timing problems occur.
+virtual instruments.
 
 ```typescript
-function audioReady(): () => void {
+function audioReady(): void {
   // audioContext is available here.
-  return function(): void {
-    // Executed every beat where possible.
-    // audioContext is available here.
-    // audioTime is available here.
-  }
 }
 ```
 
-#### `layers`
+#### `beatsPerMinute`
 
-A function which is executed by the engine during startup to define which layers
-are to be rendered.
+The number of beats per minute in the game's music.
+
+#### `renderBeat`
+
+Called once per beat while the music is playing.  Use this to generate the
+game's music, one beat at a time.
 
 ```typescript
-function layers(layer: LayerFactory): void {
-  layer(
-    320, // viewportMinimumWidthVirtualPixels
-    420, // viewportMaximumWidthVirtualPixels
-    240, // viewportMinimumHeightVirtualPixels
-    400, // viewportMaximumHeightVirtualPixels
-    0, // viewportHorizontalAlignmentSignedUnitInterval
-    0, // viewportVerticalAlignmentSignedUnitInterval
-    () => {
-      draw(
-        anExample_svg,
-        [translateX(24)] // transforms
-      )
-      hitbox(
-        64, // widthVirtualPixels
-        80, // heightVirtualPixels
-        [translateX(24)], // transforms
-        () => {
-          state.clickedOrTouched = true
-          const currentTime = now
-        }
-      )
-    }
-  )
+function renderBeat(): void {
+  // audioContext, beat and beatTime are available here.
 }
 ```
 
-##### `viewportMinimumWidthVirtualPixels`/`viewportMaximumWidthVirtualPixels`/`viewportMinimumHeightVirtualPixels`/`viewportMaximumHeightVirtualPixels`
+#### `render`
 
-The X axis runs from left to right, while the Y axis runs from top to bottom.
-
-A "virtual resolution" is specified, which maps to SVG pixels.  The `minimum`
-`width` and `height` define the "safe area" which is guaranteed to be visible.
-This will be made as large as possible without cropping it or distorting the
-aspect ratio.
-
-The `maximum` `width` and `height` define how much margin is visible around the
-"safe area" when the display resolution's aspect ratio does not match that of
-the "safe area".
-
-For instance, in the above example, if the screen is wider than a 4:3 aspect
-ratio, up to 50 extra virtual pixels will be shown left of X 0, and a further
-50 right of X 320.  The viewport will be cropped beyond the "maximum".
-
-###### `viewportHorizontalAlignmentSignedUnitInterval`/`viewportVerticalAlignmentSignedUnitInterval`
-
-Viewports are alignable to display borders, for elements such as buttons which
-should be near the edges of devices.
-
-Horizontal and vertical alignment are signed unit intervals, where -1 aligns the
-left and top borders of the viewport with those of the display, 0 centers the
-viewport on the display, and 1 aligns the right and bottom borders of the
-viewport with those of the display.
-
-##### `render`
-
-Executed when the engine needs to know what to display to the user, and which
-interaction options exist, based on the current state.
+Executed when `state` is known to have changed, to re-render the scene.  See
+Render Emitters for details on what can be done in this callback.
 
 ##### Mutation callbacks
 
@@ -370,20 +314,31 @@ work.
 #### `audioContext`
 
 The current Web Audio API context.  This should only be used in the `audioReady`
-function and its returned callback.
+and `renderBeat` functions.
 
-#### `audioTime`
+#### `beat`
 
-Converts a unit interval representing progress through the current beat to a Web
-Audio API time.  This should only be used in the `audioReady` function's
-returned callback.
+The number of beats of game music rendered so far.  This should only be used in
+the `renderBeat` function.
+
+#### `beatTime`
+
+Converts a unit interval into the beat being rendered into a Web Audio API time.
+
+```typescript
+const webAudioApiTimeOfBeatStart = beatTime(0)
+const webAudioApiTimeOfBeatMidpoint = beatTime(0.5)
+const webAudioApiTimeOfBeatEnd = beatTime(1)
+```
+
+This should only be used in the `renderBeat` function.
 
 #### `Truthiness`
 
 Either `1` or `undefined`.  Useful for indicating a `true`/`false` flag without
 the overhead of `return !1` or similar.
 
-#### `Json`/`IJsonArray`/`IJsonArrayAny`/`IJsonObject`
+#### `Json`
 
 Types which can be serialized to or deserialized from JSON.
 
@@ -437,54 +392,326 @@ Calculates the distance between two vectors.
 A type which represents a [HTML5 key code](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code).
 This maps to a location on the keyboard, not what the key is mapped to.
 
-#### `now`
-
-A monotonic clock, which tracks the number of beats which appear to have elapsed
-since the start of the game.  This may be somewhat inaccurate; there is a limit
-on how much time can "pass" in one go.
-
 #### Render emitters
 
-These can be called during a layer's render callback to describe something which
-the render emits.
+These can be called during the render callback to describe something which the
+render emits.
 
-##### `draw`
+##### `elapse`
 
-Draws the given `svg`.  The transform origin is the center of the SVG.
+```typescript
+
+// The time was 200.
+
+elapse(650)
+
+// The time is now 850.
+
+```
+
+Progress the timeline by the given number of milliseconds.
+
+##### `phase`
+
+```typescript
+
+// First phase.
+
+phase()
+
+// Second phase.
+
+phase()
+
+// Third phase.
+
+phase()
+
+// Final, looping phase.
+
+```
+
+Phases can be thought of as "bookmarks" in the animation described during
+`render`.  Phases can be used for skipping; for instance, you might have a
+sequence of events which can be individually skipped but do not otherwise
+require any user input.
+
+The last phase loops.  If no looping animation is desired at all, this can be
+prevented by making the last phase empty (e.g. calling `phase` at the end of
+`render`).
+
+##### `viewport`
+
+```typescript
+const createdViewport = viewport(
+  320, // viewportMinimumWidthVirtualPixels
+  240, // viewportMinimumHeightVirtualPixels
+  420, // viewportMaximumWidthVirtualPixels
+  400, // viewportMaximumHeightVirtualPixels
+  0, // viewportHorizontalAlignmentSignedUnitInterval
+  0, // viewportVerticalAlignmentSignedUnitInterval
+)
+```
+
+Viewports sit directly under the root of the scene graph.  They persist until
+the next `render`.  They cannot be animated.
+
+##### `viewportMinimumWidthVirtualPixels`/`viewportMinimumHeightVirtualPixels`/`viewportMaximumWidthVirtualPixels`/`viewportMaximumHeightVirtualPixels`
+
+The X axis runs from center to right, while the Y axis runs from center to
+bottom.
+
+A "virtual resolution" is specified, which maps to SVG pixels.  The `minimum`
+`width` and `height` define the "safe area" which is guaranteed to be visible.
+This will be made as large as possible without cropping it or distorting the
+aspect ratio.
+
+The `maximum` `width` and `height` define how much margin is visible around the
+"safe area" when the display resolution's aspect ratio does not match that of
+the "safe area".
+
+For instance, in the above example, if the screen is wider than a 4:3 aspect
+ratio, up to 50 extra virtual pixels will be shown left of X -160, and a further
+50 right of X 160.  The viewport will be cropped beyond the "maximum".
+
+###### `viewportHorizontalAlignmentSignedUnitInterval`/`viewportVerticalAlignmentSignedUnitInterval`
+
+Viewports are alignable to display borders, for elements such as buttons which
+should be near the edges of devices.
+
+Horizontal and vertical alignment are signed unit intervals, where -1 aligns the
+left and top borders of the viewport with those of the display, 0 centers the
+viewport on the display, and 1 aligns the right and bottom borders of the
+viewport with those of the display.
+
+##### `group`
+
+```typescript
+const createdGroup = group(parentViewportOrGroup)
+```
+
+Groups are not themselves visible, but can be used to manipulate a set of other
+objects as a whole, or control render order.  They are hidden until the time at
+which they were created.
+
+##### `sprite`
+
+```typescript
+const createdSprite = sprite(parentViewportOrGroup, importedFile_svg)
+```
+
+Sprites display imported SVG files.  They are hidden until the time at
+which they were created.
+
+Their origin is the center of the bounding box of the SVG.
 
 ##### `hitbox`
 
-Defines a clickable or touchable area within the viewport which triggers a
-mutation callback.
-
-As with `draw`, the transform origin is the center of the hitbox.
-
-If multiple hitboxes overlap, within the same layer or between multiple layers,
-the last defined wins.
-
-##### `at`
-
 ```typescript
-at(
-  now + 32,
+hitbox(
+  parentViewport,
+  leftVirtualPixels,
+  topVirtualPixels,
+  widthVirtualPixels,
+  heightVirtualPixels,
   () => {
-    state.thirtyTwoBeatsElapsed = true
-    const sameAsAboveTime = now
+    state.aKeyPressed = true
   }
 )
 ```
 
-Requests that a mutation callback be executed after a delay.
+Maps an area of the display to a mutation callback, which is then executed when
+that area is clicked on or touched.  If multiple cover the same area, the last
+hitbox defined in the last viewport defined takes priority.
 
-Operates in the same time space as `now`.
+Hitboxes cannot be animated.
 
-Timers will not fire if missing from future `render` callbacks.
+##### Easings
 
-Executes immediately if before `now`.  This can cause infinite recursion if care
-is not taken to ensure they are not present on the following `render`.
+These describe how a subject object will interpolate between the current
+keyframe and the next.  The default behaviour is `stepEnd`.
 
-If multiple are defined, the last defined with the earliest time takes
-priority.  Only one can fire per `render`.
+###### `stepEnd`
+
+```typescript
+
+// Configure the group or sprite before the sudden transition.
+
+stepEnd(groupOrSprite)
+
+// Configure the group or sprite after the sudden transition.
+
+```
+
+Sets a hard transition; allows for changes without any interpolation.
+
+###### `linear`
+
+```typescript
+
+// Configure the keyframe to interpolate from.
+
+linear(groupOrSprite)
+
+// Elapse, then configure the keyframe to interpolate to.
+
+```
+
+Interpolates linearly; at a constant rate.  This makes the start and end of the
+motion somewhat abrupt.
+
+###### `easeOut`
+
+```typescript
+
+// Configure the keyframe to interpolate from.
+
+easeOut(groupOrSprite)
+
+// Elapse, then configure the keyframe to interpolate to.
+
+```
+
+Interpolates quickly, decelerating towards the end.
+
+###### `easeIn`
+
+```typescript
+
+// Configure the keyframe to interpolate from.
+
+easeIn(groupOrSprite)
+
+// Elapse, then configure the keyframe to interpolate to.
+
+```
+
+Interpolates slowly, accelerating towards the end.
+
+###### `easeInOut`
+
+```typescript
+
+// Configure the keyframe to interpolate from.
+
+easeInOut(groupOrSprite)
+
+// Elapse, then configure the keyframe to interpolate to.
+
+```
+
+Interpolates slowly, accelerates towards the middle, then decelerates again
+towards the end.
+
+###### `ease`
+
+```typescript
+
+// Configure the keyframe to interpolate from.
+
+ease(groupOrSprite)
+
+// Elapse, then configure the keyframe to interpolate to.
+
+```
+
+Interpolates at moderate speed, accelerates towards the middle, then decelerates
+again towards the end.
+
+##### Transforms
+
+These manipulate the current keyframe of the subject object.  If the subject
+object has no keyframe at the current time, a new non-interpolating keyframe is
+created based on the previous keyframe first.
+
+###### `setOpacity`
+
+```typescript
+setOpacity(groupOrSprite, 0.4)
+```
+
+Sets the opacity, where 0 is fully transparent and 1 is fully opaque.
+
+###### `hide`
+
+```typescript
+hide(groupOrSprite)
+```
+
+Equivalent to `setOpacity(groupOrSprite, 0)`.
+
+###### `show`
+
+```typescript
+show(groupOrSprite)
+```
+
+Equivalent to `setOpacity(groupOrSprite, 1)`.
+
+###### `translateX`
+
+```typescript
+translateX(groupOrSprite, 20)
+```
+
+Translates by the given number of virtual pixels on the X axis.
+
+###### `translateY`
+
+```typescript
+translateY(groupOrSprite, 20)
+```
+
+Translates by the given number of virtual pixels on the Y axis.
+
+###### `translate`
+
+```typescript
+translate(groupOrSprite, 20, 65)
+```
+
+Translates by the given numbers of virtual pixels on the X and Y axes
+respectively.
+
+###### `rotate`
+
+```typescript
+rotate(groupOrSprite, 90)
+```
+
+Rotates by the given number of degrees clockwise.
+
+###### `scaleX`
+
+```typescript
+scaleX(groupOrSprite, 2)
+```
+
+Scales by the given factor on the X axis.
+
+###### `scaleY`
+
+```typescript
+scaleY(groupOrSprite, 2)
+```
+
+Scales by the given factor on the Y axis.
+
+###### `scale`
+
+```typescript
+scale(groupOrSprite, 2, 4)
+```
+
+Scales by the given factors on the X and Y axes respectively.
+
+###### `scaleUniform`
+
+```typescript
+scaleUniform(groupOrSprite, 2)
+```
+
+Scales by the given factor on the X and Y axes.
 
 ##### `mapKey`
 
@@ -496,186 +723,6 @@ mapKey(`KeyA`, () => {
 
 Maps a `KeyCode` to a mutation callback.  If multiple are defined with the same
 `KeyCode`, the last defined takes priority.
-
-#### Render Helpers
-
-These are intended to be used only during a render callback, but don't directly
-emit anything.
-
-##### `animation`
-
-```typescript
-animation(
-  now + 2,
-  [
-    [3, () => { /* Rendered between now + 2 and now + 5. */ }],
-    [6, () => { /* Rendered between now + 5 and now + 11. */ }],
-    [1, () => { /* Rendered between now + 11 and now + 12. */ }]
-  ],
-  ended => {
-    /* Rendered after now + 12. */
-    /* ended = now + 12. */
-  }
-)
-```
-
-Describes a "one-shot" animation.
-
-This is:
-
-- A time at which to start playing the animation.
-- A list of "frames", which are a duration and a render callback.
-- A render callback to execute once the animation finishes.
-
-The appropriate render callback (if any) will be executed, and a re-render
-triggered at the end of each frame.
-
-##### `loop`
-
-Describes a looping animation.
-
-This is:
-
-- A time at which to start playing the animation.
-- A list of "frames", which are a duration and a render callback.
-
-The appropriate render callback (if any) will be executed, and a re-render
-triggered at the end of each frame.
-
-```typescript
-loop(
-  now + 2,
-  [
-    [3, () => {
-      /* Rendered between now + 2 and now + 5. */
-      /* Subsequently rendered between now + 12 and now + 15. */
-    }],
-    [6, () => {
-      /* Rendered between now + 5 and now + 11. */
-      /* Subsequently rendered between now + 15 and now + 21. */
-    }],
-    [1, () => {
-      /* Rendered between now + 11 and now + 12. */
-      /* Subsequently rendered between now + 21 and now + 22. */
-    }]
-  ]
-)
-```
-
-##### `iterativeAnimation`
-
-```typescript
-iterativeAnimation(
-  now + 2,
-  4,
-  5,
-  i => {
-    /* Rendered with i = 0 at now + 2. */
-    /* Rendered with i = 1 at now + 6. */
-    /* Rendered with i = 2 at now + 10. */
-    /* Rendered with i = 3 at now + 14. */
-    /* Rendered with i = 4 at now + 18. */
-  }
-  ended => {
-    /* Rendered after now + 22. */
-    /* ended = now + 22. */
-  }
-)
-```
-
-Describes a "one-shot" animation which counts from zero up to a given value.
-
-This is:
-
-- A time at which to start playing the animation.
-- The duration of each frame.
-- The number of frames (the exclusive upper bound of `i`).
-- A render callback to call while the animation is playing.
-- A render callback to execute once the animation finishes.
-
-The appropriate render callback (if any) will be executed, and a re-render
-triggered at the end of each frame.
-
-##### `after`
-
-```typescript
-after(
-  now + 2,
-  () => {
-    /* Rendered after now + 2. */
-  }
-)
-```
-
-```typescript
-after(
-  undefined,
-  () => {
-    /* Never rendered. */
-  }
-)
-```
-
-Does nothing until the given time, but then re-renders at the specified time,
-executing the render callback.
-
-Does nothing if no time is given.
-
-##### `until`
-
-```typescript
-until(
-  now + 2,
-  () => {
-    /* Rendered until now + 2. */
-  }
-)
-```
-
-```typescript
-until(
-  undefined,
-  () => {
-    /* Always rendered. */
-  }
-)
-```
-
-Executes the render callback.  Re-renders at the specified time, after which it
-is no longer executed.
-
-Always executes the render callback if no time is given.
-
-##### `switchAt`
-
-```typescript
-switchAt(
-  now + 2,
-  () => {
-    /* Rendered until now + 2. */
-  },
-  () => {
-    /* Rendered after now + 2. */
-  }
-)
-```
-
-```typescript
-switchAt(
-  undefined,
-  () => {
-    /* Always rendered. */
-  },
-  () => {
-    /* Never rendered. */
-  }
-)
-```
-
-Executes the first render callback.  Re-renders at the specified time, after
-which it instead renders the second render callback.
-
-Always executes the first render callback if no time is given.
 
 #### Mutation Callback Helpers
 
@@ -717,43 +764,6 @@ Returns falsy and has no side effects when unsuccessful.
 ```typescript
 const truthyOnNonFailure = drop(`a-key`)
 ```
-
-#### Transforms
-
-These can be given to some functions when rendering a layer.
-
-##### `translateX`
-
-Returns a translation by the given number of virtual pixels on the X axis.
-
-##### `translateY`
-
-Returns a translation by the given number of virtual pixels on the Y axis.
-
-##### `translate`
-
-Returns a translation by the given numbers of virtual pixels on the X and Y axes
-respectively.
-
-##### `rotation`
-
-Returns a translation by the given number of degrees clockwise.
-
-##### `scaleX`
-
-Returns a scaling by the given factor on the X axis.
-
-##### `scaleY`
-
-Returns a scaling by the given factor on the Y axis.
-
-##### `scale`
-
-Returns a scaling by the given factors on the X and Y axes respectively.
-
-##### `scaleUniform`
-
-Returns a scaling by the given factor on the X and Y axes.
 
 ## Build pipeline
 

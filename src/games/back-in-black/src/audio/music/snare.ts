@@ -24,7 +24,7 @@ function setUpSnare(): void {
 }
 
 function snare(at: number): void {
-  const startTime = audioTime(at)
+  const startTime = beatTime(at)
   snareGain.gain.setValueAtTime(1, startTime)
   snareBandpass.frequency.setValueAtTime(2000, startTime)
   snareOscillatorGain.gain.setValueAtTime(1, startTime)

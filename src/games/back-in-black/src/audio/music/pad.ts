@@ -33,16 +33,14 @@ function setUpPad(): void {
   padOscillator.start()
 }
 
-
-
 function padOn(at: number, note: number): void {
-  const startTime = audioTime(at)
+  const startTime = beatTime(at)
   const frequency = 440 * Math.pow(2, note / 12)
   padOscillator.frequency.setValueAtTime(frequency, startTime)
   padGain.gain.setValueAtTime(2.4, startTime)
 }
 
 function padOff(at: number): void {
-  const startTime = audioTime(at)
+  const startTime = beatTime(at)
   padGain.gain.setValueAtTime(0, startTime)
 }

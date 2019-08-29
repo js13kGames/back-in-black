@@ -2,72 +2,72 @@ const ledgendary: Level = {
   name: `ledgendary`,
   rooms: [{
     type: `mcguffin`,
-    x: 3,
-    y: 3
+    x: -1,
+    y: 0
   }, {
     type: `empty`,
-    x: 4,
-    y: 3
+    x: 0,
+    y: 0
   }, {
     type: `empty`,
-    x: 4,
-    y: 2
+    x: 0,
+    y: -1
   }, {
     type: `empty`,
-    x: 5,
-    y: 2
+    x: 1,
+    y: -1
   }, {
     type: `empty`,
-    x: 4,
-    y: 4
+    x: 0,
+    y: 1
   }, {
     type: `empty`,
-    x: 5,
-    y: 4
+    x: 1,
+    y: 1
   }, {
     type: `empty`,
-    x: 5,
-    y: 3
+    x: 1,
+    y: 0
   }],
   corridors: [{
     type: `empty`,
-    x: 3,
-    y: 3,
+    x: -1,
+    y: 0,
     facing: `east`
   }, {
     type: `empty`,
-    x: 4,
-    y: 3,
+    x: 0,
+    y: 0,
     facing: `north`
   }, {
     type: `ledge`,
-    x: 5,
-    y: 2,
+    x: 1,
+    y: -1,
     facing: `west`
   }, {
     type: `empty`,
-    x: 5,
-    y: 3,
+    x: 1,
+    y: 0,
     facing: `north`
   }, {
     type: `empty`,
-    x: 4,
-    y: 3,
+    x: 0,
+    y: 0,
     facing: `south`
   }, {
     type: `ledge`,
-    x: 4,
-    y: 4,
+    x: 0,
+    y: 1,
     facing: `east`
   }, {
     type: `empty`,
-    x: 5,
-    y: 3,
+    x: 1,
+    y: 0,
     facing: `south`
   }, {
     type: `goal`,
-    x: 5,
-    y: 3,
+    x: 1,
+    y: 0,
     facing: `east`
   }]
 }

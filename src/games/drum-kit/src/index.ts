@@ -19,61 +19,58 @@ let snare: undefined | ((at: number) => void)
 let hat: undefined | ((at: number, duration: number) => void)
 let cowbell: undefined | ((at: number) => void)
 
-function layers(
-  layer: LayerFactory
-): void {
-  layer(
-    safeAreaWidthVirtualPixels, fullWidthVirtualPixels,
-    safeAreaHeightVirtualPixels, fullHeightVirtualPixels,
-    0, 0,
-    () => {
-      draw(background_svg, [translate(halfSafeAreaWidthVirtualPixels, halfSafeAreaHeightVirtualPixels)])
-
-      // Kick
-      hitbox(90, 110, [translate(170, 165)], () => {
-        if (kick) {
-          kick(audioContext.currentTime)
-        }
-      })
-
-      // Snare
-      hitbox(90, 55, [translate(205, 82.5)], () => {
-        if (snare) {
-          snare(audioContext.currentTime)
-        }
-      })
-
-      // Closed Hat
-      hitbox(85, 50, [translate(110, 80)], () => {
-        if (hat) {
-          hat(audioContext.currentTime, 0.05)
-        }
-      })
-
-      // Open Hat
-      hitbox(95, 45, [translate(170, 37.5)], () => {
-        if (hat) {
-          hat(audioContext.currentTime, 0.15)
-        }
-      })
-
-      // Cowbell
-      hitbox(30, 45, [translate(232.5, 135)], () => {
-        if (cowbell) {
-          cowbell(audioContext.currentTime)
-        }
-      })
-
-      // Metronome
-      hitbox(22.5, 35, [translate(88.75, 139)], () => { })
-
-      // Tape Recorder
-      hitbox(40, 45, [translate(80, 190)], () => { })
-    }
+function render(): void {
+  const mainViewport = viewport(
+    safeAreaWidthVirtualPixels, safeAreaHeightVirtualPixels,
+    fullWidthVirtualPixels, fullHeightVirtualPixels,
+    0, 0
   )
+
+  sprite(mainViewport, background_svg)
+
+  // Kick
+  hitbox(mainViewport, -35, -10, 85, 112, () => {
+    if (kick) {
+      kick(audioContext.currentTime)
+    }
+  })
+
+  // Snare
+  hitbox(mainViewport, 0, -65, 87, 55, () => {
+    if (snare) {
+      snare(audioContext.currentTime)
+    }
+  })
+
+  // Closed Hat
+  hitbox(mainViewport, -93, -65, 85, 53, () => {
+    if (hat) {
+      hat(audioContext.currentTime, 0.05)
+    }
+  })
+
+  // Open Hat
+  hitbox(mainViewport, -40, -105, 97, 48, () => {
+    if (hat) {
+      hat(audioContext.currentTime, 0.15)
+    }
+  })
+
+  // Cowbell
+  hitbox(mainViewport, 55, -10, 35, 50, () => {
+    if (cowbell) {
+      cowbell(audioContext.currentTime)
+    }
+  })
+
+  // Metronome
+  hitbox(mainViewport, -83, 2, 22.5, 35, () => { })
+
+  // Tape Recorder
+  hitbox(mainViewport, -98, 50, 35, 45, () => { })
 }
 
-function audioReady(): () => void {
+function audioReady(): void {
   const sampleRate = audioContext.sampleRate
 
   var whiteNoiseBuffer = audioContext.createBuffer(1, sampleRate, sampleRate)
@@ -174,7 +171,7 @@ function audioReady(): () => void {
     cowbellGain.gain.setValueAtTime(5, at)
     cowbellGain.gain.linearRampToValueAtTime(0, at + 0.1)
   }
+}
 
-  return () => {
-  }
+function renderBeat(): void {
 }

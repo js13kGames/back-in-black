@@ -2,49 +2,49 @@ const getInGetItGetOut: Level = {
   name: `get in,get it,get out`,
   rooms: [{
     type: `mcguffin`,
-    x: 3,
-    y: 2
+    x: -1,
+    y: -1
   }, {
     type: `empty`,
-    x: 4,
-    y: 2
+    x: 0,
+    y: -1
   }, {
     type: `empty`,
-    x: 4,
-    y: 3
+    x: 0,
+    y: 0
   }, {
     type: `empty`,
-    x: 4,
-    y: 4
+    x: 0,
+    y: 1
   }, {
     type: `empty`,
-    x: 5,
-    y: 4
+    x: 1,
+    y: 1
   }],
   corridors: [{
     type: `empty`,
-    x: 3,
-    y: 2,
+    x: -1,
+    y: -1,
     facing: `east`
   }, {
     type: `empty`,
-    x: 4,
-    y: 2,
+    x: 0,
+    y: -1,
     facing: `south`
   }, {
     type: `empty`,
-    x: 4,
-    y: 3,
+    x: 0,
+    y: 0,
     facing: `south`
   }, {
     type: `empty`,
-    x: 4,
-    y: 4,
+    x: 0,
+    y: 1,
     facing: `east`
   }, {
     type: `goal`,
-    x: 5,
-    y: 4,
+    x: 1,
+    y: 1,
     facing: `east`
   }]
 }

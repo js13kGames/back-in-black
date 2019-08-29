@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="3.svg">
+   sodipodi:docname="number-3.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -25,19 +25,19 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="18.0625"
-     inkscape:cx="4.5006403"
-     inkscape:cy="0.35503162"
+     inkscape:zoom="45.254834"
+     inkscape:cx="5.440955"
+     inkscape:cy="10.571226"
      inkscape:document-units="px"
      inkscape:current-layer="svg8"
      showgrid="true"
      units="px"
      showguides="true"
      inkscape:snap-global="true"
-     inkscape:window-width="1662"
-     inkscape:window-height="1374"
-     inkscape:window-x="67"
-     inkscape:window-y="27"
+     inkscape:window-width="1920"
+     inkscape:window-height="1080"
+     inkscape:window-x="2560"
+     inkscape:window-y="0"
      inkscape:window-maximized="0"
      inkscape:pagecheckerboard="false"
      inkscape:measure-start="0,0"
@@ -63,12 +63,8 @@
   </metadata>
   <path
      style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-opacity:1"
-     d="M 13,5 C 13,5 13,1 9,1 5,1 1,1 1,1 v 4 z"
-     id="path1008-6-2"
-     inkscape:connector-curvature="0" />
-  <path
-     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-opacity:1"
-     d="m 5,9 v 4 h 4 v 2 c 0,0 0,2 -2,2 -2,0 -6,0 -6,0 v 4 h 8 c 0,0 4,0 4,-4 0,-4 0,-8 0,-8 z"
+     d="m 5,9 v 4 h 4 v 2 c 0,0 0,2 -2,2 H 1 v 4 h 8 c 0,0 4,0 4,-4 V 5 C 13,1 9,1 9,1 H 1 v 4 h 6 c 0,0 2,0 2,2 v 2 z"
      id="path1157"
-     inkscape:connector-curvature="0" />
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccscccscccccccc" />
 </svg>

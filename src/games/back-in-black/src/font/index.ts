@@ -1,4 +1,4 @@
-const font: { readonly [character: string]: EngineSvg } = {
+const font: { readonly [character: string]: EngineSpritesSvg } = {
   a: font_a_svg,
   b: font_b_svg,
   c: font_c_svg,

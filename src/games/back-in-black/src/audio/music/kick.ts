@@ -11,7 +11,7 @@ function setUpKick(): void {
 }
 
 function kick(at: number): void {
-  const startTime = audioTime(at)
+  const startTime = beatTime(at)
   kickOscillator.frequency.setValueAtTime(200, startTime)
   kickGain.gain.setValueAtTime(1, startTime)
 

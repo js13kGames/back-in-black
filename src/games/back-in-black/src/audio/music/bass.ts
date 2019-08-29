@@ -32,7 +32,7 @@ function setUpBass(): void {
 }
 
 function bassOn(at: number, note: number): void {
-  const startTime = audioTime(at)
+  const startTime = beatTime(at)
   note += 3
   const frequency = 55 * Math.pow(2, note / 12)
   bassOscillatorA.frequency.setValueAtTime(frequency, startTime)
@@ -44,6 +44,6 @@ function bassOn(at: number, note: number): void {
 }
 
 function bassOff(at: number): void {
-  const startTime = audioTime(at)
+  const startTime = beatTime(at)
   bassGain.gain.setValueAtTime(0, startTime)
 }

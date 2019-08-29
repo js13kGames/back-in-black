@@ -27,7 +27,7 @@ function setUpLead(): void {
 }
 
 function leadOn(at: number, channel: 0 | 1, note: number): void {
-  const startTime = audioTime(at)
+  const startTime = beatTime(at)
   note += 3
   const frequency = 220 * Math.pow(2, note / 12)
   leads[channel][0].frequency.setValueAtTime(frequency, startTime)
@@ -36,6 +36,6 @@ function leadOn(at: number, channel: 0 | 1, note: number): void {
 }
 
 function leadOff(at: number, channel: 0 | 1): void {
-  const startTime = audioTime(at)
+  const startTime = beatTime(at)
   leads[channel][2].gain.setValueAtTime(0, startTime)
 }

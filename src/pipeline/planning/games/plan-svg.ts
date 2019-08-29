@@ -66,7 +66,7 @@ export default function (
             )
           }
 
-          const typeScript = `const ${item.name}: EngineSvg = [${match[1]}, ${match[2]}, ${JSON.stringify(match[3])}]`
+          const typeScript = `const ${item.name}: EngineSpritesSvg = [${match[1]}, ${match[2]}, ${JSON.stringify(match[3])}]`
           gameSvgTypeScriptTextStore.set(item.game, generateSvgPath(item), typeScript)
         }
       ),
