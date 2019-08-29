@@ -15,3 +15,15 @@ function engineAudioStart(): void {
   }
   audioReady()
 }
+
+function engineAudioResume(): void {
+  if (audioContext && audioContext.state == `suspended`) {
+    audioContext.resume()
+  }
+}
+
+function engineAudioSuspend(): void {
+  if (audioContext) {
+    audioContext.suspend()
+  }
+}
