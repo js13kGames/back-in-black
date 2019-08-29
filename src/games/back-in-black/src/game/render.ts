@@ -87,7 +87,9 @@ function renderNonInteractiveGame(
     readonly distance: number
   }[] = []
 
-  if (mode.state == `initial`) {
+  if (mode.state == `initial` || mode.animation == `take`) {
+    const switchState = mode.switch == (mode.animation == `switch` ? `b` : `a`)
+
     for (const room of level.rooms) {
       const roomGroup = group(parent)
       translate(roomGroup, room.x * roomSpacing, room.y * roomSpacing)
@@ -108,9 +110,9 @@ function renderNonInteractiveGame(
             parent: roomGroup,
             hide: sprite(
               roomGroup,
-              mode.switch == `a` ? game_room_switch_a_svg : game_room_switch_b_svg
+              switchState ? game_room_switch_a_svg : game_room_switch_b_svg
             ),
-            show: mode.switch == `a` ? game_room_switch_b_svg : game_room_switch_a_svg,
+            show: switchState ? game_room_switch_b_svg : game_room_switch_a_svg,
           })
           break
         default:
@@ -145,9 +147,9 @@ function renderNonInteractiveGame(
             parent: corridorGroup,
             hide: sprite(
               corridorGroup,
-              mode.switch == `a` ? game_corridor_door_open_svg : game_corridor_door_closed_svg
+              switchState ? game_corridor_door_open_svg : game_corridor_door_closed_svg
             ),
-            show: mode.switch == `a` ? game_corridor_door_closed_svg : game_corridor_door_open_svg,
+            show: switchState ? game_corridor_door_closed_svg : game_corridor_door_open_svg,
           })
           break
         case `closedDoor`:
@@ -155,9 +157,9 @@ function renderNonInteractiveGame(
             parent: corridorGroup,
             hide: sprite(
               corridorGroup,
-              mode.switch == `a` ? game_corridor_door_closed_svg : game_corridor_door_open_svg
+              switchState ? game_corridor_door_closed_svg : game_corridor_door_open_svg
             ),
-            show: mode.switch == `a` ? game_corridor_door_open_svg : game_corridor_door_closed_svg,
+            show: switchState ? game_corridor_door_open_svg : game_corridor_door_closed_svg,
           })
           break
         case `goal`:
@@ -179,7 +181,7 @@ function renderNonInteractiveGame(
 
   hide(playerIdleB)
 
-  if (mode.walked) {
+  if (mode.animation) {
     hide(playerIdleA)
     translateX(playerGroup, -roomSpacing)
   } else {
@@ -187,7 +189,7 @@ function renderNonInteractiveGame(
   }
 
   return () => {
-    if (mode.walked) {
+    if (mode.animation) {
       linear(playerGroup)
       for (let i = 0; i < 8; i++) {
         elapse(50)
@@ -198,50 +200,37 @@ function renderNonInteractiveGame(
       show(playerIdleA)
     }
 
-    let outOfBounds = true
-
-    for (const room of level.rooms) {
-      if (room.x == mode.x && room.y == mode.y) {
-        outOfBounds = false
-        switch (room.type) {
-          case `switch`:
-            if (mode.walked) {
-              mode.switch = mode.switch == `a` ? `b` : `a`
-              for (const change of changeOnSwitch) {
-                hide(change.hide)
-                sprite(change.parent, change.show)
-              }
+    switch (mode.animation) {
+      case `take`:
+        while (hideWhenTaken.length) {
+          let shortestDistance = Infinity
+          for (const item of hideWhenTaken) {
+            if (item.distance < shortestDistance) {
+              shortestDistance = item.distance
             }
-            break
-
-          case `mcguffin`:
-            if (mode.walked) {
-              while (hideWhenTaken.length) {
-                let shortestDistance = Infinity
-                for (const item of hideWhenTaken) {
-                  if (item.distance < shortestDistance) {
-                    shortestDistance = item.distance
-                  }
-                }
-                for (let index = 0; index < hideWhenTaken.length;) {
-                  const item = hideWhenTaken[index]
-                  if (item.distance == shortestDistance) {
-                    hide(item.hide)
-                    hideWhenTaken.splice(index, 1)
-                  } else {
-                    index++
-                  }
-                }
-                elapse(300)
-              }
-              mode.state = `taken`
+          }
+          for (let index = 0; index < hideWhenTaken.length;) {
+            const item = hideWhenTaken[index]
+            if (item.distance == shortestDistance) {
+              hide(item.hide)
+              hideWhenTaken.splice(index, 1)
+            } else {
+              index++
             }
-            break
+          }
+          elapse(300)
         }
-      }
+        break
+
+      case `switch`:
+        for (const change of changeOnSwitch) {
+          hide(change.hide)
+          sprite(change.parent, change.show)
+        }
+        break
     }
 
-    if (outOfBounds) {
+    if (mode.state == `won`) {
       hide(playerGroup)
       renderNonInteractiveMenu(parent, postGameMenu(mode))
       phase()
@@ -289,7 +278,7 @@ function renderInteractiveGame(
         const level = levels[mode.level]
 
         mode.facing = key.facing
-        delete mode.walked
+        delete mode.animation
 
         for (const corridor of level.corridors) {
           const forward = corridor.x == mode.x && corridor.y == mode.y && corridor.facing == key.facing
@@ -329,8 +318,27 @@ function renderInteractiveGame(
             mode.x += facingX[key.facing]
             mode.y += facingY[key.facing]
 
-            mode.walked = 1
-            return
+            for (const room of level.rooms) {
+              if (room.x == mode.x && room.y == mode.y) {
+                switch (room.type) {
+                  case `mcguffin`:
+                    if (mode.state == `initial`) {
+                      mode.animation = `take`
+                      mode.state = `taken`
+                      return
+                    }
+                    break
+
+                  case `switch`:
+                    mode.animation = `switch`
+                    mode.switch = mode.switch == `a` ? `b` : `a`
+                    return
+                }
+
+                mode.animation = `walk`
+                return
+              }
+            }
           }
         }
       }

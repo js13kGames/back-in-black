@@ -1,5 +1,5 @@
-const version = 6
-const beatsPerMinute = 80
+const version = 7
+const beatsPerMinute = 140
 
 type TitleMode = {
   type: `title`
@@ -16,7 +16,7 @@ type GameMode = {
   x: number
   y: number
   facing: Facing
-  walked?: Truthiness
+  animation?: `walk` | `switch` | `take`
   state: `initial` | `taken` | `won`
 }
 
@@ -89,7 +89,7 @@ function enterGameMode(level: number): void {
     x: goal.x,
     y: goal.y,
     facing: facingReverse[goal.facing],
-    walked: 1,
+    animation: `walk`,
     state: `initial`,
   })
 }
