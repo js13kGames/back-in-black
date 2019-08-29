@@ -38,19 +38,19 @@ function postGameMenu(
     options: [{
       label: `next`,
       callback(): void {
-        delete mode.animation
+        mode.animation = null
         enterGameMode(mode.level + 1)
       }
     }, {
       label: `retry`,
       callback(): void {
-        delete mode.animation
+        mode.animation = null
         enterGameMode(mode.level)
       }
     }, {
       label: `level select`,
       callback(): void {
-        delete mode.animation
+        mode.animation = null
         enterMode({
           type: `levelSelect`
         })
@@ -300,7 +300,7 @@ function renderInteractiveGame(
         const level = levels[mode.level]
 
         mode.facing = key.facing
-        delete mode.animation
+        mode.animation = null
 
         for (const corridor of level.corridors) {
           const forward = corridor.x == mode.x && corridor.y == mode.y && corridor.facing == key.facing

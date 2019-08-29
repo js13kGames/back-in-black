@@ -1,4 +1,4 @@
-const version = 7
+const version = 8
 const beatsPerMinute = 140
 
 type TitleMode = {
@@ -16,13 +16,13 @@ type GameMode = {
   x: number
   y: number
   facing: Facing
-  animation?: `walk` | `switch` | `take`
+  animation: null | `walk` | `switch` | `take`
   state: `initial` | `taken` | `won`
 }
 
 type TransitionMode = {
   readonly type: `transition`
-  readonly from?: Mode
+  readonly from: null | Mode
   readonly to: Mode
 }
 
@@ -42,6 +42,7 @@ function initial(): State {
     unlockedLevels: 1,
     root: {
       type: `transition`,
+      from: null,
       to: {
         type: `title`
       }
