@@ -6,11 +6,9 @@ import Diff from "../../files/diff"
 import StepBase from "../../steps/step-base"
 import DeleteFromKeyValueStoreIfSetStep from "../../steps/actions/stores/delete-from-key-value-store-if-set-step"
 import CombineTypeScriptStep from "../../steps/actions/type-script/combine-type-script-step"
-import ParseUglifyJsStep from "../../steps/actions/uglify-js/parse-step"
-import CombineUglifyJsStep from "../../steps/actions/uglify-js/combine-step"
+import MinifyJsStep from "../../steps/actions/minify-js-step"
 import gameNameTypeScriptParsedStore from "../../stores/game-name-type-script-parsed-store"
 import gameTypeScriptCombinedJavascriptTextStore from "../../stores/game-type-script-combined-javascript-text-store"
-import gameTypeScriptCombinedJavascriptParsedStore from "../../stores/game-type-script-combined-javascript-parsed-store"
 import gameJavascriptStore from "../../stores/game-javascript-store"
 import gameSvgTypeScriptParsedStore from "../../stores/game-svg-type-script-parsed-store"
 import engineTypeScriptParsedStore from "../../stores/engine-type-script-parsed-store"
@@ -30,9 +28,6 @@ export default function (
       item => [
         new DeleteFromKeyValueStoreIfSetStep(
           gameTypeScriptCombinedJavascriptTextStore, item
-        ),
-        new DeleteFromKeyValueStoreIfSetStep(
-          gameTypeScriptCombinedJavascriptParsedStore, item
         ),
         new DeleteFromKeyValueStoreIfSetStep(gameJavascriptStore, item)
       ],
@@ -60,18 +55,10 @@ export default function (
             item, javascript
           ),
         ),
-        new ParseUglifyJsStep(
+        new MinifyJsStep(
           () => gameTypeScriptCombinedJavascriptTextStore.get(item),
-          parsed => gameTypeScriptCombinedJavascriptParsedStore.set(
-            item, parsed
-          )
-        ),
-        new CombineUglifyJsStep(
-          () => [
-            gameTypeScriptCombinedJavascriptParsedStore.get(item)
-          ],
           combined => gameJavascriptStore.set(item, combined)
-        )
+        ),
       ]
     )
 }
