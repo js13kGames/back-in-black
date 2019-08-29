@@ -11,7 +11,7 @@ const output: typeScript.CompilerOptions = {
   charset: `utf8`,
   //checkJs: true,
   composite: false,
-  declaration: true,
+  declaration: false,
   declarationMap: false,
   diagnostics: false,
   disableSizeLimit: false,

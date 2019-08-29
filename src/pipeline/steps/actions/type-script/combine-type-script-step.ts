@@ -11,7 +11,6 @@ export default class CombineTypeScriptStep extends ActionStepBase {
       readonly [path: string]: typeScript.SourceFile
     }>,
     private readonly storeJavascript: (javascript: string) => void,
-    private readonly storeTypes: (types: string) => void
   ) {
     super(
       `combineTypeScript`,
@@ -64,10 +63,6 @@ export default class CombineTypeScriptStep extends ActionStepBase {
       switch (fileName) {
         case `result.js`:
           this.storeJavascript(data)
-          break
-
-        case `result.d.ts`:
-          this.storeTypes(data)
           break
 
         default:

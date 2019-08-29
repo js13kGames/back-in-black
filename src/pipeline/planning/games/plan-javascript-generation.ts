@@ -1,4 +1,5 @@
 import * as path from "path"
+import * as typeScript from "typescript"
 import keyValueObject from "../../utilities/key-value-object"
 import * as types from "../../types"
 import Diff from "../../files/diff"
@@ -11,10 +12,9 @@ import gameNameTypeScriptParsedStore from "../../stores/game-name-type-script-pa
 import gameTypeScriptCombinedJavascriptTextStore from "../../stores/game-type-script-combined-javascript-text-store"
 import gameTypeScriptCombinedJavascriptParsedStore from "../../stores/game-type-script-combined-javascript-parsed-store"
 import gameJavascriptStore from "../../stores/game-javascript-store"
-import engineTypeScriptCombinedTypesParsedStore from "../../stores/engine-type-script-combined-types-parsed-store"
 import gameSvgTypeScriptParsedStore from "../../stores/game-svg-type-script-parsed-store"
+import engineTypeScriptParsedStore from "../../stores/engine-type-script-parsed-store"
 import gameTypeScriptParsedStore from "../../stores/game-type-script-parsed-store"
-import engineTypeScriptCombinedJavascriptParsedStore from "../../stores/engine-type-script-combined-javascript-parsed-store"
 
 export default function (
   enginePlanningResult: types.EnginePlanningResult,
@@ -38,21 +38,27 @@ export default function (
       ],
       item => [
         new CombineTypeScriptStep(
-          () => [
-            keyValueObject(
-              `engine.d.ts`, engineTypeScriptCombinedTypesParsedStore.get()
-            ),
-            keyValueObject(
-              path.join(`.generated-type-script`, `game-name.ts`),
-              gameNameTypeScriptParsedStore.get(item)
-            ),
-            gameSvgTypeScriptParsedStore.tryGetAllByBaseKey(item),
-            gameTypeScriptParsedStore.tryGetAllByBaseKey(item)
-          ],
+          () => {
+            const allEngineTypeScript = engineTypeScriptParsedStore.getAll()
+            const nonPlaceholderEngineTypeScript: { [key: string]: typeScript.SourceFile } = {}
+            for (const key of Object
+              .keys(allEngineTypeScript)
+              .filter(key => !key.endsWith(`.d.ts`))) {
+              nonPlaceholderEngineTypeScript[key] = allEngineTypeScript[key]
+            }
+            return [
+              nonPlaceholderEngineTypeScript,
+              keyValueObject(
+                path.join(`.generated-type-script`, `game-name.ts`),
+                gameNameTypeScriptParsedStore.get(item)
+              ),
+              gameSvgTypeScriptParsedStore.tryGetAllByBaseKey(item),
+              gameTypeScriptParsedStore.tryGetAllByBaseKey(item)
+            ]
+          },
           javascript => gameTypeScriptCombinedJavascriptTextStore.set(
             item, javascript
           ),
-          types => { }
         ),
         new ParseUglifyJsStep(
           () => gameTypeScriptCombinedJavascriptTextStore.get(item),
@@ -62,7 +68,6 @@ export default function (
         ),
         new CombineUglifyJsStep(
           () => [
-            engineTypeScriptCombinedJavascriptParsedStore.get(),
             gameTypeScriptCombinedJavascriptParsedStore.get(item)
           ],
           combined => gameJavascriptStore.set(item, combined)

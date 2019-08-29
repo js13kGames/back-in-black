@@ -55,7 +55,6 @@ export default function (
         new CombineTypeScriptStep(
           () => [keyValueObject(hotReloadIndex, hotReloadParsedStore.get())],
           javascript => hotReloadCombinedStore.set(javascript),
-          types => { }
         ),
         new HostStep(
           () => hotReloadCombinedStore.get(),
