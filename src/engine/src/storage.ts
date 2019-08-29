@@ -1,7 +1,9 @@
-try {
-  localStorage.setItem(`${gameName}-check`, `check`)
-  saveLoadAvailable = 1
-} catch { }
+function engineStorageCheck(): void {
+  try {
+    localStorage.setItem(`${gameName}-check`, `check`)
+    saveLoadAvailable = 1
+  } catch { }
+}
 
 function engineStorageSave<T extends EngineJson>(key: string, content: T): Truthiness {
   if (saveLoadAvailable) {

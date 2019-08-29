@@ -1,4 +1,5 @@
 onload = () => {
+  engineStorageCheck()
   engineStateLoad()
   engineAudioStart()
   engineRender()
