@@ -6,6 +6,12 @@ let audioContext: AudioContext
 
 let beat: number
 
+function beatTime(
+  beats: number,
+): number {
+  return engineAudioBeatTime(beats)
+}
+
 type Truthiness = 1 | undefined
 
 type Json = EngineJson
