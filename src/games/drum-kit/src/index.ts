@@ -70,7 +70,7 @@ function render(): void {
   hitbox(mainViewport, -98, 50, 35, 45, () => { })
 }
 
-function audioReady(): () => void {
+function audioReady(): void {
   const sampleRate = audioContext.sampleRate
 
   var whiteNoiseBuffer = audioContext.createBuffer(1, sampleRate, sampleRate)
@@ -171,7 +171,7 @@ function audioReady(): () => void {
     cowbellGain.gain.setValueAtTime(5, at)
     cowbellGain.gain.linearRampToValueAtTime(0, at + 0.1)
   }
+}
 
-  return () => {
-  }
+function renderBeat(): void {
 }

@@ -90,7 +90,8 @@ function render(): void {
   )
 }
 
-function audioReady(): () => void {
-  return () => {
-  }
+function audioReady(): void {
+}
+
+function renderBeat(): void {
 }

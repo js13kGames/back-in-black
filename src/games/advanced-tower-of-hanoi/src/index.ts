@@ -36,9 +36,10 @@ const towerWidthVirtualPixels = safeAreaWidthVirtualPixels / 3
 
 const pieceHeightVirtualPixels = 19
 
-function audioReady(): () => void {
-  return () => {
-  }
+function audioReady(): void {
+}
+
+function renderBeat(): void {
 }
 
 const pieceAtRestShadows = [
