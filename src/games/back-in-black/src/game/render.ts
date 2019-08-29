@@ -38,16 +38,19 @@ function postGameMenu(
     options: [{
       label: `next`,
       callback(): void {
+        delete mode.animation
         enterGameMode(mode.level + 1)
       }
     }, {
       label: `retry`,
       callback(): void {
+        delete mode.animation
         enterGameMode(mode.level)
       }
     }, {
       label: `level select`,
       callback(): void {
+        delete mode.animation
         enterMode({
           type: `levelSelect`
         })
