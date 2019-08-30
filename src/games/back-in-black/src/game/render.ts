@@ -309,6 +309,9 @@ function renderNonInteractiveGame(
       if (mode.walking) {
         return animateWalk(parent, mode, level, game_player_walk_silhouette_svg)
       } else {
+        const goalSprite = sprite(parent, game_corridor_goal_open_ceiling_svg)
+        translateAndRotateLikeCorridor(level.goal, goalSprite)
+
         const playerGroup = group(parent)
         translateAndRotateLikeCorridor(mode, playerGroup)
         const playerA = sprite(playerGroup, game_player_idle_a_silhouette_svg)
