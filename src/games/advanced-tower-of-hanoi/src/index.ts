@@ -154,21 +154,7 @@ function render(): undefined | (() => void) {
 
   switch (state.action.type) {
     case `none`: {
-      let x = towerWidthVirtualPixels * -1.5
-      for (let towerIndex = 0; towerIndex < 3; towerIndex++) {
-        const towerValue = state.towers[towerIndex]
-        if (towerValue.length) {
-          hitbox(mainViewport, x, -halfSafeAreaHeightVirtualPixels, towerWidthVirtualPixels, safeAreaWidthVirtualPixels, () => {
-            state.action = {
-              type: `rising`,
-              piece: towerValue[towerValue.length - 1],
-              fromTower: towerIndex,
-            }
-            towerValue.length--
-          })
-        }
-        x += towerWidthVirtualPixels
-      }
+      renderRaiseTowerHitboxes(mainViewport)
     } break
 
     case `rising`: {
@@ -286,22 +272,7 @@ function render(): undefined | (() => void) {
       if (state.towers[2].length == 4 && action.toTower == 2) {
         sprite(mainViewport, win_svg)
       } else {
-        let x = towerWidthVirtualPixels * -1.5
-        for (let towerIndex = 0; towerIndex < 3; towerIndex++) {
-          const towerValue = state.towers[towerIndex]
-          if (towerValue.length || towerIndex == action.toTower) {
-            hitbox(mainViewport, x, -halfSafeAreaHeightVirtualPixels, towerWidthVirtualPixels, safeAreaWidthVirtualPixels, () => {
-              state.towers[action.toTower].push(action.piece)
-              state.action = {
-                type: `rising`,
-                piece: towerValue[towerValue.length - 1],
-                fromTower: towerIndex,
-              }
-              towerValue.length--
-            })
-          }
-          x += towerWidthVirtualPixels
-        }
+        renderRaiseTowerHitboxes(mainViewport)
       }
     } break
   }
@@ -309,4 +280,24 @@ function render(): undefined | (() => void) {
   hitbox(mainViewport, -70, -115, 140, 40, () => state = initial())
 
   return
+}
+
+function renderRaiseTowerHitboxes(
+  mainViewport: EngineViewport,
+): void {
+  let x = towerWidthVirtualPixels * -1.5
+  for (let towerIndex = 0; towerIndex < 3; towerIndex++) {
+    const towerValue = state.towers[towerIndex]
+    if (towerValue.length) {
+      hitbox(mainViewport, x, -halfSafeAreaHeightVirtualPixels, towerWidthVirtualPixels, safeAreaWidthVirtualPixels, () => {
+        state.action = {
+          type: `rising`,
+          piece: towerValue[towerValue.length - 1],
+          fromTower: towerIndex,
+        }
+        towerValue.length--
+      })
+    }
+    x += towerWidthVirtualPixels
+  }
 }
