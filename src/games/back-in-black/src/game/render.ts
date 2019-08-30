@@ -59,17 +59,36 @@ function postGameMenu(
   }
 }
 
-function renderStaticRooms(
+function forEachRoom(
+  mode: GameMode,
+  level: Level,
+  callback: (
+    room: readonly [number, number],
+    svg: EngineSpritesSvg,
+  ) => void,
+): void {
+  for (const room of level.rooms) {
+    callback(room, game_room_empty_svg)
+  }
+  for (const room of level.switches) {
+    callback(room, mode.switch == `a` ? game_room_switch_a_svg : game_room_switch_b_svg)
+  }
+}
+
+function forEachRoomRendered(
   parent: EngineViewport | EngineAnimation,
   mode: GameMode,
   level: Level,
+  callback: (
+    room: readonly [number, number],
+    sprite: EngineAnimation,
+  ) => void
 ): void {
-  for (const room of level.rooms) {
-    translate(sprite(parent, game_room_empty_svg), room[0] * roomSpacing, room[1] * roomSpacing)
-  }
-  for (const room of level.switches) {
-    translate(sprite(parent, mode.switch == `a` ? game_room_switch_a_svg : game_room_switch_b_svg), room[0] * roomSpacing, room[1] * roomSpacing)
-  }
+  forEachRoom(mode, level, (room, svg) => {
+    const roomSprite = sprite(parent, svg)
+    translate(roomSprite, room[0] * roomSpacing, room[1] * roomSpacing)
+    callback(room, roomSprite)
+  })
 }
 
 function renderCorridor(
@@ -179,7 +198,7 @@ function renderNonInteractiveGame(
   const level = levels[mode.level]
   switch (mode.state) {
     case `initial`:
-      renderStaticRooms(parent, mode, level)
+      forEachRoomRendered(parent, mode, level, () => { })
 
       const mcguffinGroup = group(parent)
       translate(mcguffinGroup, level.mcguffin[0] * roomSpacing, level.mcguffin[1] * roomSpacing)
@@ -218,23 +237,10 @@ function renderNonInteractiveGame(
         readonly distance: number
       }[] = []
 
-      for (const room of level.rooms) {
-        const roomSprite = sprite(parent, game_room_empty_svg)
-        translate(roomSprite, room[0] * roomSpacing, room[1] * roomSpacing)
-        toShutOff.push({
-          sprite: roomSprite,
-          distance: distanceSquared(room[0], room[1], level.mcguffin[0], level.mcguffin[1]),
-        })
-      }
-
-      for (const room of level.switches) {
-        const roomSprite = sprite(parent, mode.switch == `a` ? game_room_switch_a_svg : game_room_switch_b_svg)
-        translate(roomSprite, room[0] * roomSpacing, room[1] * roomSpacing)
-        toShutOff.push({
-          sprite: roomSprite,
-          distance: distanceSquared(room[0], room[1], level.mcguffin[0], level.mcguffin[1]),
-        })
-      }
+      forEachRoomRendered(parent, mode, level, (room, roomSprite) => toShutOff.push({
+        sprite: roomSprite,
+        distance: distanceSquared(room[0], room[1], level.mcguffin[0], level.mcguffin[1]),
+      }))
 
       for (const corridor of level.corridors) {
         toShutOff.push({
