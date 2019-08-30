@@ -95,8 +95,7 @@ function renderNonInteractiveMode(
       sprite(parent, background_title_svg)
       return () => { return undefined }
     case `levelSelect`:
-      sprite(parent, background_levelSelect_svg)
-      return () => { return undefined }
+      return renderNonInteractiveLevelSelect(parent)
     case `game`:
       return renderNonInteractiveGame(parent, mode)
   }
@@ -119,12 +118,7 @@ function renderInteractiveMode(
       )
       break
     case `levelSelect`:
-      hitbox(
-        mainViewport,
-        -safeAreaWidthVirtualPixels, -safeAreaHeightVirtualPixels,
-        doubleSafeAreaWidthVirtualPixels, doubleSafeAreaHeightVirtualPixels,
-        () => enterGameMode(0)
-      )
+      renderInteractiveLevelSelect(mainViewport)
       break
     case `game`:
       renderInteractiveGame(mainViewport, mode)
