@@ -432,7 +432,7 @@ function renderInteractiveGame(
 function shouldRenderKeys(
   mode: GameMode,
 ): Truthiness {
-  if (mode.state == `finding` || mode.state == `taken` && !mode.walking) {
+  if ((mode.state == `finding` || mode.state == `taken`) && !mode.walking) {
     return 1
   }
   return
