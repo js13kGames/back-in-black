@@ -30,6 +30,16 @@ const keys: ReadonlyArray<{
   y: -1,
 }]
 
+function translateLikeRoom(
+  likeRoom: {
+    readonly 0: number
+    readonly 1: number
+  },
+  object: EngineAnimation,
+): void {
+  translate(object, likeRoom[0] * roomSpacing, likeRoom[1] * roomSpacing)
+}
+
 function postGameMenu(
   mode: GameMode,
 ): Menu {
@@ -86,7 +96,7 @@ function forEachRoomRendered(
 ): void {
   forEachRoom(mode, level, (room, svg) => {
     const roomSprite = sprite(parent, svg)
-    translate(roomSprite, room[0] * roomSpacing, room[1] * roomSpacing)
+    translateLikeRoom(room, roomSprite)
     callback(room, roomSprite)
   })
 }
@@ -129,7 +139,7 @@ function forEachCorridorRendered(
 ): void {
   forEachCorridor(mode, level, (corridor, svg) => {
     const corridorSprite = sprite(parent, svg)
-    translate(corridorSprite, corridor[0] * roomSpacing, corridor[1] * roomSpacing)
+    translateLikeRoom(corridor, corridorSprite)
     rotate(corridorSprite, facingDegrees[corridor[2]])
     callback(corridor, corridorSprite)
   })
@@ -142,7 +152,7 @@ function animateWalk(
   svg: EngineSpritesSvg,
 ): () => undefined | (() => void) {
   const playerGroup = group(parent)
-  translate(playerGroup, mode[0] * roomSpacing, mode[1] * roomSpacing)
+  translateLikeRoom(mode, playerGroup)
   rotate(playerGroup, facingDegrees[mode[2]])
   const playerSprite = sprite(playerGroup, svg)
   return () => {
@@ -192,7 +202,7 @@ function renderNonInteractiveGame(
       forEachRoomRendered(parent, mode, level, () => { })
 
       const mcguffinGroup = group(parent)
-      translate(mcguffinGroup, level.mcguffin[0] * roomSpacing, level.mcguffin[1] * roomSpacing)
+      translateLikeRoom(level.mcguffin, mcguffinGroup)
       const mcguffinA = sprite(mcguffinGroup, game_room_mcguffin_a_svg)
 
       forEachCorridorRendered(parent, mode, level, () => { })
@@ -201,7 +211,7 @@ function renderNonInteractiveGame(
         return animateWalk(parent, mode, level, game_player_walk_lit_svg)
       } else {
         const playerGroup = group(parent)
-        translate(playerGroup, mode[0] * roomSpacing, mode[1] * roomSpacing)
+        translateLikeRoom(mode, playerGroup)
         rotate(playerGroup, facingDegrees[mode[2]])
         const playerA = sprite(playerGroup, game_player_idle_a_lit_svg)
 
@@ -279,7 +289,7 @@ function renderNonInteractiveGame(
         return animateWalk(parent, mode, level, game_player_walk_silhouette_svg)
       } else {
         const playerGroup = group(parent)
-        translate(playerGroup, mode[0] * roomSpacing, mode[1] * roomSpacing)
+        translateLikeRoom(mode, playerGroup)
         rotate(playerGroup, facingDegrees[mode[2]])
         const playerA = sprite(playerGroup, game_player_idle_a_silhouette_svg)
 
