@@ -77,10 +77,10 @@ function enterGameMode(level: number): void {
     type: `game`,
     level,
     switch: `a`,
-    0: levelValue.goal[0],
-    1: levelValue.goal[1],
+    0: levelValue.goal[0] + facingX[levelValue.goal[2]],
+    1: levelValue.goal[1] + facingY[levelValue.goal[2]],
     2: facingReverse[levelValue.goal[2]],
-    walking: false,
+    walking: true,
     state: `initial`,
     menuState: `closed`,
   })
