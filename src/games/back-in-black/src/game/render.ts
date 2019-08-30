@@ -40,6 +40,18 @@ function translateLikeRoom(
   translate(object, likeRoom[0] * roomSpacing, likeRoom[1] * roomSpacing)
 }
 
+function translateAndRotateLikeCorridor(
+  likeCorridor: {
+    readonly 0: number
+    readonly 1: number
+    readonly 2: Facing
+  },
+  object: EngineAnimation
+): void {
+  translateLikeRoom(likeCorridor, object)
+  rotate(object, facingDegrees[likeCorridor[2]])
+}
+
 function postGameMenu(
   mode: GameMode,
 ): Menu {
@@ -139,8 +151,7 @@ function forEachCorridorRendered(
 ): void {
   forEachCorridor(mode, level, (corridor, svg) => {
     const corridorSprite = sprite(parent, svg)
-    translateLikeRoom(corridor, corridorSprite)
-    rotate(corridorSprite, facingDegrees[corridor[2]])
+    translateAndRotateLikeCorridor(corridor, corridorSprite)
     callback(corridor, corridorSprite)
   })
 }
@@ -152,8 +163,7 @@ function animateWalk(
   svg: EngineSpritesSvg,
 ): () => undefined | (() => void) {
   const playerGroup = group(parent)
-  translateLikeRoom(mode, playerGroup)
-  rotate(playerGroup, facingDegrees[mode[2]])
+  translateAndRotateLikeCorridor(mode, playerGroup)
   const playerSprite = sprite(playerGroup, svg)
   return () => {
     linear(playerGroup)
@@ -211,8 +221,7 @@ function renderNonInteractiveGame(
         return animateWalk(parent, mode, level, game_player_walk_lit_svg)
       } else {
         const playerGroup = group(parent)
-        translateLikeRoom(mode, playerGroup)
-        rotate(playerGroup, facingDegrees[mode[2]])
+        translateAndRotateLikeCorridor(mode, playerGroup)
         const playerA = sprite(playerGroup, game_player_idle_a_lit_svg)
 
         renderNonInteractiveKeys(parent, mode)
@@ -289,8 +298,7 @@ function renderNonInteractiveGame(
         return animateWalk(parent, mode, level, game_player_walk_silhouette_svg)
       } else {
         const playerGroup = group(parent)
-        translateLikeRoom(mode, playerGroup)
-        rotate(playerGroup, facingDegrees[mode[2]])
+        translateAndRotateLikeCorridor(mode, playerGroup)
         const playerA = sprite(playerGroup, game_player_idle_a_silhouette_svg)
 
         renderNonInteractiveKeys(parent, mode)
