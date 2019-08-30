@@ -72,14 +72,13 @@ function enterMode(mode: Mode): void {
 
 function enterGameMode(level: number): void {
   const levelValue = levels[level]
-  const goal = levelValue.corridors.filter(corridor => corridor.type == `goal`)[0]
   enterMode({
     type: `game`,
     level,
     switch: `a`,
-    x: goal.x,
-    y: goal.y,
-    facing: facingReverse[goal.facing],
+    x: levelValue.goal[0],
+    y: levelValue.goal[1],
+    facing: facingReverse[levelValue.goal[2]],
     walking: false,
     state: `initial`,
   })

@@ -91,57 +91,48 @@ function forEachRoomRendered(
   })
 }
 
-function renderCorridor(
-  parent: EngineViewport | EngineAnimation,
+function forEachCorridor(
   mode: GameMode,
-  corridor: Corridor,
-): EngineAnimation {
-  let svg: EngineSpritesSvg
-
-  switch (corridor.type) {
-    case `empty`:
-      svg = game_corridor_empty_svg
-      break
-
-    case `ledge`:
-      svg = game_corridor_ledge_svg
-      break
-
-    case `stairs`:
-      svg = game_corridor_stairs_svg
-      break
-
-    case `openDoor`:
-      svg = mode.switch == `a` ? game_corridor_door_open_svg : game_corridor_door_closed_svg
-      break
-
-    case `closedDoor`:
-      svg = mode.switch == `a` ? game_corridor_door_closed_svg : game_corridor_door_open_svg
-      break
-
-    case `goal`:
-      svg = game_corridor_goal_closed_svg
-      break
-
-    default:
-      // TODO: this is impossible.
-      throw null
+  level: Level,
+  callback: (
+    corridor: Corridor,
+    svg: EngineSpritesSvg,
+  ) => void,
+): void {
+  callback(level.goal, game_corridor_goal_closed_svg)
+  for (const ledge of level.ledges) {
+    callback(ledge, game_corridor_ledge_svg)
   }
-
-  const corridorSprite = sprite(parent, svg)
-  translate(corridorSprite, corridor.x * roomSpacing, corridor.y * roomSpacing)
-  rotate(corridorSprite, facingDegrees[corridor.facing])
-  return corridorSprite
+  for (const stair of level.stairs) {
+    callback(stair, game_corridor_stairs_svg)
+  }
+  for (const door of level.openDoors) {
+    callback(door, mode.switch == `a` ? game_corridor_door_open_svg : game_corridor_door_closed_svg)
+  }
+  for (const door of level.closedDoors) {
+    callback(door, mode.switch == `a` ? game_corridor_door_closed_svg : game_corridor_door_open_svg)
+  }
+  for (const corridor of level.corridors) {
+    callback(corridor, game_corridor_empty_svg)
+  }
 }
 
-function renderCorridors(
+
+function forEachCorridorRendered(
   parent: EngineViewport | EngineAnimation,
   mode: GameMode,
   level: Level,
+  callback: (
+    corridor: Corridor,
+    sprite: EngineAnimation,
+  ) => void,
 ): void {
-  for (const corridor of level.corridors) {
-    renderCorridor(parent, mode, corridor)
-  }
+  forEachCorridor(mode, level, (corridor, svg) => {
+    const corridorSprite = sprite(parent, svg)
+    translate(corridorSprite, corridor[0] * roomSpacing, corridor[1] * roomSpacing)
+    rotate(corridorSprite, facingDegrees[corridor[2]])
+    callback(corridor, corridorSprite)
+  })
 }
 
 function animateWalk(
@@ -204,7 +195,7 @@ function renderNonInteractiveGame(
       translate(mcguffinGroup, level.mcguffin[0] * roomSpacing, level.mcguffin[1] * roomSpacing)
       const mcguffinA = sprite(mcguffinGroup, game_room_mcguffin_a_svg)
 
-      renderCorridors(parent, mode, level)
+      forEachCorridorRendered(parent, mode, level, () => { })
 
       if (mode.walking) {
         return animateWalk(parent, mode, level, game_player_walk_lit_svg)
@@ -242,25 +233,23 @@ function renderNonInteractiveGame(
         distance: distanceSquared(room[0], room[1], level.mcguffin[0], level.mcguffin[1]),
       }))
 
-      for (const corridor of level.corridors) {
-        toShutOff.push({
-          sprite: renderCorridor(parent, mode, corridor),
-          distance: Math.min(
-            distanceSquared(
-              corridor.x,
-              corridor.y,
-              level.mcguffin[0],
-              level.mcguffin[1],
-            ),
-            distanceSquared(
-              corridor.x + facingX[corridor.facing],
-              corridor.y + facingY[corridor.facing],
-              level.mcguffin[0],
-              level.mcguffin[1],
-            )
+      forEachCorridorRendered(parent, mode, level, (corridor, sprite) => toShutOff.push({
+        sprite,
+        distance: Math.min(
+          distanceSquared(
+            corridor[0],
+            corridor[1],
+            level.mcguffin[0],
+            level.mcguffin[1],
           ),
-        })
-      }
+          distanceSquared(
+            corridor[0] + facingX[corridor[2]],
+            corridor[1] + facingY[corridor[2]],
+            level.mcguffin[0],
+            level.mcguffin[1],
+          )
+        ),
+      }))
 
       return () => {
         while (toShutOff.length) {
@@ -310,6 +299,24 @@ function renderNonInteractiveGame(
   }
 }
 
+function travellingForward(
+  mode: GameMode,
+  corridor: Corridor,
+): boolean {
+  return mode.x == corridor[0]
+    && mode.y == corridor[1]
+    && mode.facing == corridor[2]
+}
+
+function travellingBackward(
+  mode: GameMode,
+  corridor: Corridor,
+): boolean {
+  return mode.x == corridor[0] + facingX[corridor[2]]
+    && mode.y == corridor[1] + facingY[corridor[2]]
+    && mode.facing == facingReverse[corridor[2]]
+}
+
 function renderInteractiveGame(
   mainViewport: EngineViewport,
   mode: GameMode,
@@ -331,42 +338,21 @@ function renderInteractiveGame(
         mode.facing = key.facing
         mode.walking = false
 
-        for (const corridor of level.corridors) {
-          const forward = corridor.x == mode.x && corridor.y == mode.y && corridor.facing == key.facing
-          const otherEndX = corridor.x + facingX[corridor.facing]
-          const otherEndY = corridor.y + facingY[corridor.facing]
-          const otherFacing = facingReverse[corridor.facing]
-          const reverse = otherEndX == mode.x && otherEndY == mode.y && otherFacing == key.facing
+        const passableInBothDirections = level.corridors
+          .concat(level.stairs)
+          .concat(mode.switch == `a` ? level.openDoors : level.closedDoors)
+          .concat(mode.state == `taken` ? [level.goal] : [])
 
-          if (forward || reverse) {
-            switch (corridor.type) {
-              case `ledge`:
-                if (reverse) {
-                  return
-                }
-                break
-
-              case `openDoor`:
-                if (mode.switch == `b`) {
-                  return
-                }
-                break
-
-              case `closedDoor`:
-                if (mode.switch == `a`) {
-                  return
-                }
-                break
-
-              case `goal`:
-                if (mode.state == `initial`) {
-                  return
-                }
-                break
-            }
-
+        for (const corridor of passableInBothDirections) {
+          if (travellingForward(mode, corridor)
+            || travellingBackward(mode, corridor)) {
             mode.walking = true
-            return
+          }
+        }
+
+        for (const ledge of level.ledges) {
+          if (travellingForward(mode, ledge)) {
+            mode.walking = true
           }
         }
       }

@@ -8,30 +8,15 @@ const getInGetItGetOut: Level = {
     [0, 1],
     [1, 1]
   ],
-  corridors: [{
-    type: `empty`,
-    x: -1,
-    y: -1,
-    facing: `east`
-  }, {
-    type: `empty`,
-    x: 0,
-    y: -1,
-    facing: `south`
-  }, {
-    type: `empty`,
-    x: 0,
-    y: 0,
-    facing: `south`
-  }, {
-    type: `empty`,
-    x: 0,
-    y: 1,
-    facing: `east`
-  }, {
-    type: `goal`,
-    x: 1,
-    y: 1,
-    facing: `east`
-  }]
+  goal: [1, 1, `east`],
+  ledges: [],
+  stairs: [],
+  openDoors: [],
+  closedDoors: [],
+  corridors: [
+    [-1, -1, `east`],
+    [0, -1, `south`],
+    [0, 0, `south`],
+    [0, 1, `east`],
+  ],
 }

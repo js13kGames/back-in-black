@@ -8,25 +8,15 @@ const adoorable: Level = {
     [1, 0],
     [0, 0]
   ],
-  corridors: [{
-    type: `empty`,
-    x: 1,
-    y: 0,
-    facing: `north`
-  }, {
-    type: `empty`,
-    x: 0,
-    y: 0,
-    facing: `west`
-  }, {
-    type: `closedDoor`,
-    x: 1,
-    y: 0,
-    facing: `west`
-  }, {
-    type: `goal`,
-    x: 1,
-    y: 0,
-    facing: `east`
-  }]
+  goal: [1, 0, `east`],
+  ledges: [],
+  stairs: [],
+  openDoors: [],
+  closedDoors: [
+    [1, 0, `west`],
+  ],
+  corridors: [
+    [1, 0, `north`],
+    [0, 0, `west`],
+  ],
 }
