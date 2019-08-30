@@ -161,6 +161,12 @@ function animateWalk(
 ): () => undefined | (() => void) {
   const playerGroup = group(parent)
   translateAndRotateLikeCorridor(mode, playerGroup)
+
+  if (mode.state != `initial`) {
+    const goalSprite = sprite(parent, game_corridor_goal_open_ceiling_svg)
+    translateAndRotateLikeCorridor(level.goal, goalSprite)
+  }
+
   const playerSprite = sprite(playerGroup, svg)
   return () => {
     linear(playerGroup)
@@ -297,7 +303,7 @@ function renderNonInteractiveGame(
       }
 
     case `taken`:
-      const goalSprite = sprite(parent, game_corridor_goal_open_svg)
+      const goalSprite = sprite(parent, game_corridor_goal_open_floor_svg)
       translateAndRotateLikeCorridor(level.goal, goalSprite)
 
       if (mode.walking) {
