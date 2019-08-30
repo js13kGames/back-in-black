@@ -17,9 +17,19 @@ function levelSelectMenu(): Menu {
 function renderNonInteractiveLevelSelect(
   parent: EngineViewport | EngineAnimation,
 ): () => (undefined | (() => void)) {
-  sprite(parent, levelSelect_background_svg)
+  const starfieldA = sprite(parent, levelSelect_background_starfield_svg)
+  const starfieldB = sprite(parent, levelSelect_background_starfield_svg)
+  translateY(starfieldB, -doubleSafeAreaHeightVirtualPixels)
+  linear(starfieldA)
+  linear(starfieldB)
+  sprite(parent, levelSelect_background_vignette_svg)
   renderNonInteractiveMenu(parent, levelSelectMenu(), false)
-  return () => { return undefined }
+  return () => {
+    elapse(3000)
+    translateY(starfieldA, doubleSafeAreaHeightVirtualPixels)
+    translateY(starfieldB, doubleSafeAreaHeightVirtualPixels)
+    return undefined
+  }
 }
 
 function renderInteractiveLevelSelect(
