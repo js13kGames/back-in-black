@@ -60,19 +60,16 @@ function postGameMenu(
     options: [{
       label: `next`,
       callback(): void {
-        mode.walking = false
         enterGameMode(mode.level + 1)
       }
     }, {
       label: `retry`,
       callback(): void {
-        mode.walking = false
         enterGameMode(mode.level)
       }
     }, {
       label: `level select`,
       callback(): void {
-        mode.walking = false
         enterMode({
           type: `levelSelect`
         })
@@ -200,6 +197,7 @@ function animateWalk(
       }
 
       mode.state = `won`
+      mode.menuState = `opening`
     }
   }
 }
@@ -320,6 +318,19 @@ function renderNonInteractiveGame(
         }
       }
 
+    case `won`:
+      if (mode.menuState == `opening`) {
+        return () => {
+          renderNonInteractiveMenu(parent, postGameMenu(mode), true)
+          return () => mode.menuState = `open`
+        }
+      } else {
+        renderNonInteractiveMenu(parent, postGameMenu(mode), false)
+        return () => {
+          return undefined
+        }
+      }
+
     default:
       return () => { return undefined }
   }
@@ -383,6 +394,10 @@ function renderInteractiveGame(
         }
       }
     }
+  }
+
+  if (mode.state == `won`) {
+    renderInteractiveMenu(mainViewport, postGameMenu(mode))
   }
 }
 
