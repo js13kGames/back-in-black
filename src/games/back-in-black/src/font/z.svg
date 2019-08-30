@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="14"
-   height="22"
-   viewBox="0 0 14 22"
+   width="15"
+   height="23"
+   viewBox="0 0 15 23"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="25.544232"
-     inkscape:cx="1.378728"
-     inkscape:cy="14.109606"
+     inkscape:zoom="36.125"
+     inkscape:cx="-0.2811212"
+     inkscape:cy="14.538057"
      inkscape:document-units="px"
      inkscape:current-layer="svg8"
      showgrid="true"
@@ -57,14 +57,32 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <path
-     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-opacity:1"
-     d="M 13,21 H 1 V 17 L 9,5 H 1 V 1 H 13 V 5 L 5,17 h 8 z"
-     id="path1090"
+     style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-opacity:1"
+     d="m 2,1 1,1 h 9 l 1,-1 z"
+     id="path826"
      inkscape:connector-curvature="0"
-     sodipodi:nodetypes="ccccccccccc" />
+     sodipodi:nodetypes="ccccc" />
+  <path
+     style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-opacity:1"
+     d="m 9,10 2,-7 h 1 l -2,7 z"
+     id="path840"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccc" />
+  <path
+     style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-opacity:1"
+     d="m 2,22 1,-1 h 9 l 1,1 z"
+     id="path846"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccc" />
+  <path
+     style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-opacity:1"
+     d="M 6,13 4,20 H 3 l 2,-7 z"
+     id="path840-6-5"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccc" />
 </svg>

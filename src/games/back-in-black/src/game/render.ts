@@ -450,7 +450,11 @@ function renderNonInteractiveKeys(
         halfSafeAreaWidthVirtualPixels + key.x * 32 + 16,
         halfSafeAreaHeightVirtualPixels + key.y * 32 + 16
       )
-      sprite(keyGroup, game_hud_key_svg)
+      const left = sprite(keyGroup, game_hud_button_svg)
+      translateX(left, -15)
+      const right = sprite(keyGroup, game_hud_button_svg)
+      translateX(right, 15)
+      scaleX(right, -1)
       write(keyGroup, key.text)
     }
   }

@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="218"
-   height="32"
-   viewBox="0 0 218 32"
+   width="30"
+   height="31"
+   viewBox="0 0 30 31"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
@@ -25,20 +25,20 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="11.712676"
-     inkscape:cx="194.67419"
-     inkscape:cy="5.2341111"
+     inkscape:zoom="33.12845"
+     inkscape:cx="26.68039"
+     inkscape:cy="15.355599"
      inkscape:document-units="px"
      inkscape:current-layer="layer13"
      showgrid="true"
      units="px"
      showguides="false"
      inkscape:snap-global="true"
-     inkscape:window-width="1662"
-     inkscape:window-height="1374"
+     inkscape:window-width="2493"
+     inkscape:window-height="1376"
      inkscape:window-x="67"
      inkscape:window-y="27"
-     inkscape:window-maximized="0"
+     inkscape:window-maximized="1"
      inkscape:pagecheckerboard="false">
     <inkscape:grid
        type="xygrid"
@@ -64,7 +64,7 @@
      id="layer8"
      inkscape:label="McGuffin"
      style="display:none"
-     transform="translate(0,-4)">
+     transform="translate(0,-5)">
     <rect
        ry="8"
        style="fill:#6d3b3b;fill-opacity:1;stroke:none;stroke-opacity:1"
@@ -116,7 +116,7 @@
      id="layer5"
      inkscape:label="Switch A"
      style="display:none"
-     transform="translate(0,-4)">
+     transform="translate(0,-5)">
     <rect
        ry="8"
        style="fill:#6d3b3b;fill-opacity:1;stroke:none;stroke-opacity:1"
@@ -156,7 +156,7 @@
      id="layer7"
      inkscape:label="Switch B"
      style="display:none"
-     transform="translate(0,-4)">
+     transform="translate(0,-5)">
     <rect
        style="fill:#6d3b3b;fill-opacity:1;stroke:none;stroke-opacity:1"
        id="rect948"
@@ -196,7 +196,7 @@
      id="layer6"
      inkscape:label="Empty Corridor"
      style="display:none"
-     transform="translate(0,-4)">
+     transform="translate(0,-5)">
     <rect
        style="fill:#6d3b3b;fill-opacity:1;stroke:none;stroke-width:1;stroke-opacity:1"
        id="rect1169"
@@ -227,7 +227,7 @@
      id="layer4"
      inkscape:label="Closed Door"
      style="display:none"
-     transform="translate(0,-4)">
+     transform="translate(0,-5)">
     <rect
        style="fill:#6d3b3b;fill-opacity:1;stroke:none;stroke-width:1;stroke-opacity:1"
        id="rect1169-2"
@@ -272,7 +272,7 @@
      id="layer3"
      inkscape:label="Open Door"
      style="display:none"
-     transform="translate(0,-4)">
+     transform="translate(0,-5)">
     <rect
        style="fill:#6d3b3b;fill-opacity:1;stroke:none;stroke-width:1;stroke-opacity:1"
        id="rect1169-6"
@@ -317,7 +317,7 @@
      id="layer2"
      inkscape:label="Empty Room"
      style="display:none"
-     transform="translate(0,-4)">
+     transform="translate(0,-5)">
     <rect
        ry="8"
        style="fill:#6d3b3b;fill-opacity:1;stroke:none;stroke-opacity:1"
@@ -342,7 +342,7 @@
      id="layer9"
      inkscape:label="Ledge"
      style="display:none"
-     transform="translate(0,-4)">
+     transform="translate(0,-5)">
     <path
        style="fill:#6d3b3b;fill-opacity:1;stroke:none;stroke-width:1;stroke-opacity:1"
        d="M 57,6 H 53 V 4 h -8 v 28 h 8 v -2 h 4 z"
@@ -378,7 +378,7 @@
      id="layer10"
      inkscape:label="Stairs"
      style="display:none"
-     transform="translate(0,-4)">
+     transform="translate(0,-5)">
     <path
        style="fill:#6d3b3b;fill-opacity:1;stroke:none;stroke-opacity:1"
        d="m 52,4 h 5 V 32 H 52 V 31 H 48 V 30 H 45 V 6 h 3 V 5 h 4 z"
@@ -423,7 +423,7 @@
      id="layer11"
      inkscape:label="Open Goal"
      style="display:none"
-     transform="translate(0,-4)">
+     transform="translate(0,-5)">
     <path
        style="fill:#6d3b3b;fill-opacity:1;stroke:none;stroke-width:1;stroke-opacity:1"
        d="m 45,6 h 7.1251 L 56,5 c 0,0 4,-1 4,3 v 19 c 0,5 -4,4 -4,4 l -4,-1 h -7 z"
@@ -467,7 +467,7 @@
      id="layer12"
      inkscape:label="Closed Goal"
      style="display:none"
-     transform="translate(0,-4)">
+     transform="translate(0,-5)">
     <path
        style="fill:#6d3b3b;fill-opacity:1;stroke:none;stroke-width:1;stroke-opacity:1"
        d="m 45,6 h 7.1251 L 56,5 c 0,0 4,-1 4,3 v 19 c 0,5 -4,4 -4,4 l -4,-1 h -7 z"
@@ -501,15 +501,53 @@
      id="layer13"
      inkscape:label="Walking"
      style="display:inline"
-     transform="translate(0,-4)">
+     transform="translate(0,-5)">
+    <path
+       style="fill:#000b2b;fill-opacity:1;stroke:none;stroke-opacity:1"
+       d="m 15,6 1,-1 h 13 l 1,1 -2,2 h -9 l -1,1 v 23 l 1,1 h 9 l 2,2 -1,1 H 16 l -1,-1 z"
+       id="path915"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccccccccc" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-opacity:1"
+       d="m 17,6 1,1 h 4 V 6 Z"
+       id="path826"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-opacity:1"
+       d="m 16,7 1,1 v 10 h -1 z"
+       id="path828"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-opacity:1"
+       d="m 17,23 v 10 l -1,1 V 23 Z"
+       id="path844"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-opacity:1"
+       d="m 17,35 1,-1 h 4 v 1 z"
+       id="path846"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-opacity:1"
+       d="m 23,6 v 1 h 4 l 1,-1 z"
+       id="path958"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-opacity:1"
+       d="m 23,34 h 4 l 1,1 h -5 z"
+       id="path960"
+       inkscape:connector-curvature="0" />
     <rect
-       style="fill:#21005b;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1"
-       id="rect886"
-       width="216"
-       height="30"
-       x="1"
-       y="5.000001"
-       rx="4.0000005"
-       ry="4.0000005" />
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-opacity:1"
+       id="rect962"
+       width="1"
+       height="3"
+       x="16"
+       y="19" />
   </g>
 </svg>
