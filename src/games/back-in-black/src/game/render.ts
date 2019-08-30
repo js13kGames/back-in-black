@@ -179,8 +179,10 @@ function animateWalk(
       mode[1] += facingY[mode[2]]
       mode.walking = false
 
-      if (mode.state == `initial` && mode[0] == level.mcguffin[0] && mode[1] == level.mcguffin[1]) {
-        mode.state = `taking`
+      if (mode[0] == level.mcguffin[0] && mode[1] == level.mcguffin[1]) {
+        if (mode.state == `initial`) {
+          mode.state = `taking`
+        }
         return
       }
 
