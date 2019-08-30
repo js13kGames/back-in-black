@@ -116,6 +116,53 @@ function renderCorridors(
   }
 }
 
+function animateWalk(
+  parent: EngineViewport | EngineAnimation,
+  mode: GameMode,
+  level: Level,
+  svg: EngineSpritesSvg,
+): () => undefined | (() => void) {
+  const playerGroup = group(parent)
+  translate(playerGroup, (mode.x - facingX[mode.facing]) * roomSpacing, (mode.y - facingY[mode.facing]) * roomSpacing)
+  rotate(playerGroup, facingDegrees[mode.facing])
+  const playerSprite = sprite(playerGroup, svg)
+  return () => {
+    linear(playerGroup)
+    for (let i = 0; i < 2; i++) {
+      elapse(100)
+      scaleY(playerSprite, -1)
+      elapse(100)
+      scaleY(playerSprite, -1)
+    }
+    translateX(playerGroup, roomSpacing)
+    return () => {
+      mode.x += facingX[mode.facing]
+      mode.y += facingY[mode.facing]
+      mode.walking = false
+
+      if (mode.state == `initial` && mode.x == level.mcguffin[0] && mode.y == level.mcguffin[1]) {
+        mode.state = `taking`
+        return
+      }
+
+      for (const room of level.switches) {
+        if (mode.x == room[0] && mode.y == room[1]) {
+          mode.switch = mode.switch == `a` ? `b` : `a`
+          return
+        }
+      }
+
+      for (const room of level.rooms) {
+        if (mode.x == room[0] && mode.y == room[1]) {
+          return
+        }
+      }
+
+      mode.state = `won`
+    }
+  }
+}
+
 function renderNonInteractiveGame(
   parent: EngineViewport | EngineAnimation,
   mode: GameMode,
@@ -131,6 +178,9 @@ function renderNonInteractiveGame(
 
       renderCorridors(parent, mode, level)
 
+      if (mode.walking) {
+        return animateWalk(parent, mode, level, game_player_walk_lit_svg)
+      } else {
       const playerGroup = group(parent)
       translate(playerGroup, mode.x * roomSpacing, mode.y * roomSpacing)
       rotate(playerGroup, facingDegrees[mode.facing])
@@ -148,6 +198,7 @@ function renderNonInteractiveGame(
         sprite(mcguffinGroup, game_room_mcguffin_c_svg)
         elapse(333)
         return undefined
+      }
       }
 
     default:
