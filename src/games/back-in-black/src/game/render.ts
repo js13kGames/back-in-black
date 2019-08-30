@@ -97,6 +97,23 @@ function renderNonInteractiveGame(
       })
       mcguffinRoomGroupAndSprites.push(mcguffinRoomGroup, sprite(mcguffinRoomGroup, game_room_mcguffin_a_svg))
 
+      for (const room of level.switches) {
+        const roomGroup = group(parent)
+        translate(roomGroup, room[0] * roomSpacing, room[1] * roomSpacing)
+        hideWhenTaken.push({
+          hide: roomGroup,
+          distance: distanceSquared(room[0], room[1], level.mcguffin[0], level.mcguffin[1]),
+        })
+        changeOnSwitch.push({
+          parent: roomGroup,
+          hide: sprite(
+            roomGroup,
+            switchState ? game_room_switch_a_svg : game_room_switch_b_svg
+          ),
+          show: switchState ? game_room_switch_b_svg : game_room_switch_a_svg,
+        })
+      }
+
       for (const room of level.rooms) {
         const roomGroup = group(parent)
         translate(roomGroup, room.x * roomSpacing, room.y * roomSpacing)
@@ -109,16 +126,6 @@ function renderNonInteractiveGame(
           case `empty`: {
             sprite(roomGroup, game_room_empty_svg)
           } break
-          case `switch`:
-            changeOnSwitch.push({
-              parent: roomGroup,
-              hide: sprite(
-                roomGroup,
-                switchState ? game_room_switch_a_svg : game_room_switch_b_svg
-              ),
-              show: switchState ? game_room_switch_b_svg : game_room_switch_a_svg,
-            })
-            break
           default:
             throw null
         }
@@ -343,15 +350,11 @@ function renderInteractiveGame(
               }
             }
 
-            for (const room of level.rooms) {
-              if (room.x == mode.x && room.y == mode.y) {
-                switch (room.type) {
-                  case `switch`:
-                    mode.animation = `switch`
-                    mode.switch = mode.switch == `a` ? `b` : `a`
-                    return
-                }
-                break
+            for (const room of level.switches) {
+              if (room[0] == mode.x && room[1] == mode.y) {
+                mode.animation = `switch`
+                mode.switch = mode.switch == `a` ? `b` : `a`
+                return
               }
             }
             mode.animation = `walk`

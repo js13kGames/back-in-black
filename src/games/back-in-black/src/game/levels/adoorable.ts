@@ -1,14 +1,13 @@
 const adoorable: Level = {
   name: `adoorable`,
   mcguffin: [-1, 0],
+  switches: [
+    [1, -1]
+  ],
   rooms: [{
     type: `empty`,
     x: 1,
     y: 0
-  }, {
-    type: `switch`,
-    x: 1,
-    y: -1
   }, {
     type: `empty`,
     x: 0,

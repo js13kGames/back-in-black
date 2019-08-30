@@ -1,6 +1,7 @@
 const ledgendary: Level = {
   name: `ledgendary`,
   mcguffin: [-1, 0],
+  switches: [],
   rooms: [{
     type: `empty`,
     x: 0,

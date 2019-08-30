@@ -1,6 +1,7 @@
 const getInGetItGetOut: Level = {
   name: `get in,get it,get out`,
   mcguffin: [-1, -1],
+  switches: [],
   rooms: [{
     type: `empty`,
     x: 0,
