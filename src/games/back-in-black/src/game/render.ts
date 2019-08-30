@@ -76,43 +76,44 @@ function renderCorridor(
   parent: EngineViewport | EngineAnimation,
   mode: GameMode,
   corridor: Corridor,
-): void {
-    let svg: EngineSpritesSvg
+): EngineAnimation {
+  let svg: EngineSpritesSvg
 
-    switch (corridor.type) {
-      case `empty`:
-        svg = game_corridor_empty_svg
-        break
+  switch (corridor.type) {
+    case `empty`:
+      svg = game_corridor_empty_svg
+      break
 
-      case `ledge`:
-        svg = game_corridor_ledge_svg
-        break
+    case `ledge`:
+      svg = game_corridor_ledge_svg
+      break
 
-      case `stairs`:
-        svg = game_corridor_stairs_svg
-        break
+    case `stairs`:
+      svg = game_corridor_stairs_svg
+      break
 
-      case `openDoor`:
-        svg = mode.switch == `a` ? game_corridor_door_open_svg : game_corridor_door_closed_svg
-        break
+    case `openDoor`:
+      svg = mode.switch == `a` ? game_corridor_door_open_svg : game_corridor_door_closed_svg
+      break
 
-      case `closedDoor`:
-        svg = mode.switch == `a` ? game_corridor_door_closed_svg : game_corridor_door_open_svg
-        break
+    case `closedDoor`:
+      svg = mode.switch == `a` ? game_corridor_door_closed_svg : game_corridor_door_open_svg
+      break
 
-      case `goal`:
-        svg = game_corridor_goal_closed_svg
-        break
+    case `goal`:
+      svg = game_corridor_goal_closed_svg
+      break
 
-      default:
-        // TODO: this is impossible.
-        throw null
-    }
-
-    const corridorSprite = sprite(parent, svg)
-    translate(corridorSprite, corridor.x * roomSpacing, corridor.y * roomSpacing)
-    rotate(corridorSprite, facingDegrees[corridor.facing])
+    default:
+      // TODO: this is impossible.
+      throw null
   }
+
+  const corridorSprite = sprite(parent, svg)
+  translate(corridorSprite, corridor.x * roomSpacing, corridor.y * roomSpacing)
+  rotate(corridorSprite, facingDegrees[corridor.facing])
+  return corridorSprite
+}
 
 function renderCorridors(
   parent: EngineViewport | EngineAnimation,
@@ -209,6 +210,73 @@ function renderNonInteractiveGame(
           elapse(333)
           return undefined
         }
+      }
+
+    case `taking`:
+      const toShutOff: {
+        readonly sprite: EngineAnimation
+        readonly distance: number
+      }[] = []
+
+      for (const room of level.rooms) {
+        const roomSprite = sprite(parent, game_room_empty_svg)
+        translate(roomSprite, room[0] * roomSpacing, room[1] * roomSpacing)
+        toShutOff.push({
+          sprite: roomSprite,
+          distance: distanceSquared(room[0], room[1], level.mcguffin[0], level.mcguffin[1]),
+        })
+      }
+
+      for (const room of level.switches) {
+        const roomSprite = sprite(parent, mode.switch == `a` ? game_room_switch_a_svg : game_room_switch_b_svg)
+        translate(roomSprite, room[0] * roomSpacing, room[1] * roomSpacing)
+        toShutOff.push({
+          sprite: roomSprite,
+          distance: distanceSquared(room[0], room[1], level.mcguffin[0], level.mcguffin[1]),
+        })
+      }
+
+      for (const corridor of level.corridors) {
+        toShutOff.push({
+          sprite: renderCorridor(parent, mode, corridor),
+          distance: Math.min(
+            distanceSquared(
+              corridor.x,
+              corridor.y,
+              level.mcguffin[0],
+              level.mcguffin[1],
+            ),
+            distanceSquared(
+              corridor.x + facingX[corridor.facing],
+              corridor.y + facingY[corridor.facing],
+              level.mcguffin[0],
+              level.mcguffin[1],
+            )
+          ),
+        })
+      }
+
+      return () => {
+        while (toShutOff.length) {
+          let shortestDistance = Infinity
+          for (const item of toShutOff) {
+            if (item.distance < shortestDistance) {
+              shortestDistance = item.distance
+            }
+          }
+          for (let index = 0; index < toShutOff.length;) {
+            const item = toShutOff[index]
+            if (item.distance == shortestDistance) {
+              hide(item.sprite)
+              toShutOff.splice(index, 1)
+            } else {
+              index++
+            }
+          }
+          elapse(300)
+        }
+
+        return () => mode.state = `taken`
       }
 
     default:
