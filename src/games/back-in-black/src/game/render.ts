@@ -60,7 +60,13 @@ function postGameMenu(
     options: [{
       label: `next`,
       callback(): void {
-        enterGameMode(mode.level + 1)
+        if (mode.level == levels.length - 1) {
+          enterMode({
+            type: `credits`
+          })
+        } else {
+          enterGameMode(mode.level + 1)
+        }
       }
     }, {
       label: `retry`,

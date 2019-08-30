@@ -21,10 +21,15 @@ type GameMode = {
   menuState: `closed` | `opening` | `open` | `closing`
 }
 
+type CreditsMode = {
+  readonly type: `credits`
+}
+
 type Mode =
   | TitleMode
   | LevelSelectMode
   | GameMode
+  | CreditsMode
 
 type State = {
   unlockedLevels: number
@@ -98,6 +103,8 @@ function renderNonInteractiveMode(
       return renderNonInteractiveLevelSelect(parent)
     case `game`:
       return renderNonInteractiveGame(parent, mode)
+    case `credits`:
+      return renderNonInteractiveCredits(parent)
   }
 }
 
@@ -122,6 +129,9 @@ function renderInteractiveMode(
       break
     case `game`:
       renderInteractiveGame(mainViewport, mode)
+      break
+    case `credits`:
+      renderInteractiveCredits(mainViewport)
       break
   }
 }
