@@ -208,19 +208,7 @@ function render(): undefined | (() => void) {
 
       elapse(350)
 
-      let x = towerWidthVirtualPixels * -1.5
-      for (let towerIndex = 0; towerIndex < 3; towerIndex++) {
-        const towerValue = state.towers[towerIndex]
-        if (!towerValue.length || towerValue[towerValue.length - 1] < action.piece) {
-          hitbox(mainViewport, x, -halfSafeAreaHeightVirtualPixels, towerWidthVirtualPixels, safeAreaWidthVirtualPixels, () => state.action = {
-            type: `landing`,
-            piece: action.piece,
-            fromTower: action.fromTower,
-            toTower: towerIndex,
-          })
-        }
-        x += towerWidthVirtualPixels
-      }
+      renderLandTowerHitboxes(mainViewport, action.piece, action.fromTower)
     } break
 
     case `landing`: {
@@ -296,6 +284,26 @@ function renderRaiseTowerHitboxes(
           fromTower: towerIndex,
         }
         towerValue.length--
+      })
+    }
+    x += towerWidthVirtualPixels
+  }
+}
+
+function renderLandTowerHitboxes(
+  mainViewport: EngineViewport,
+  piece: number,
+  fromTower: number,
+): void {
+  let x = towerWidthVirtualPixels * -1.5
+  for (let towerIndex = 0; towerIndex < 3; towerIndex++) {
+    const towerValue = state.towers[towerIndex]
+    if (!towerValue.length || towerValue[towerValue.length - 1] < piece) {
+      hitbox(mainViewport, x, -halfSafeAreaHeightVirtualPixels, towerWidthVirtualPixels, safeAreaWidthVirtualPixels, () => state.action = {
+        type: `landing`,
+        piece: piece,
+        fromTower: fromTower,
+        toTower: towerIndex,
       })
     }
     x += towerWidthVirtualPixels
