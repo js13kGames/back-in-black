@@ -279,6 +279,26 @@ function renderNonInteractiveGame(
         return () => mode.state = `taken`
       }
 
+    case `taken`:
+      if (mode.walking) {
+        return animateWalk(parent, mode, level, game_player_walk_silhouette_svg)
+      } else {
+        const playerGroup = group(parent)
+        translate(playerGroup, mode.x * roomSpacing, mode.y * roomSpacing)
+        rotate(playerGroup, facingDegrees[mode.facing])
+        const playerA = sprite(playerGroup, game_player_idle_a_silhouette_svg)
+
+        renderNonInteractiveKeys(parent, mode)
+
+        return () => {
+          elapse(500)
+          hide(playerA)
+          sprite(playerGroup, game_player_idle_b_silhouette_svg)
+          elapse(500)
+          return undefined
+        }
+      }
+
     default:
       return () => { return undefined }
   }
