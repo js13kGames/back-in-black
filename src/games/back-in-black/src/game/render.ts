@@ -115,11 +115,19 @@ function renderNonInteractiveGame(
         rotate(corridorSprite, facingDegrees[corridor.facing])
       }
 
+      const playerGroup = group(parent)
+      translate(playerGroup, mode.x * roomSpacing, mode.y * roomSpacing)
+      rotate(playerGroup, facingDegrees[mode.facing])
+      const playerA = sprite(playerGroup, game_player_idle_a_lit_svg)
+
       return () => {
         elapse(333)
         hide(mcguffinA)
         const mcguffinB = sprite(mcguffinGroup, game_room_mcguffin_b_svg)
-        elapse(333)
+        elapse(167)
+        hide(playerA)
+        sprite(playerGroup, game_player_idle_b_lit_svg)
+        elapse(167)
         hide(mcguffinB)
         sprite(mcguffinGroup, game_room_mcguffin_c_svg)
         elapse(333)
