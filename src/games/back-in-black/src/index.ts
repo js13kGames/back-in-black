@@ -1,4 +1,4 @@
-const version = 8
+const version = 9
 const beatsPerMinute = 140
 
 type TitleMode = {
@@ -16,37 +16,30 @@ type GameMode = {
   x: number
   y: number
   facing: Facing
-  animation: null | `walk` | `switch` | `take`
-  state: `initial` | `taken` | `won`
-}
-
-type TransitionMode = {
-  readonly type: `transition`
-  readonly from: null | Mode
-  readonly to: Mode
+  walking: boolean
+  state: `initial` | `taking` | `taken` | `won`
 }
 
 type Mode =
   | TitleMode
   | LevelSelectMode
   | GameMode
-  | TransitionMode
 
 type State = {
   unlockedLevels: number
-  root: Mode
+  from: null | Mode
+  to: Mode
+  transitioning: boolean
 }
 
 function initial(): State {
   return {
     unlockedLevels: 1,
-    root: {
-      type: `transition`,
-      from: null,
-      to: {
-        type: `title`
-      }
-    }
+    from: null,
+    to: {
+      type: `title`
+    },
+    transitioning: true,
   }
 }
 
@@ -72,12 +65,9 @@ const transitionFrames: ReadonlyArray<EngineSpritesSvg> = [
 const transitionFrameDuration = 30
 
 function enterMode(mode: Mode): void {
-
-  state.root = {
-    type: `transition`,
-    from: state.root,
-    to: mode
-  }
+  state.from = state.to
+  state.to = mode
+  state.transitioning = true
 }
 
 function enterGameMode(level: number): void {
@@ -90,7 +80,7 @@ function enterGameMode(level: number): void {
     x: goal.x,
     y: goal.y,
     facing: facingReverse[goal.facing],
-    animation: `walk`,
+    walking: false,
     state: `initial`,
   })
 }
@@ -98,60 +88,16 @@ function enterGameMode(level: number): void {
 function renderNonInteractiveMode(
   parent: EngineViewport | EngineAnimation,
   mode: Mode,
-): () => void {
+): () => (undefined | (() => void)) {
   switch (mode.type) {
     case `title`:
       sprite(parent, background_title_svg)
-      return () => { }
+      return () => { return undefined }
     case `levelSelect`:
       sprite(parent, background_levelSelect_svg)
-      return () => { }
+      return () => { return undefined }
     case `game`:
       return renderNonInteractiveGame(parent, mode)
-    case `transition`:
-      state.root = mode.to
-
-      if (mode.from) {
-        const fromContainer = group(parent)
-        renderNonInteractiveMode(fromContainer, mode.from)
-
-        const toContainer = group(parent)
-        hide(toContainer)
-        const animateTo = renderNonInteractiveMode(toContainer, mode.to)
-
-        return () => {
-          const sprites: EngineAnimation[] = []
-          for (const frame of transitionFrames) {
-            sprites.push(sprite(parent, frame))
-            elapse(transitionFrameDuration)
-          }
-          hide(fromContainer)
-
-          show(toContainer)
-          for (const frame of sprites) {
-            hide(frame)
-            elapse(transitionFrameDuration)
-          }
-
-          animateTo()
-        }
-      } else {
-        const animateTo = renderNonInteractiveMode(parent, mode.to)
-
-        const sprites: EngineAnimation[] = []
-        for (const frame of transitionFrames) {
-          sprites.push(sprite(parent, frame))
-        }
-
-        return () => {
-          for (const frame of sprites) {
-            hide(frame)
-            elapse(transitionFrameDuration)
-          }
-
-          animateTo()
-        }
-      }
   }
 }
 
@@ -182,9 +128,6 @@ function renderInteractiveMode(
     case `game`:
       renderInteractiveGame(mainViewport, mode)
       break
-    case `transition`:
-      renderInteractiveMode(mainViewport, mode.to)
-      break
   }
 }
 
@@ -195,10 +138,41 @@ function render(): undefined | (() => void) {
     0, 0,
   )
 
-  renderNonInteractiveMode(mainViewport, state.root)()
-  renderInteractiveMode(mainViewport, state.root)
+  const mode = state.from || state.to
 
-  return
+  const callback = renderNonInteractiveMode(mainViewport, mode)
+
+  if (state.transitioning) {
+    hitbox(
+      mainViewport,
+      -safeAreaWidthVirtualPixels, -safeAreaHeightVirtualPixels,
+      doubleSafeAreaWidthVirtualPixels, doubleSafeAreaHeightVirtualPixels,
+      () => state.transitioning = false
+    )
+    if (state.from) {
+      for (const frame of transitionFrames) {
+        sprite(mainViewport, frame)
+        elapse(transitionFrameDuration)
+      }
+
+      return () => state.from = null
+    } else {
+      const frames: EngineAnimation[] = []
+      for (const frame of transitionFrames) {
+        frames.push(sprite(mainViewport, frame))
+      }
+
+      for (const frame of frames) {
+        elapse(transitionFrameDuration)
+        hide(frame)
+      }
+
+      return () => state.transitioning = false
+    }
+  } else {
+    renderInteractiveMode(mainViewport, mode)
+    return callback
+  }
 }
 
 function audioReady(): void {
