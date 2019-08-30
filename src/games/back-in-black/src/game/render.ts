@@ -186,6 +186,8 @@ function renderNonInteractiveGame(
       rotate(playerGroup, facingDegrees[mode.facing])
       const playerA = sprite(playerGroup, game_player_idle_a_lit_svg)
 
+        renderNonInteractiveKeys(parent, mode)
+
       return () => {
         elapse(333)
         hide(mcguffinA)
@@ -210,6 +212,89 @@ function renderInteractiveGame(
   mainViewport: EngineViewport,
   mode: GameMode,
 ): void {
-  mainViewport
-  mode
+  if (shouldRenderKeys(mode)) {
+    for (const key of keys) {
+      mapKey(key.keycode, callback)
+      hitbox(
+        mainViewport,
+        halfSafeAreaWidthVirtualPixels + key.x * 32,
+        halfSafeAreaHeightVirtualPixels + key.y * 32,
+        32, 32,
+        callback
+      )
+
+      function callback() {
+        const level = levels[mode.level]
+
+        mode.facing = key.facing
+        mode.walking = false
+
+        for (const corridor of level.corridors) {
+          const forward = corridor.x == mode.x && corridor.y == mode.y && corridor.facing == key.facing
+          const otherEndX = corridor.x + facingX[corridor.facing]
+          const otherEndY = corridor.y + facingY[corridor.facing]
+          const otherFacing = facingReverse[corridor.facing]
+          const reverse = otherEndX == mode.x && otherEndY == mode.y && otherFacing == key.facing
+
+          if (forward || reverse) {
+            switch (corridor.type) {
+              case `ledge`:
+                if (reverse) {
+                  return
+                }
+                break
+
+              case `openDoor`:
+                if (mode.switch == `b`) {
+                  return
+                }
+                break
+
+              case `closedDoor`:
+                if (mode.switch == `a`) {
+                  return
+                }
+                break
+
+              case `goal`:
+                if (mode.state == `initial`) {
+                  return
+                }
+                break
+            }
+
+            mode.walking = true
+            return
+          }
+        }
+      }
+    }
+  }
+}
+
+function shouldRenderKeys(
+  mode: GameMode,
+): Truthiness {
+  if (mode.state == `initial` || mode.state == `taken` && !mode.walking) {
+    return 1
+  }
+  return
+}
+
+function renderNonInteractiveKeys(
+  parent: EngineViewport | EngineAnimation,
+  mode: GameMode,
+): void {
+  if (shouldRenderKeys(mode)) {
+    for (const key of keys) {
+      const keyGroup = group(parent)
+      translate(
+        keyGroup,
+        halfSafeAreaWidthVirtualPixels + key.x * 32 + 16,
+        halfSafeAreaHeightVirtualPixels + key.y * 32 + 16
+      )
+      sprite(keyGroup, game_hud_key_svg)
+      write(keyGroup, key.text)
+    }
+  }
 }
