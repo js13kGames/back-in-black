@@ -171,7 +171,7 @@ function render(): undefined | (() => void) {
     }
   } else {
     renderInteractiveMode(mainViewport, mode)
-    return callback
+    return callback()
   }
 }
 
