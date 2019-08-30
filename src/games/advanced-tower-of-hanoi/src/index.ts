@@ -125,7 +125,7 @@ const pieceHoveringShadows1 = [
 const millisecondsPerVirtualPixel = 1
 const millisecondsPerFrame = 100
 
-function render(): void {
+function render(): undefined | (() => void) {
   const mainViewport = viewport(
     safeAreaWidthVirtualPixels, safeAreaHeightVirtualPixels,
     640, 480,
@@ -169,7 +169,6 @@ function render(): void {
         }
         x += towerWidthVirtualPixels
       }
-      phase()
     } break
 
     case `rising`: {
@@ -206,8 +205,6 @@ function render(): void {
       stepEnd(foregroundSprite)
       hide(backgroundSprite)
       hide(foregroundSprite)
-
-      phase()
 
       const hovering0ShadowSprite = sprite(pieceShadows, pieceHoveringShadows0[action.piece])
       const hovering0Sprite = sprite(pieces, piecesHovering0[action.piece])
@@ -286,8 +283,6 @@ function render(): void {
 
       hide(landing1Sprite)
 
-      phase()
-
       if (state.towers[2].length == 4 && action.toTower == 2) {
         sprite(mainViewport, win_svg)
       } else {
@@ -312,4 +307,6 @@ function render(): void {
   }
 
   hitbox(mainViewport, -70, -115, 140, 40, () => state = initial())
+
+  return
 }

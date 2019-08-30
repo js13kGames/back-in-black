@@ -102,10 +102,10 @@ function renderNonInteractiveMode(
   switch (mode.type) {
     case `title`:
       sprite(parent, background_title_svg)
-      return phase
+      return () => { }
     case `levelSelect`:
       sprite(parent, background_levelSelect_svg)
-      return phase
+      return () => { }
     case `game`:
       return renderNonInteractiveGame(parent, mode)
     case `transition`:
@@ -188,7 +188,7 @@ function renderInteractiveMode(
   }
 }
 
-function render(): void {
+function render(): undefined | (() => void) {
   const mainViewport = viewport(
     safeAreaWidthVirtualPixels, safeAreaHeightVirtualPixels,
     doubleSafeAreaWidthVirtualPixels, doubleSafeAreaHeightVirtualPixels,
@@ -197,6 +197,8 @@ function render(): void {
 
   renderNonInteractiveMode(mainViewport, state.root)()
   renderInteractiveMode(mainViewport, state.root)
+
+  return
 }
 
 function audioReady(): void {

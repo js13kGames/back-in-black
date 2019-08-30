@@ -12,4 +12,4 @@ declare const beatsPerMinute: number
 
 declare function renderBeat(): void
 
-declare function render(): void
+declare function render(): undefined | (() => void)

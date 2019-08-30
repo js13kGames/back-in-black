@@ -22,6 +22,7 @@ type EngineViewport = readonly [
 ]
 
 const engineViewports: EngineViewport[] = []
+let engineViewportsCallback: undefined | (() => void)
 
 function engineViewportsCreate(
   minimumWidthVirtualPixels: number,
@@ -72,7 +73,7 @@ function engineViewportsRender(): void {
   }
   engineViewports.length = 0
 
-  render()
+  engineViewportsCallback = render()
 
   engineViewportsResize()
 

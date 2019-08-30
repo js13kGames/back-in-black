@@ -28,7 +28,7 @@ const pieceHeightVirtualPixels = 20
 
 const pieces = [piece0_svg, piece1_svg, piece2_svg, piece3_svg, piece4_svg]
 
-function render(): void {
+function render(): undefined | (() => void) {
   const mainViewport = viewport(
     safeAreaWidthVirtualPixels, safeAreaHeightVirtualPixels,
     fullWidthVirtualPixels, fullHeightVirtualPixels,
@@ -88,6 +88,8 @@ function render(): void {
     35, 37.5,
     () => state = initial()
   )
+
+  return
 }
 
 function audioReady(): void {

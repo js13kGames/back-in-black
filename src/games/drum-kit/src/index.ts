@@ -19,7 +19,7 @@ let snare: undefined | ((at: number) => void)
 let hat: undefined | ((at: number, duration: number) => void)
 let cowbell: undefined | ((at: number) => void)
 
-function render(): void {
+function render(): undefined | (() => void) {
   const mainViewport = viewport(
     safeAreaWidthVirtualPixels, safeAreaHeightVirtualPixels,
     fullWidthVirtualPixels, fullHeightVirtualPixels,
@@ -68,6 +68,8 @@ function render(): void {
 
   // Tape Recorder
   hitbox(mainViewport, -98, 50, 35, 45, () => { })
+
+  return
 }
 
 function audioReady(): void {

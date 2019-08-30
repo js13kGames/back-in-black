@@ -73,10 +73,6 @@ function elapse(
   engineAnimationsElapse(milliseconds)
 }
 
-function phase(): void {
-  engineAnimationsPhase()
-}
-
 function viewport(
   minimumWidthVirtualPixels: number,
   minimumHeightVirtualPixels: number,

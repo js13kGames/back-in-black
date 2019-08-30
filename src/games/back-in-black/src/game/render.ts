@@ -240,7 +240,6 @@ function renderNonInteractiveGame(
       if (mode.state == `won`) {
         hide(playerGroup)
         renderNonInteractiveMenu(parent, postGameMenu(mode), true)
-        phase()
       } else {
         for (const key of keys) {
           const keyGroup = group(parent)
@@ -252,8 +251,6 @@ function renderNonInteractiveGame(
           sprite(keyGroup, game_hud_key_svg)
           write(keyGroup, key.text)
         }
-
-        phase()
 
         elapse(333)
         if (mcguffinRoomGroupAndSprites.length) {
