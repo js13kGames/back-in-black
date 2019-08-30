@@ -299,6 +299,9 @@ function renderNonInteractiveGame(
       }
 
     case `taken`:
+      const goalSprite = sprite(parent, game_corridor_goal_open_svg)
+      translateAndRotateLikeCorridor(level.goal, goalSprite)
+
       if (mode.walking) {
         return animateWalk(parent, mode, level, game_player_walk_silhouette_svg)
       } else {
