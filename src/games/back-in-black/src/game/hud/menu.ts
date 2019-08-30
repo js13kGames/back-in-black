@@ -27,7 +27,11 @@ function renderNonInteractiveMenu(
   for (const option of menu.options) {
     const optionGroup = group(parent)
     translateY(optionGroup, y)
-    sprite(optionGroup, game_hud_button_svg)
+    const left = sprite(optionGroup, game_hud_button_svg)
+    translateX(left, -109)
+    const right = sprite(optionGroup, game_hud_button_svg)
+    translateX(right, 109)
+    scaleX(right, -1)
     write(optionGroup, option.label)
     if (enter) {
       hide(optionGroup)
