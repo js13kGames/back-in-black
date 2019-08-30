@@ -286,8 +286,29 @@ function renderBeat(): void {
 
 #### `render`
 
+```typescript
+function render(): undefined | (() => void) {
+  if (state.someCondition) {
+    // Use render emitters here.
+    // Any animations will play once.
+    return () => {
+      // Executed at the end of the animation; modify state here.
+      // Another render will then be performed.
+      // Will not be executed if a mapped key or hitbox is triggered.
+    }
+  } else {
+    // Use render emitters here.
+    // Any animations will loop until interrupted by a mapped key or hitbox.
+    return undefined
+  }
+}
+```
+
 Executed when `state` is known to have changed, to re-render the scene.  See
 Render Emitters for details on what can be done in this callback.
+
+A mutation callback may be returned which is executed at the end of the
+animation.
 
 ##### Mutation callbacks
 
@@ -410,35 +431,6 @@ elapse(650)
 ```
 
 Progress the timeline by the given number of milliseconds.
-
-##### `phase`
-
-```typescript
-
-// First phase.
-
-phase()
-
-// Second phase.
-
-phase()
-
-// Third phase.
-
-phase()
-
-// Final, looping phase.
-
-```
-
-Phases can be thought of as "bookmarks" in the animation described during
-`render`.  Phases can be used for skipping; for instance, you might have a
-sequence of events which can be individually skipped but do not otherwise
-require any user input.
-
-The last phase loops.  If no looping animation is desired at all, this can be
-prevented by making the last phase empty (e.g. calling `phase` at the end of
-`render`).
 
 ##### `viewport`
 
