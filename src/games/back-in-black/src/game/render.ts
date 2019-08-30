@@ -272,6 +272,9 @@ function renderNonInteractiveGame(
         ),
       }))
 
+      const playerSprite = sprite(parent, game_player_idle_a_silhouette_svg)
+      translateAndRotateLikeCorridor(mode, playerSprite)
+
       return () => {
         while (toShutOff.length) {
           let shortestDistance = Infinity
