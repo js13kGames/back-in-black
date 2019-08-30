@@ -223,6 +223,7 @@ function animateWalk(
 
       mode.state = `won`
       mode.menuState = `opening`
+      state.unlockedLevels = Math.min(levels.length, Math.max(state.unlockedLevels, mode.level + 2))
     }
   }
 }
