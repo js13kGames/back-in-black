@@ -518,6 +518,18 @@ hitbox defined in the last viewport defined takes priority.
 
 Hitboxes cannot be animated.
 
+##### `sound`
+
+```typescript
+sound(time => {
+  // audioContext is available here.
+  // "time" is the current elapsed time, in the Web Audio API's time space.
+})
+```
+
+Executes a callback if the Web Audio API is available (and running).  The time
+`elapse`d to, in Web Audio API time, is provided as an argument.
+
 ##### Easings
 
 These describe how a subject object will interpolate between the current
