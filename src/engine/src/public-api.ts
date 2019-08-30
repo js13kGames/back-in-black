@@ -122,6 +122,14 @@ function hitbox(
   )
 }
 
+function sound(
+  callback: (time: number) => void
+): void {
+  if (audioContext && audioContext.state == `running`) {
+    callback(audioContext.currentTime + engineAnimationsElapsed / 1000)
+  }
+}
+
 function stepEnd(
   animation: EngineAnimation,
 ): void {
