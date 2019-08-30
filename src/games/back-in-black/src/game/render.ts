@@ -73,16 +73,6 @@ function renderNonInteractiveGame(
     translateY(levelName, 15 - halfSafeAreaHeightVirtualPixels)
     write(levelName, level.name)
 
-    let mcguffinX = 0
-    let mcguffinY = 0
-    for (const room of level.rooms) {
-      if (room.type == `mcguffin`) {
-        mcguffinX = room.x
-        mcguffinY = room.y
-        break
-      }
-    }
-
     const changeOnSwitch: {
       readonly parent: EngineAnimation
       readonly hide: EngineAnimation
@@ -99,21 +89,26 @@ function renderNonInteractiveGame(
     if (mode.state == `initial` || mode.animation == `take`) {
       const switchState = mode.switch == (mode.animation == `switch` ? `b` : `a`)
 
+      const mcguffinRoomGroup = group(parent)
+      translate(mcguffinRoomGroup, level.mcguffin[0] * roomSpacing, level.mcguffin[1] * roomSpacing)
+      hideWhenTaken.push({
+        hide: mcguffinRoomGroup,
+        distance: 0,
+      })
+      mcguffinRoomGroupAndSprites.push(mcguffinRoomGroup, sprite(mcguffinRoomGroup, game_room_mcguffin_a_svg))
+
       for (const room of level.rooms) {
         const roomGroup = group(parent)
         translate(roomGroup, room.x * roomSpacing, room.y * roomSpacing)
         hideWhenTaken.push({
           hide: roomGroup,
-          distance: distanceSquared(room.x, room.y, mcguffinX, mcguffinY),
+          distance: distanceSquared(room.x, room.y, level.mcguffin[0], level.mcguffin[1]),
         })
 
         switch (room.type) {
           case `empty`: {
             sprite(roomGroup, game_room_empty_svg)
           } break
-          case `mcguffin`:
-            mcguffinRoomGroupAndSprites.push(roomGroup, sprite(roomGroup, game_room_mcguffin_a_svg))
-            break
           case `switch`:
             changeOnSwitch.push({
               parent: roomGroup,
@@ -136,8 +131,8 @@ function renderNonInteractiveGame(
         hideWhenTaken.push({
           hide: corridorGroup,
           distance: Math.min(
-            distanceSquared(corridor.x, corridor.y, mcguffinX, mcguffinY),
-            distanceSquared(corridor.x + facingX[corridor.facing], corridor.y + facingY[corridor.facing], mcguffinX, mcguffinY)
+            distanceSquared(corridor.x, corridor.y, level.mcguffin[0], level.mcguffin[1]),
+            distanceSquared(corridor.x + facingX[corridor.facing], corridor.y + facingY[corridor.facing], level.mcguffin[0], level.mcguffin[1])
           )
         })
 
@@ -340,17 +335,17 @@ function renderInteractiveGame(
             mode.x += facingX[key.facing]
             mode.y += facingY[key.facing]
 
+            if (mode.x == level.mcguffin[0] && mode.y == level.mcguffin[1]) {
+              if (mode.state == `initial`) {
+                mode.animation = `take`
+                mode.state = `taken`
+                return
+              }
+            }
+
             for (const room of level.rooms) {
               if (room.x == mode.x && room.y == mode.y) {
                 switch (room.type) {
-                  case `mcguffin`:
-                    if (mode.state == `initial`) {
-                      mode.animation = `take`
-                      mode.state = `taken`
-                      return
-                    }
-                    break
-
                   case `switch`:
                     mode.animation = `switch`
                     mode.switch = mode.switch == `a` ? `b` : `a`

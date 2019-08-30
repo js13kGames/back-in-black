@@ -1,7 +1,8 @@
 type Level = {
   readonly name: string
+  readonly mcguffin: readonly [number, number]
   readonly rooms: ReadonlyArray<{
-    readonly type: `empty` | `mcguffin` | `switch`
+    readonly type: `empty` | `switch`
     readonly x: number
     readonly y: number
   }>
