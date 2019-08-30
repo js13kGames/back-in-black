@@ -161,7 +161,11 @@ function render(): undefined | (() => void) {
 
   switch (state.action.type) {
     case `none`: {
-      renderRaiseTowerHitboxes(mainViewport)
+      if (state.towers[2].length == 5) {
+        sprite(mainViewport, win_svg)
+      } else {
+        renderRaiseTowerHitboxes(mainViewport)
+      }
     } break
 
     case `rising`: {
@@ -272,13 +276,12 @@ function render(): undefined | (() => void) {
 
       elapse(millisecondsPerFrame)
 
-      if (state.towers[2].length == 4 && action.toTower == 2) {
-        sprite(mainViewport, win_svg)
-      } else {
-        callback = () => {
-          state.towers[action.toTower].push(action.piece)
-          state.action = { type: `none` }
-        }
+      callback = () => {
+        state.towers[action.toTower].push(action.piece)
+        state.action = { type: `none` }
+      }
+
+      if (state.towers[2].length < 4 || action.toTower != 2) {
         renderRaiseTowerHitboxes(mainViewport, callback)
       }
     } break
