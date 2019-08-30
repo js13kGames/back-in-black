@@ -16,16 +16,15 @@ type EngineAnimationsKeyframe = {
 const enum EngineAnimationKey {
   // This must share an index with EngineViewportKey.OuterElement.
   Element,
-  KeyframesByPhase,
+  Keyframes,
 }
 
 type EngineAnimation = readonly [
   HTMLElement,
-  EngineAnimationsKeyframe[][],
+  EngineAnimationsKeyframe[],
 ]
 
-const engineAnimationsPhaseDurations: number[] = []
-let engineAnimationsIndexOfCurrentPhase: number
+let engineAnimationsElapsed: number
 const engineAnimationsRenderedAnimations: Animation[] = []
 let engineAnimationsTimeout: undefined | number
 
@@ -33,19 +32,13 @@ const engineAnimations: EngineAnimation[] = []
 
 function engineAnimationsClear(): void {
   engineAnimations.length = 0
-  engineAnimationsIndexOfCurrentPhase = 0
-  engineAnimationsPhaseDurations.length = 0
-  engineAnimationsPhaseDurations.push(0)
+  engineAnimationsElapsed = 0
 }
 
 function engineAnimationsElapse(
   milliseconds: number
 ): void {
-  engineAnimationsPhaseDurations[engineAnimationsPhaseDurations.length - 1] += milliseconds
-}
-
-function engineAnimationsPhase(): void {
-  engineAnimationsPhaseDurations.push(0)
+  engineAnimationsElapsed += milliseconds
 }
 
 function engineAnimationsCreate(
@@ -54,28 +47,22 @@ function engineAnimationsCreate(
 ): EngineAnimation {
   element.style.position = `absolute`
   element.style.transform = `none`
-  const indexOfLatestPhase = engineAnimationsPhaseDurations.length - 1
-  element.style.opacity = indexOfLatestPhase || engineAnimationsPhaseDurations[0]
-    ? `0`
-    : `1`
+  element.style.opacity = engineAnimationsElapsed ? `0` : `1`
 
   parent[EngineViewportKey.InnerElement].appendChild(element)
 
-  const keyframesByPhase: EngineAnimationsKeyframe[][] = []
-
-  const durationOfLatestPhase = engineAnimationsPhaseDurations[indexOfLatestPhase]
-  if (indexOfLatestPhase || durationOfLatestPhase) {
-    keyframesByPhase[indexOfLatestPhase] = [{
-      offset: durationOfLatestPhase,
+  const keyframes: EngineAnimationsKeyframe[] = engineAnimationsElapsed
+    ? [{
+      offset: engineAnimationsElapsed,
       easing: `step-end`,
       transform: `none`,
       opacity: `1`,
     }]
-  }
+    : []
 
   const animation: EngineAnimation = [
     element,
-    keyframesByPhase,
+    keyframes,
   ]
 
   engineAnimations.push(animation)
@@ -89,7 +76,7 @@ function engineAnimationsGetTransformTarget(
   transform: null | string
   opacity: null | string
 } {
-  if (engineAnimationsPhaseDurations.length > 1 || engineAnimationsPhaseDurations[0]) {
+  if (engineAnimationsElapsed) {
     return engineAnimationsGetOrCreateCurrentKeyframe(animation)
   } else {
     return animation[EngineAnimationKey.Element].style
@@ -102,12 +89,9 @@ function engineAnimationsFindPreviousTransform(
   readonly transform: string
   readonly opacity: string
 } {
-  const keyframesByPhase = animation[EngineAnimationKey.KeyframesByPhase]
-  for (let phaseIndex = keyframesByPhase.length - 1; phaseIndex >= 0; phaseIndex--) {
-    const keyframes = keyframesByPhase[phaseIndex]
-    if (keyframes) {
-      return keyframes[keyframes.length - 1]
-    }
+  const keyframes = animation[EngineAnimationKey.Keyframes]
+  if (keyframes.length) {
+    return keyframes[keyframes.length - 1]
   }
 
   // TODO: Although we've definitely set these, retrieving them from the element
@@ -123,19 +107,16 @@ function engineAnimationsCreateKeyframe(
 ): EngineAnimationsKeyframe {
   const previousTransform = engineAnimationsFindPreviousTransform(animation)
 
-  const keyframesByPhase = animation[EngineAnimationKey.KeyframesByPhase]
-  const indexOfLatestPhase = engineAnimationsPhaseDurations.length - 1
-  const durationOfLatestPhase = engineAnimationsPhaseDurations[indexOfLatestPhase]
-  const latestPhase = keyframesByPhase[indexOfLatestPhase] = keyframesByPhase[indexOfLatestPhase] || []
+  const keyframes = animation[EngineAnimationKey.Keyframes]
 
   const newKeyframe: EngineAnimationsKeyframe = {
-    offset: durationOfLatestPhase,
+    offset: engineAnimationsElapsed,
     easing: `step-end`,
     transform: previousTransform.transform,
     opacity: previousTransform.opacity,
   }
 
-  latestPhase.push(newKeyframe)
+  keyframes.push(newKeyframe)
 
   return newKeyframe
 }
@@ -143,15 +124,11 @@ function engineAnimationsCreateKeyframe(
 function engineAnimationsGetOrCreateCurrentKeyframe(
   animation: EngineAnimation,
 ): EngineAnimationsKeyframe {
-  const keyframesByPhase = animation[EngineAnimationKey.KeyframesByPhase]
-  const indexOfLatestPhase = engineAnimationsPhaseDurations.length - 1
-  const durationOfLatestPhase = engineAnimationsPhaseDurations[indexOfLatestPhase]
+  const keyframes = animation[EngineAnimationKey.Keyframes]
 
-  const keyframes = keyframesByPhase[indexOfLatestPhase]
-
-  if (keyframes) {
+  if (keyframes.length) {
     const lastKeyframe = keyframes[keyframes.length - 1]
-    if (lastKeyframe.offset == durationOfLatestPhase) {
+    if (lastKeyframe.offset == engineAnimationsElapsed) {
       return lastKeyframe
     }
   }
@@ -159,7 +136,7 @@ function engineAnimationsGetOrCreateCurrentKeyframe(
   return engineAnimationsCreateKeyframe(animation)
 }
 
-function engineAnimationsSendNextPhaseToBrowser(): void {
+function engineAnimationsSendToBrowser(): void {
   for (const renderedAnimation of engineAnimationsRenderedAnimations) {
     renderedAnimation.cancel()
   }
@@ -167,30 +144,16 @@ function engineAnimationsSendNextPhaseToBrowser(): void {
   clearTimeout(engineAnimationsTimeout)
   engineAnimationsTimeout = undefined
 
-  const lastPhase = engineAnimationsIndexOfCurrentPhase == engineAnimationsPhaseDurations.length - 1
-
-  const phaseDuration = engineAnimationsPhaseDurations[engineAnimationsIndexOfCurrentPhase]
-
   for (const animation of engineAnimations) {
     const element = animation[EngineAnimationKey.Element]
-    const keyframesByPhase = animation[EngineAnimationKey.KeyframesByPhase]
-    const keyframes = keyframesByPhase[engineAnimationsIndexOfCurrentPhase]
+    const keyframes = animation[EngineAnimationKey.Keyframes]
 
-    if (phaseDuration) {
-      if (engineAnimationsIndexOfCurrentPhase) {
-        const previousKeyframes = keyframesByPhase[engineAnimationsIndexOfCurrentPhase - 1]
-        if (previousKeyframes) {
-          const lastKeyframe = previousKeyframes[previousKeyframes.length - 1]
-          element.style.transform = lastKeyframe.transform
-          element.style.opacity = lastKeyframe.opacity
-        }
-      }
-
-      if (keyframes) {
+    if (engineAnimationsElapsed) {
+      if (keyframes.length) {
         const firstKeyframe = keyframes[0]
         const lastKeyframe = keyframes[keyframes.length - 1]
         for (const keyframe of keyframes) {
-          keyframe.offset /= phaseDuration
+          keyframe.offset /= engineAnimationsElapsed
         }
 
         if (firstKeyframe.offset > 0) {
@@ -212,34 +175,26 @@ function engineAnimationsSendNextPhaseToBrowser(): void {
         }
 
         engineAnimationsRenderedAnimations.push(element.animate(keyframes, {
-          duration: phaseDuration,
-          iterations: lastPhase ? Infinity : 1,
+          duration: engineAnimationsElapsed,
+          iterations: engineViewportsCallback ? 1 : Infinity,
           fill: `forwards`,
         }))
-      }
-    } else {
-      if (keyframes) {
-        const firstKeyframe = keyframes[0]
-        element.style.transform = firstKeyframe.transform
-        element.style.opacity = firstKeyframe.opacity
-      } else {
-        const previousKeyframes = keyframesByPhase[engineAnimationsIndexOfCurrentPhase - 1]
-        if (previousKeyframes) {
-          const lastKeyframe = previousKeyframes[previousKeyframes.length - 1]
-          element.style.transform = lastKeyframe.transform
-          element.style.opacity = lastKeyframe.opacity
-        }
       }
     }
   }
 
-  engineAnimationsIndexOfCurrentPhase++
+  if (engineViewportsCallback) {
+    const callback = engineViewportsCallback
 
-  if (!lastPhase) {
     if (engineAnimationsRenderedAnimations.length) {
-      engineAnimationsRenderedAnimations[0].onfinish = engineAnimationsSendNextPhaseToBrowser
+      engineAnimationsRenderedAnimations[0].onfinish = handleCallback
     } else {
-      engineAnimationsTimeout = setTimeout(engineAnimationsSendNextPhaseToBrowser, phaseDuration)
+      engineAnimationsTimeout = setTimeout(handleCallback, engineAnimationsElapsed)
+    }
+
+    function handleCallback(): void {
+      callback()
+      engineRender()
     }
   }
 }

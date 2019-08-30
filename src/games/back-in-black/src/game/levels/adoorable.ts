@@ -1,41 +1,22 @@
 const adoorable: Level = {
   name: `adoorable`,
-  rooms: [{
-    type: `mcguffin`,
-    x: -1,
-    y: 0
-  }, {
-    type: `empty`,
-    x: 1,
-    y: 0
-  }, {
-    type: `switch`,
-    x: 1,
-    y: -1
-  }, {
-    type: `empty`,
-    x: 0,
-    y: 0
-  }],
-  corridors: [{
-    type: `empty`,
-    x: 1,
-    y: 0,
-    facing: `north`
-  }, {
-    type: `empty`,
-    x: 0,
-    y: 0,
-    facing: `west`
-  }, {
-    type: `closedDoor`,
-    x: 1,
-    y: 0,
-    facing: `west`
-  }, {
-    type: `goal`,
-    x: 1,
-    y: 0,
-    facing: `east`
-  }]
+  mcguffin: [-1, 0],
+  switches: [
+    [1, -1]
+  ],
+  rooms: [
+    [1, 0],
+    [0, 0]
+  ],
+  goal: [1, 0, `east`],
+  ledges: [],
+  stairs: [],
+  openDoors: [],
+  closedDoors: [
+    [1, 0, `west`],
+  ],
+  corridors: [
+    [1, 0, `north`],
+    [0, 0, `west`],
+  ],
 }

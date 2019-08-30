@@ -14,12 +14,12 @@ const halfSafeAreaHeightVirtualPixels = safeAreaHeightVirtualPixels / 2
 const fullWidthVirtualPixels = safeAreaWidthVirtualPixels * 2
 const fullHeightVirtualPixels = safeAreaHeightVirtualPixels * 2
 
-let kick: undefined | ((at: number) => void)
-let snare: undefined | ((at: number) => void)
-let hat: undefined | ((at: number, duration: number) => void)
-let cowbell: undefined | ((at: number) => void)
+let kick: (at: number) => void
+let snare: (at: number) => void
+let hat: (at: number, duration: number) => void
+let cowbell: (at: number) => void
 
-function render(): void {
+function render(): undefined | (() => void) {
   const mainViewport = viewport(
     safeAreaWidthVirtualPixels, safeAreaHeightVirtualPixels,
     fullWidthVirtualPixels, fullHeightVirtualPixels,
@@ -29,45 +29,27 @@ function render(): void {
   sprite(mainViewport, background_svg)
 
   // Kick
-  hitbox(mainViewport, -35, -10, 85, 112, () => {
-    if (kick) {
-      kick(audioContext.currentTime)
-    }
-  })
+  hitbox(mainViewport, -35, -10, 85, 112, () => sound(kick))
 
   // Snare
-  hitbox(mainViewport, 0, -65, 87, 55, () => {
-    if (snare) {
-      snare(audioContext.currentTime)
-    }
-  })
+  hitbox(mainViewport, 0, -65, 87, 55, () => sound(snare))
 
   // Closed Hat
-  hitbox(mainViewport, -93, -65, 85, 53, () => {
-    if (hat) {
-      hat(audioContext.currentTime, 0.05)
-    }
-  })
+  hitbox(mainViewport, -93, -65, 85, 53, () => sound(time => hat(time, 0.05)))
 
   // Open Hat
-  hitbox(mainViewport, -40, -105, 97, 48, () => {
-    if (hat) {
-      hat(audioContext.currentTime, 0.15)
-    }
-  })
+  hitbox(mainViewport, -40, -105, 97, 48, () => sound(time => hat(time, 0.15)))
 
   // Cowbell
-  hitbox(mainViewport, 55, -10, 35, 50, () => {
-    if (cowbell) {
-      cowbell(audioContext.currentTime)
-    }
-  })
+  hitbox(mainViewport, 55, -10, 35, 50, () => sound(cowbell))
 
   // Metronome
   hitbox(mainViewport, -83, 2, 22.5, 35, () => { })
 
   // Tape Recorder
   hitbox(mainViewport, -98, 50, 35, 45, () => { })
+
+  return
 }
 
 function audioReady(): void {

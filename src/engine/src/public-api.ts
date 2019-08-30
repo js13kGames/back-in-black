@@ -73,10 +73,6 @@ function elapse(
   engineAnimationsElapse(milliseconds)
 }
 
-function phase(): void {
-  engineAnimationsPhase()
-}
-
 function viewport(
   minimumWidthVirtualPixels: number,
   minimumHeightVirtualPixels: number,
@@ -124,6 +120,14 @@ function hitbox(
     heightVirtualPixels,
     callback
   )
+}
+
+function sound(
+  callback: (time: number) => void
+): void {
+  if (audioContext && audioContext.state == `running`) {
+    callback(audioContext.currentTime + engineAnimationsElapsed / 1000)
+  }
 }
 
 function stepEnd(

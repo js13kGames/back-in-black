@@ -9,13 +9,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="60"
+   width="96"
    height="36"
-   viewBox="0 0 60 36"
+   viewBox="0 0 96 36"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="open.svg">
+   sodipodi:docname="ceiling.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="23.425352"
-     inkscape:cx="52.757451"
-     inkscape:cy="20.438252"
+     inkscape:zoom="16.564225"
+     inkscape:cx="80.162662"
+     inkscape:cy="29.210904"
      inkscape:document-units="px"
      inkscape:current-layer="layer11"
      showgrid="true"
@@ -415,48 +415,11 @@
      inkscape:label="Open Goal"
      style="display:inline">
     <path
-       style="fill:#6d3b3b;fill-opacity:1;stroke:none;stroke-width:1;stroke-opacity:1"
-       d="m 45,10 c 0,0 0,-4 7.1251,-4 L 56,5 c 0,0 4,-1 4,3 v 19 c 0,5 -4,4 -4,4 l -4,-1 c -7,0 -7,-4 -7,-4 z"
-       id="rect1169-0"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccsccccc" />
-    <path
-       style="fill:#40477e;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
-       d="m 44,26 h 8 V 10 h -8 z"
-       id="path823-2-3"
-       inkscape:connector-curvature="0" />
-    <path
-       style="fill:#a39d1d;fill-opacity:1;stroke:none;stroke-opacity:1"
-       d="m 50,18 -4,-4 v 8 z"
-       id="path870-5-3-0-6"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccc" />
-    <path
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-opacity:1"
-       d="M 52,10 56,9 V 27 L 52,26 Z"
-       id="path1363"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc" />
-    <path
-       style="fill:#949ac8;fill-opacity:1;stroke:none;stroke-opacity:1"
-       d="m 52,10 -4,1 v 14 l 4,1 z"
-       id="path1367"
-       inkscape:connector-curvature="0" />
-    <path
-       style="fill:#d9d22c;fill-opacity:1;stroke:none;stroke-opacity:1"
-       d="m 48,16 2,2 -2,2 z"
-       id="path1369"
-       inkscape:connector-curvature="0" />
-    <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.99999994;stroke-opacity:1"
-       d="m 44,26 h 8 V 10 h -8 z"
-       id="path823-2-3-1"
-       inkscape:connector-curvature="0" />
-    <path
        style="fill:#000000;fill-opacity:1;stroke:none;stroke-opacity:1"
-       d="M 56,9 64,7 V 29 L 56,27 Z"
+       d="M 74,9 82,7 H 96 V 29 H 82 l -8,-2 z"
        id="path884"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccc" />
   </g>
   <g
      inkscape:groupmode="layer"

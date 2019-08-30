@@ -12,6 +12,11 @@ type State = {
     readonly fromTower: number
   }
   | {
+    readonly type: `hovering`
+    readonly piece: number
+    readonly fromTower: number
+  }
+  | {
     readonly type: `landing`
     readonly piece: number
     readonly fromTower: number
@@ -125,7 +130,7 @@ const pieceHoveringShadows1 = [
 const millisecondsPerVirtualPixel = 1
 const millisecondsPerFrame = 100
 
-function render(): void {
+function render(): undefined | (() => void) {
   const mainViewport = viewport(
     safeAreaWidthVirtualPixels, safeAreaHeightVirtualPixels,
     640, 480,
@@ -152,24 +157,15 @@ function render(): void {
     x += towerWidthVirtualPixels
   }
 
+  let callback: undefined | (() => void)
+
   switch (state.action.type) {
     case `none`: {
-      let x = towerWidthVirtualPixels * -1.5
-      for (let towerIndex = 0; towerIndex < 3; towerIndex++) {
-        const towerValue = state.towers[towerIndex]
-        if (towerValue.length) {
-          hitbox(mainViewport, x, -halfSafeAreaHeightVirtualPixels, towerWidthVirtualPixels, safeAreaWidthVirtualPixels, () => {
-            state.action = {
-              type: `rising`,
-              piece: towerValue[towerValue.length - 1],
-              fromTower: towerIndex,
-            }
-            towerValue.length--
-          })
-        }
-        x += towerWidthVirtualPixels
+      if (state.towers[2].length == 5) {
+        sprite(mainViewport, win_svg)
+      } else {
+        renderRaiseTowerHitboxes(mainViewport)
       }
-      phase()
     } break
 
     case `rising`: {
@@ -202,17 +198,25 @@ function render(): void {
 
       translateY(backgroundSprite, toY - fromY)
       translateY(foregroundSprite, toY - fromY)
-      stepEnd(backgroundSprite)
-      stepEnd(foregroundSprite)
-      hide(backgroundSprite)
-      hide(foregroundSprite)
 
-      phase()
+      renderLandTowerHitboxes(mainViewport, action.piece, action.fromTower)
+
+      callback = () => state.action = {
+        type: `hovering`,
+        piece: action.piece,
+        fromTower: action.fromTower,
+      }
+    } break
+
+    case `hovering`: {
+      const action = state.action
+      const pieceX = towerWidthVirtualPixels * (action.fromTower - 1)
+      const y = -70
 
       const hovering0ShadowSprite = sprite(pieceShadows, pieceHoveringShadows0[action.piece])
       const hovering0Sprite = sprite(pieces, piecesHovering0[action.piece])
-      translate(hovering0ShadowSprite, pieceX, toY)
-      translate(hovering0Sprite, pieceX, toY)
+      translate(hovering0ShadowSprite, pieceX, y)
+      translate(hovering0Sprite, pieceX, y)
 
       elapse(350)
 
@@ -220,24 +224,12 @@ function render(): void {
       hide(hovering0Sprite)
       const hovering1ShadowSprite = sprite(pieceShadows, pieceHoveringShadows1[action.piece])
       const hovering1Sprite = sprite(pieces, piecesHovering1[action.piece])
-      translate(hovering1ShadowSprite, pieceX, toY)
-      translate(hovering1Sprite, pieceX, toY)
+      translate(hovering1ShadowSprite, pieceX, y)
+      translate(hovering1Sprite, pieceX, y)
 
       elapse(350)
 
-      let x = towerWidthVirtualPixels * -1.5
-      for (let towerIndex = 0; towerIndex < 3; towerIndex++) {
-        const towerValue = state.towers[towerIndex]
-        if (!towerValue.length || towerValue[towerValue.length - 1] < action.piece) {
-          hitbox(mainViewport, x, -halfSafeAreaHeightVirtualPixels, towerWidthVirtualPixels, safeAreaWidthVirtualPixels, () => state.action = {
-            type: `landing`,
-            piece: action.piece,
-            fromTower: action.fromTower,
-            toTower: towerIndex,
-          })
-        }
-        x += towerWidthVirtualPixels
-      }
+      renderLandTowerHitboxes(mainViewport, action.piece, action.fromTower)
     } break
 
     case `landing`: {
@@ -284,32 +276,62 @@ function render(): void {
 
       elapse(millisecondsPerFrame)
 
-      hide(landing1Sprite)
+      callback = () => {
+        state.towers[action.toTower].push(action.piece)
+        state.action = { type: `none` }
+      }
 
-      phase()
-
-      if (state.towers[2].length == 4 && action.toTower == 2) {
-        sprite(mainViewport, win_svg)
-      } else {
-        let x = towerWidthVirtualPixels * -1.5
-        for (let towerIndex = 0; towerIndex < 3; towerIndex++) {
-          const towerValue = state.towers[towerIndex]
-          if (towerValue.length || towerIndex == action.toTower) {
-            hitbox(mainViewport, x, -halfSafeAreaHeightVirtualPixels, towerWidthVirtualPixels, safeAreaWidthVirtualPixels, () => {
-              state.towers[action.toTower].push(action.piece)
-              state.action = {
-                type: `rising`,
-                piece: towerValue[towerValue.length - 1],
-                fromTower: towerIndex,
-              }
-              towerValue.length--
-            })
-          }
-          x += towerWidthVirtualPixels
-        }
+      if (state.towers[2].length < 4 || action.toTower != 2) {
+        renderRaiseTowerHitboxes(mainViewport, callback)
       }
     } break
   }
 
   hitbox(mainViewport, -70, -115, 140, 40, () => state = initial())
+
+  return callback
+}
+
+function renderRaiseTowerHitboxes(
+  mainViewport: EngineViewport,
+  callback?: () => void
+): void {
+  let x = towerWidthVirtualPixels * -1.5
+  for (let towerIndex = 0; towerIndex < 3; towerIndex++) {
+    const towerValue = state.towers[towerIndex]
+    if (towerValue.length) {
+      hitbox(mainViewport, x, -halfSafeAreaHeightVirtualPixels, towerWidthVirtualPixels, safeAreaWidthVirtualPixels, () => {
+        if (callback) {
+          callback()
+        }
+        state.action = {
+          type: `rising`,
+          piece: towerValue[towerValue.length - 1],
+          fromTower: towerIndex,
+        }
+        towerValue.length--
+      })
+    }
+    x += towerWidthVirtualPixels
+  }
+}
+
+function renderLandTowerHitboxes(
+  mainViewport: EngineViewport,
+  piece: number,
+  fromTower: number,
+): void {
+  let x = towerWidthVirtualPixels * -1.5
+  for (let towerIndex = 0; towerIndex < 3; towerIndex++) {
+    const towerValue = state.towers[towerIndex]
+    if (!towerValue.length || towerValue[towerValue.length - 1] < piece) {
+      hitbox(mainViewport, x, -halfSafeAreaHeightVirtualPixels, towerWidthVirtualPixels, safeAreaWidthVirtualPixels, () => state.action = {
+        type: `landing`,
+        piece: piece,
+        fromTower: fromTower,
+        toTower: towerIndex,
+      })
+    }
+    x += towerWidthVirtualPixels
+  }
 }
