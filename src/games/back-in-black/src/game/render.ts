@@ -159,11 +159,26 @@ function animateWalk(
   level: Level,
   svg: EngineSpritesSvg,
 ): () => undefined | (() => void) {
+  if (mode.state == `entering`) {
+    const goalSprite = sprite(parent, game_corridor_goal_open_floor_lit_svg)
+    translateAndRotateLikeCorridor(level.goal, goalSprite)
+  }
+
+  if (mode.state == `taken`) {
+    const goalSprite = sprite(parent, game_corridor_goal_open_floor_dark_svg)
+    translateAndRotateLikeCorridor(level.goal, goalSprite)
+  }
+
   const playerGroup = group(parent)
   translateAndRotateLikeCorridor(mode, playerGroup)
 
-  if (mode.state != `initial`) {
-    const goalSprite = sprite(parent, game_corridor_goal_open_ceiling_svg)
+  if (mode.state == `entering`) {
+    const goalSprite = sprite(parent, game_corridor_goal_open_ceiling_lit_svg)
+    translateAndRotateLikeCorridor(level.goal, goalSprite)
+  }
+
+  if (mode.state == `taken`) {
+    const goalSprite = sprite(parent, game_corridor_goal_open_ceiling_dark_svg)
     translateAndRotateLikeCorridor(level.goal, goalSprite)
   }
 
@@ -182,8 +197,12 @@ function animateWalk(
       mode[1] += facingY[mode[2]]
       mode.walking = false
 
+      if (mode.state == `entering`) {
+        mode.state = `finding`
+      }
+
       if (mode[0] == level.mcguffin[0] && mode[1] == level.mcguffin[1]) {
-        if (mode.state == `initial`) {
+        if (mode.state == `finding`) {
           mode.state = `taking`
         }
         return
@@ -214,7 +233,8 @@ function renderNonInteractiveGame(
 ): () => (undefined | (() => void)) {
   const level = levels[mode.level]
   switch (mode.state) {
-    case `initial`:
+    case `entering`:
+    case `finding`:
       forEachRoomRendered(parent, mode, level, () => { })
 
       const mcguffinGroup = group(parent)
@@ -303,14 +323,13 @@ function renderNonInteractiveGame(
       }
 
     case `taken`:
-      const goalSprite = sprite(parent, game_corridor_goal_open_floor_svg)
-      translateAndRotateLikeCorridor(level.goal, goalSprite)
-
       if (mode.walking) {
         return animateWalk(parent, mode, level, game_player_walk_silhouette_svg)
       } else {
-        const goalSprite = sprite(parent, game_corridor_goal_open_ceiling_svg)
-        translateAndRotateLikeCorridor(level.goal, goalSprite)
+        const goalFloorSprite = sprite(parent, game_corridor_goal_open_floor_dark_svg)
+        translateAndRotateLikeCorridor(level.goal, goalFloorSprite)
+        const goalCeilingSprite = sprite(parent, game_corridor_goal_open_ceiling_dark_svg)
+        translateAndRotateLikeCorridor(level.goal, goalCeilingSprite)
 
         const playerGroup = group(parent)
         translateAndRotateLikeCorridor(mode, playerGroup)
@@ -413,7 +432,7 @@ function renderInteractiveGame(
 function shouldRenderKeys(
   mode: GameMode,
 ): Truthiness {
-  if (mode.state == `initial` || mode.state == `taken` && !mode.walking) {
+  if (mode.state == `finding` || mode.state == `taken` && !mode.walking) {
     return 1
   }
   return
