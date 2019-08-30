@@ -123,7 +123,7 @@ function animateWalk(
   svg: EngineSpritesSvg,
 ): () => undefined | (() => void) {
   const playerGroup = group(parent)
-  translate(playerGroup, (mode.x - facingX[mode.facing]) * roomSpacing, (mode.y - facingY[mode.facing]) * roomSpacing)
+  translate(playerGroup, mode.x * roomSpacing, mode.y * roomSpacing)
   rotate(playerGroup, facingDegrees[mode.facing])
   const playerSprite = sprite(playerGroup, svg)
   return () => {
@@ -181,26 +181,26 @@ function renderNonInteractiveGame(
       if (mode.walking) {
         return animateWalk(parent, mode, level, game_player_walk_lit_svg)
       } else {
-      const playerGroup = group(parent)
-      translate(playerGroup, mode.x * roomSpacing, mode.y * roomSpacing)
-      rotate(playerGroup, facingDegrees[mode.facing])
-      const playerA = sprite(playerGroup, game_player_idle_a_lit_svg)
+        const playerGroup = group(parent)
+        translate(playerGroup, mode.x * roomSpacing, mode.y * roomSpacing)
+        rotate(playerGroup, facingDegrees[mode.facing])
+        const playerA = sprite(playerGroup, game_player_idle_a_lit_svg)
 
         renderNonInteractiveKeys(parent, mode)
 
-      return () => {
-        elapse(333)
-        hide(mcguffinA)
-        const mcguffinB = sprite(mcguffinGroup, game_room_mcguffin_b_svg)
-        elapse(167)
-        hide(playerA)
-        sprite(playerGroup, game_player_idle_b_lit_svg)
-        elapse(167)
-        hide(mcguffinB)
-        sprite(mcguffinGroup, game_room_mcguffin_c_svg)
-        elapse(333)
-        return undefined
-      }
+        return () => {
+          elapse(333)
+          hide(mcguffinA)
+          const mcguffinB = sprite(mcguffinGroup, game_room_mcguffin_b_svg)
+          elapse(167)
+          hide(playerA)
+          sprite(playerGroup, game_player_idle_b_lit_svg)
+          elapse(167)
+          hide(mcguffinB)
+          sprite(mcguffinGroup, game_room_mcguffin_c_svg)
+          elapse(333)
+          return undefined
+        }
       }
 
     default:
