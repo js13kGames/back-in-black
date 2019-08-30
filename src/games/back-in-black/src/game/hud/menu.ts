@@ -1,9 +1,11 @@
+type MenuOption = {
+  readonly label: string
+  callback(): void
+}
+
 type Menu = {
   readonly title: string
-  readonly options: ReadonlyArray<{
-    readonly label: string
-    callback(): void
-  }>
+  readonly options: ReadonlyArray<MenuOption>
 }
 
 function renderNonInteractiveMenu(
