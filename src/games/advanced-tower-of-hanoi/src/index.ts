@@ -275,11 +275,11 @@ function render(): undefined | (() => void) {
       if (state.towers[2].length == 4 && action.toTower == 2) {
         sprite(mainViewport, win_svg)
       } else {
-        renderRaiseTowerHitboxes(mainViewport)
         callback = () => {
           state.towers[action.toTower].push(action.piece)
           state.action = { type: `none` }
         }
+        renderRaiseTowerHitboxes(mainViewport, callback)
       }
     } break
   }
@@ -291,12 +291,16 @@ function render(): undefined | (() => void) {
 
 function renderRaiseTowerHitboxes(
   mainViewport: EngineViewport,
+  callback?: () => void
 ): void {
   let x = towerWidthVirtualPixels * -1.5
   for (let towerIndex = 0; towerIndex < 3; towerIndex++) {
     const towerValue = state.towers[towerIndex]
     if (towerValue.length) {
       hitbox(mainViewport, x, -halfSafeAreaHeightVirtualPixels, towerWidthVirtualPixels, safeAreaWidthVirtualPixels, () => {
+        if (callback) {
+          callback()
+        }
         state.action = {
           type: `rising`,
           piece: towerValue[towerValue.length - 1],
