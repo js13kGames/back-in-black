@@ -22,7 +22,7 @@ const ledgendary: Level = {
     [-1, 0, `east`],
     [0, 0, `north`],
     [1, 0, `north`],
-    [0, 0, `east`],
+    [0, 0, `south`],
     [1, 0, `south`],
   ],
 }
