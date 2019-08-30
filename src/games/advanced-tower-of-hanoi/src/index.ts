@@ -12,6 +12,11 @@ type State = {
     readonly fromTower: number
   }
   | {
+    readonly type: `hovering`
+    readonly piece: number
+    readonly fromTower: number
+  }
+  | {
     readonly type: `landing`
     readonly piece: number
     readonly fromTower: number
@@ -152,6 +157,8 @@ function render(): undefined | (() => void) {
     x += towerWidthVirtualPixels
   }
 
+  let callback: undefined | (() => void)
+
   switch (state.action.type) {
     case `none`: {
       renderRaiseTowerHitboxes(mainViewport)
@@ -187,15 +194,25 @@ function render(): undefined | (() => void) {
 
       translateY(backgroundSprite, toY - fromY)
       translateY(foregroundSprite, toY - fromY)
-      stepEnd(backgroundSprite)
-      stepEnd(foregroundSprite)
-      hide(backgroundSprite)
-      hide(foregroundSprite)
+
+      renderLandTowerHitboxes(mainViewport, action.piece, action.fromTower)
+
+      callback = () => state.action = {
+        type: `hovering`,
+        piece: action.piece,
+        fromTower: action.fromTower,
+      }
+    } break
+
+    case `hovering`: {
+      const action = state.action
+      const pieceX = towerWidthVirtualPixels * (action.fromTower - 1)
+      const y = -70
 
       const hovering0ShadowSprite = sprite(pieceShadows, pieceHoveringShadows0[action.piece])
       const hovering0Sprite = sprite(pieces, piecesHovering0[action.piece])
-      translate(hovering0ShadowSprite, pieceX, toY)
-      translate(hovering0Sprite, pieceX, toY)
+      translate(hovering0ShadowSprite, pieceX, y)
+      translate(hovering0Sprite, pieceX, y)
 
       elapse(350)
 
@@ -203,8 +220,8 @@ function render(): undefined | (() => void) {
       hide(hovering0Sprite)
       const hovering1ShadowSprite = sprite(pieceShadows, pieceHoveringShadows1[action.piece])
       const hovering1Sprite = sprite(pieces, piecesHovering1[action.piece])
-      translate(hovering1ShadowSprite, pieceX, toY)
-      translate(hovering1Sprite, pieceX, toY)
+      translate(hovering1ShadowSprite, pieceX, y)
+      translate(hovering1Sprite, pieceX, y)
 
       elapse(350)
 
@@ -267,7 +284,7 @@ function render(): undefined | (() => void) {
 
   hitbox(mainViewport, -70, -115, 140, 40, () => state = initial())
 
-  return
+  return callback
 }
 
 function renderRaiseTowerHitboxes(
