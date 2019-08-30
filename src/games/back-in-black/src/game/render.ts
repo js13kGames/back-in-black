@@ -72,12 +72,11 @@ function renderStaticRooms(
   }
 }
 
-function renderCorridors(
+function renderCorridor(
   parent: EngineViewport | EngineAnimation,
   mode: GameMode,
-  level: Level,
+  corridor: Corridor,
 ): void {
-  for (const corridor of level.corridors) {
     let svg: EngineSpritesSvg
 
     switch (corridor.type) {
@@ -113,6 +112,15 @@ function renderCorridors(
     const corridorSprite = sprite(parent, svg)
     translate(corridorSprite, corridor.x * roomSpacing, corridor.y * roomSpacing)
     rotate(corridorSprite, facingDegrees[corridor.facing])
+  }
+
+function renderCorridors(
+  parent: EngineViewport | EngineAnimation,
+  mode: GameMode,
+  level: Level,
+): void {
+  for (const corridor of level.corridors) {
+    renderCorridor(parent, mode, corridor)
   }
 }
 
