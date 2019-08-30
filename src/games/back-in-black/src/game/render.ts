@@ -116,19 +116,13 @@ function renderNonInteractiveGame(
 
       for (const room of level.rooms) {
         const roomGroup = group(parent)
-        translate(roomGroup, room.x * roomSpacing, room.y * roomSpacing)
+        translate(roomGroup, room[0] * roomSpacing, room[1] * roomSpacing)
         hideWhenTaken.push({
           hide: roomGroup,
-          distance: distanceSquared(room.x, room.y, level.mcguffin[0], level.mcguffin[1]),
+          distance: distanceSquared(room[0], room[1], level.mcguffin[0], level.mcguffin[1]),
         })
 
-        switch (room.type) {
-          case `empty`: {
-            sprite(roomGroup, game_room_empty_svg)
-          } break
-          default:
-            throw null
-        }
+        sprite(roomGroup, game_room_empty_svg)
       }
 
       for (const corridor of level.corridors) {

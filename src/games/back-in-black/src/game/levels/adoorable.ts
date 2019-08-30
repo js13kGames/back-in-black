@@ -4,15 +4,10 @@ const adoorable: Level = {
   switches: [
     [1, -1]
   ],
-  rooms: [{
-    type: `empty`,
-    x: 1,
-    y: 0
-  }, {
-    type: `empty`,
-    x: 0,
-    y: 0
-  }],
+  rooms: [
+    [1, 0],
+    [0, 0]
+  ],
   corridors: [{
     type: `empty`,
     x: 1,
