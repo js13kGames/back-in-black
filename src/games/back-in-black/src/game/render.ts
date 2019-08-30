@@ -142,8 +142,8 @@ function animateWalk(
   svg: EngineSpritesSvg,
 ): () => undefined | (() => void) {
   const playerGroup = group(parent)
-  translate(playerGroup, mode.x * roomSpacing, mode.y * roomSpacing)
-  rotate(playerGroup, facingDegrees[mode.facing])
+  translate(playerGroup, mode[0] * roomSpacing, mode[1] * roomSpacing)
+  rotate(playerGroup, facingDegrees[mode[2]])
   const playerSprite = sprite(playerGroup, svg)
   return () => {
     linear(playerGroup)
@@ -155,24 +155,24 @@ function animateWalk(
     }
     translateX(playerGroup, roomSpacing)
     return () => {
-      mode.x += facingX[mode.facing]
-      mode.y += facingY[mode.facing]
+      mode[0] += facingX[mode[2]]
+      mode[1] += facingY[mode[2]]
       mode.walking = false
 
-      if (mode.state == `initial` && mode.x == level.mcguffin[0] && mode.y == level.mcguffin[1]) {
+      if (mode.state == `initial` && mode[0] == level.mcguffin[0] && mode[1] == level.mcguffin[1]) {
         mode.state = `taking`
         return
       }
 
       for (const room of level.switches) {
-        if (mode.x == room[0] && mode.y == room[1]) {
+        if (mode[0] == room[0] && mode[1] == room[1]) {
           mode.switch = mode.switch == `a` ? `b` : `a`
           return
         }
       }
 
       for (const room of level.rooms) {
-        if (mode.x == room[0] && mode.y == room[1]) {
+        if (mode[0] == room[0] && mode[1] == room[1]) {
           return
         }
       }
@@ -201,8 +201,8 @@ function renderNonInteractiveGame(
         return animateWalk(parent, mode, level, game_player_walk_lit_svg)
       } else {
         const playerGroup = group(parent)
-        translate(playerGroup, mode.x * roomSpacing, mode.y * roomSpacing)
-        rotate(playerGroup, facingDegrees[mode.facing])
+        translate(playerGroup, mode[0] * roomSpacing, mode[1] * roomSpacing)
+        rotate(playerGroup, facingDegrees[mode[2]])
         const playerA = sprite(playerGroup, game_player_idle_a_lit_svg)
 
         renderNonInteractiveKeys(parent, mode)
@@ -279,8 +279,8 @@ function renderNonInteractiveGame(
         return animateWalk(parent, mode, level, game_player_walk_silhouette_svg)
       } else {
         const playerGroup = group(parent)
-        translate(playerGroup, mode.x * roomSpacing, mode.y * roomSpacing)
-        rotate(playerGroup, facingDegrees[mode.facing])
+        translate(playerGroup, mode[0] * roomSpacing, mode[1] * roomSpacing)
+        rotate(playerGroup, facingDegrees[mode[2]])
         const playerA = sprite(playerGroup, game_player_idle_a_silhouette_svg)
 
         renderNonInteractiveKeys(parent, mode)
@@ -303,18 +303,18 @@ function travellingForward(
   mode: GameMode,
   corridor: Corridor,
 ): boolean {
-  return mode.x == corridor[0]
-    && mode.y == corridor[1]
-    && mode.facing == corridor[2]
+  return mode[0] == corridor[0]
+    && mode[1] == corridor[1]
+    && mode[2] == corridor[2]
 }
 
 function travellingBackward(
   mode: GameMode,
   corridor: Corridor,
 ): boolean {
-  return mode.x == corridor[0] + facingX[corridor[2]]
-    && mode.y == corridor[1] + facingY[corridor[2]]
-    && mode.facing == facingReverse[corridor[2]]
+  return mode[0] == corridor[0] + facingX[corridor[2]]
+    && mode[1] == corridor[1] + facingY[corridor[2]]
+    && mode[2] == facingReverse[corridor[2]]
 }
 
 function renderInteractiveGame(
@@ -335,7 +335,7 @@ function renderInteractiveGame(
       function callback() {
         const level = levels[mode.level]
 
-        mode.facing = key.facing
+        mode[2] = key.facing
         mode.walking = false
 
         const passableInBothDirections = level.corridors

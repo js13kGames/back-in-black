@@ -1,4 +1,4 @@
-const version = 9
+const version = 10
 const beatsPerMinute = 140
 
 type TitleMode = {
@@ -13,9 +13,9 @@ type GameMode = {
   type: `game`
   readonly level: number
   switch: `a` | `b`
-  x: number
-  y: number
-  facing: Facing
+  0: number
+  1: number
+  2: Facing
   walking: boolean
   state: `initial` | `taking` | `taken` | `won`
 }
@@ -76,9 +76,9 @@ function enterGameMode(level: number): void {
     type: `game`,
     level,
     switch: `a`,
-    x: levelValue.goal[0],
-    y: levelValue.goal[1],
-    facing: facingReverse[levelValue.goal[2]],
+    0: levelValue.goal[0],
+    1: levelValue.goal[1],
+    2: facingReverse[levelValue.goal[2]],
     walking: false,
     state: `initial`,
   })
